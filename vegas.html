@@ -234,6 +234,93 @@
     font-style: italic;
   }
 
+  /* Confirmation cards */
+  .confirmations {
+    max-width: 640px;
+    margin: 16px auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 0 24px;
+  }
+  .conf-card {
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    text-align: center;
+  }
+  .conf-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .conf-code {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+    font-family: 'DM Sans', monospace;
+  }
+
+  /* Flight card */
+  .flight-card {
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(91,138,196,0.08), rgba(91,138,196,0.03));
+    border: 1px solid rgba(91,138,196,0.15);
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  .flight-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .flight-point { text-align: center; }
+  .flight-point .code {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+  }
+  .flight-point .city { font-size: 11px; color: var(--text-muted); }
+  .flight-point .time {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--thu);
+  }
+  .flight-arrow {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .flight-arrow .line {
+    width: 100%;
+    height: 1px;
+    background: rgba(91,138,196,0.3);
+    position: relative;
+  }
+  .flight-arrow .line::after {
+    content: '✈';
+    position: absolute;
+    right: -4px;
+    top: -8px;
+    font-size: 14px;
+    color: var(--thu);
+  }
+  .flight-arrow .flight-num {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
   /* ── Tablet ── */
   @media (max-width: 768px) {
     .hero { padding: 48px 20px 32px; }
@@ -254,6 +341,11 @@
     .hero-sub { font-size: 13px; margin-bottom: 16px; }
     .hero-meta { gap: 10px 18px; font-size: 11px; }
     .bus-tip { padding: 14px 16px; font-size: 12px; margin-left: 0; margin-right: 0; }
+
+    .confirmations { grid-template-columns: 1fr; gap: 8px; padding: 0; }
+    .conf-card { padding: 10px 12px; }
+    .flight-point .code { font-size: 17px; }
+    .flight-point .time { font-size: 13px; }
 
     .container { padding: 0 12px 40px; }
     .day-section { margin-top: 36px; }
@@ -303,6 +395,20 @@
     <strong>🚌 Deuce 3-Day Bus Pass — $20/person</strong><br>
     Activate Wednesday afternoon when you arrive. Covers all 3 days through Saturday morning. Buy via the <strong>rideRTC app</strong> or at any ticket vending machine on the Strip. Runs every 15 min, 24/7.
   </div>
+  <div class="confirmations">
+    <div class="conf-card">
+      <div class="conf-label">Vacation</div>
+      <div class="conf-code">BGMVEL9</div>
+    </div>
+    <div class="conf-card">
+      <div class="conf-label">Flight</div>
+      <div class="conf-code">B5U8AS</div>
+    </div>
+    <div class="conf-card">
+      <div class="conf-label">Hotel</div>
+      <div class="conf-code">BGMVEL9-1002</div>
+    </div>
+  </div>
 </div>
 
 <div class="container">
@@ -318,6 +424,25 @@
     </div>
 
     <div class="timeline">
+      <div class="flight-card">
+        <div class="flight-route">
+          <div class="flight-point">
+            <div class="code">MCI</div>
+            <div class="city">Kansas City</div>
+            <div class="time">12:40 PM</div>
+          </div>
+          <div class="flight-arrow">
+            <div class="flight-num">Flight #3620</div>
+            <div class="line"></div>
+          </div>
+          <div class="flight-point">
+            <div class="code">LAS</div>
+            <div class="city">Las Vegas</div>
+            <div class="time">1:50 PM</div>
+          </div>
+        </div>
+      </div>
+
       <div class="event">
         <div class="event-time">3:00 PM</div>
         <div class="event-name">Check In at The Cosmopolitan</div>
@@ -491,10 +616,29 @@
 
     <div class="timeline">
       <div class="event">
-        <div class="event-time">Morning</div>
-        <div class="event-name">✈️ Check Out & Head Home</div>
+        <div class="event-time">7:30 AM</div>
+        <div class="event-name">✈️ Check Out &amp; Head to Airport</div>
         <div class="event-loc">The Cosmopolitan → Harry Reid International Airport</div>
-        <div class="event-desc">Pack up and head out. If you have time before your flight, one last Secret Pizza slice makes a perfect farewell breakfast (opens at 11 AM). The Deuce can take you to the airport area, or grab a rideshare for about $15–20.</div>
+        <div class="event-desc">Your flight is at 9:50 AM, so aim to be at the airport by 7:45–8:00 AM. Grab a rideshare for about $15–20 (15 min to the airport). No time for Secret Pizza this morning — but that's what late-night runs were for.</div>
+      </div>
+
+      <div class="flight-card">
+        <div class="flight-route">
+          <div class="flight-point">
+            <div class="code">LAS</div>
+            <div class="city">Las Vegas</div>
+            <div class="time">9:50 AM</div>
+          </div>
+          <div class="flight-arrow">
+            <div class="flight-num">Flight #1596</div>
+            <div class="line"></div>
+          </div>
+          <div class="flight-point">
+            <div class="code">MCI</div>
+            <div class="city">Kansas City</div>
+            <div class="time">2:35 PM</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
