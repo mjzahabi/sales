@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PI Sales Intelligence Extension — Training Manual</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Cox Brand Tokens ── */
+  :root {
+    --power-blue: #0C80DF;
+    --joyride-blue: #024AA5;
+    --trust-blue: #1D3E74;
+    --impact-orange: #FF8210;
+    --energy-aqua: #00BCDD;
+    --platinum: #EEEEEF;
+    --silver: #CCCCCE;
+    --aluminum: #A7A9AC;
+    --steel: #808285;
+    --asphalt: #55575C;
+  }
+
+  [data-theme="light"] {
+    --bg: #F4F6FA;
+    --bg-surface: #FFFFFF;
+    --bg-card: rgba(29,62,116,0.03);
+    --bg-card-hover: rgba(12,128,223,0.05);
+    --bg-step: rgba(29,62,116,0.025);
+    --border: rgba(29,62,116,0.1);
+    --border-accent: rgba(0,188,221,0.35);
+    --text: #1D3E74;
+    --text-body: #2E4A6A;
+    --text-secondary: #4A5A7A;
+    --text-muted: #808285;
+    --tip-bg: rgba(0,188,221,0.06);
+    --tip-border: rgba(0,188,221,0.3);
+    --warn-bg: rgba(255,130,16,0.07);
+    --warn-border: rgba(255,130,16,0.3);
+    --code-bg: rgba(29,62,116,0.06);
+    --code-text: #024AA5;
+    --num-bg: var(--power-blue);
+    --badge-bg: rgba(12,128,223,0.1);
+    --badge-text: var(--joyride-blue);
+    --auto-bg: rgba(0,188,221,0.1);
+    --auto-text: #0C6B8F;
+    --manual-bg: rgba(255,130,16,0.1);
+    --manual-text: #A85200;
+    --shadow: 0 2px 12px rgba(29,62,116,0.08);
+    --shadow-lg: 0 8px 32px rgba(29,62,116,0.12);
+  }
+
+  [data-theme="dark"] {
+    --bg: #0B1120;
+    --bg-surface: #131B2E;
+    --bg-card: rgba(255,255,255,0.04);
+    --bg-card-hover: rgba(12,128,223,0.07);
+    --bg-step: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.08);
+    --border-accent: rgba(0,188,221,0.25);
+    --text: #E8EDF5;
+    --text-body: #C8D4E8;
+    --text-secondary: #8B9BC0;
+    --text-muted: #5A6A8A;
+    --tip-bg: rgba(0,188,221,0.08);
+    --tip-border: rgba(0,188,221,0.25);
+    --warn-bg: rgba(255,130,16,0.08);
+    --warn-border: rgba(255,130,16,0.25);
+    --code-bg: rgba(0,0,0,0.3);
+    --code-text: var(--energy-aqua);
+    --num-bg: var(--power-blue);
+    --badge-bg: rgba(12,128,223,0.15);
+    --badge-text: #7AC0F8;
+    --auto-bg: rgba(0,188,221,0.1);
+    --auto-text: var(--energy-aqua);
+    --manual-bg: rgba(255,130,16,0.1);
+    --manual-text: #FFB070;
+    --shadow: 0 2px 12px rgba(0,0,0,0.3);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    transition: background 0.35s, color 0.25s;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Theme Toggle ── */
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 200;
+    width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-secondary);
+    transition: all 0.25s;
+  }
+  .theme-toggle:hover { border-color: var(--power-blue); transform: scale(1.08); }
+
+  /* ── Layout ── */
+  .page { max-width: 1600px; margin: 0 auto; padding: 0 60px 100px; }
+
+  /* ── Document Header ── */
+  .doc-header {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .doc-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    padding: 5px 14px; border-radius: 50px;
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .doc-eyebrow svg { opacity: 0.7; }
+  .doc-title {
+    font-size: 2.5rem; font-weight: 700;
+    letter-spacing: -0.5px; line-height: 1.2;
+    margin-bottom: 14px; color: var(--text);
+  }
+  .doc-title span { color: var(--power-blue); }
+  .doc-subtitle {
+    font-size: 1.05rem; color: var(--text-secondary);
+    max-width: 880px; line-height: 1.75;
+    margin-bottom: 24px;
+  }
+  .doc-meta {
+    display: flex; gap: 28px; flex-wrap: wrap;
+    font-size: 0.75rem; color: var(--text-muted);
+  }
+  .doc-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ── Sticky Nav ── */
+  .sticky-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 0;
+    margin-bottom: 56px;
+  }
+  .nav-inner {
+    max-width: 1600px; margin: 0 auto;
+    padding: 0 60px;
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-item {
+    display: flex; align-items: center; gap: 7px;
+    padding: 14px 18px;
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-item:hover { color: var(--power-blue); border-bottom-color: var(--power-blue); }
+  .nav-item.active { color: var(--power-blue); border-bottom-color: var(--power-blue); }
+  .nav-num {
+    width: 18px; height: 18px; border-radius: 4px;
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    font-size: 0.6rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Section ── */
+  .doc-section {
+    margin-bottom: 72px;
+    scroll-margin-top: 54px;
+  }
+  .section-heading {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--num-bg); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 700; flex-shrink: 0;
+  }
+  .section-heading h2 { font-size: 1.55rem; font-weight: 700; }
+  .section-intro {
+    font-size: 0.97rem; color: var(--text-secondary);
+    max-width: 960px; line-height: 1.8;
+    margin-bottom: 28px;
+  }
+
+  /* ── Prose ── */
+  .prose { max-width: 960px; }
+  .prose p {
+    font-size: 0.93rem; color: var(--text-secondary);
+    line-height: 1.8; margin-bottom: 14px;
+  }
+  .prose strong { color: var(--text); font-weight: 600; }
+
+  /* ── Steps ── */
+  .steps { margin: 24px 0; }
+  .step {
+    display: flex; gap: 18px;
+    padding: 20px 24px;
+    background: var(--bg-step);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .step:hover { background: var(--bg-card-hover); border-color: var(--border-accent); }
+  .step-num {
+    width: 30px; height: 30px; min-width: 30px;
+    border-radius: 50%; background: var(--num-bg);
+    color: white; display: flex; align-items: center;
+    justify-content: center; font-size: 0.75rem;
+    font-weight: 700; margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 5px; }
+  .step-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+  .step-desc code {
+    background: var(--code-bg); color: var(--code-text);
+    padding: 2px 7px; border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+  }
+
+  /* ── Cards ── */
+  .card-grid {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 24px 0;
+  }
+  .card-grid.two { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.four { grid-template-columns: repeat(4, 1fr); }
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px 20px;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+  }
+  .card:hover { border-color: var(--border-accent); box-shadow: var(--shadow-lg); }
+  .card-icon { font-size: 1.4rem; margin-bottom: 10px; }
+  .card-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; }
+  .card-body { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+  .card.highlight { border-color: rgba(12,128,223,0.25); background: var(--bg-card-hover); }
+  .card.orange-highlight { border-color: rgba(255,130,16,0.25); background: var(--warn-bg); }
+
+  /* ── Callouts ── */
+  .callout {
+    padding: 18px 22px; border-radius: 10px;
+    margin: 18px 0; font-size: 0.88rem; line-height: 1.75;
+  }
+  .callout-label {
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout.tip { background: var(--tip-bg); border: 1px solid var(--tip-border); }
+  .callout.tip .callout-label { color: var(--energy-aqua); }
+  .callout.tip p { color: var(--text-secondary); margin: 0; }
+  .callout.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); }
+  .callout.warn .callout-label { color: var(--impact-orange); }
+  .callout.warn p { color: var(--text-secondary); margin: 0; }
+
+  /* ── Talk Track ── */
+  .talk-track {
+    background: var(--bg-card-hover);
+    border-left: 3px solid var(--power-blue);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px; margin: 16px 0;
+    position: relative;
+  }
+  .talk-track::before {
+    content: 'TALK TRACK';
+    position: absolute; top: 8px; right: 12px;
+    font-size: 0.58rem; font-weight: 700;
+    letter-spacing: 1.5px; color: var(--power-blue); opacity: 0.55;
+  }
+  .talk-track p { font-size: 0.87rem; color: var(--text-secondary); font-style: italic; margin: 0; line-height: 1.8; }
+
+  .ask-dealer {
+    background: var(--warn-bg);
+    border-left: 3px solid var(--impact-orange);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px; margin: 16px 0;
+    position: relative;
+  }
+  .ask-dealer::before {
+    content: 'ASK THE DEALER';
+    position: absolute; top: 8px; right: 12px;
+    font-size: 0.58rem; font-weight: 700;
+    letter-spacing: 1.5px; color: var(--impact-orange); opacity: 0.55;
+  }
+  .ask-dealer p { font-size: 0.87rem; color: var(--text-secondary); font-style: italic; margin: 0; }
+
+  /* ── Field Table ── */
+  .field-table {
+    width: 100%; border-collapse: collapse;
+    margin: 20px 0; font-size: 0.83rem;
+    box-shadow: var(--shadow);
+    border-radius: 10px; overflow: hidden;
+  }
+  .field-table th {
+    text-align: left; padding: 11px 16px;
+    background: var(--trust-blue); color: white;
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .field-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    background: var(--bg-surface);
+  }
+  .field-table tr:last-child td { border-bottom: none; }
+  .field-table tr:hover td { background: var(--bg-card-hover); }
+  .field-table .field-name { font-weight: 600; color: var(--text); }
+  .badge-auto {
+    display: inline-block;
+    background: var(--auto-bg); color: var(--auto-text);
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .badge-manual {
+    display: inline-block;
+    background: var(--manual-bg); color: var(--manual-text);
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px;
+  }
+
+  /* ── Button mockup ── */
+  .button-row {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .btn-mock {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 18px; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 600;
+    border: 1px solid;
+  }
+  .btn-mock.primary {
+    background: var(--power-blue); color: white; border-color: var(--power-blue);
+  }
+  .btn-mock.secondary {
+    background: var(--bg-card); color: var(--text-secondary); border-color: var(--border);
+  }
+  .btn-mock.orange {
+    background: var(--impact-orange); color: white; border-color: var(--impact-orange);
+  }
+  .btn-mock.aqua {
+    background: var(--energy-aqua); color: white; border-color: var(--energy-aqua);
+  }
+
+  /* ── Doc launch cards ── */
+  .doc-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 48px;
+    transition: box-shadow 0.2s;
+  }
+  .doc-card:hover { box-shadow: var(--shadow-lg); }
+  .doc-card-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .doc-card-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .doc-card-icon.blue { background: rgba(12,128,223,0.12); }
+  .doc-card-icon.aqua { background: rgba(0,188,221,0.12); }
+  .doc-card-icon.orange { background: rgba(255,130,16,0.12); }
+  .doc-card-icon.green { background: rgba(16,185,129,0.12); }
+  .doc-card-meta { flex: 1; }
+  .doc-card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 3px; }
+  .doc-card-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+  .doc-card-tag {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 4px 12px; border-radius: 50px;
+    background: var(--badge-bg); color: var(--badge-text);
+  }
+  .doc-card-body { padding: 28px; }
+  .doc-card-body .section-label {
+    font-size: 0.63rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-muted);
+    margin: 22px 0 10px;
+  }
+  .doc-card-body .section-label:first-child { margin-top: 0; }
+
+  /* ── Store install strip ── */
+  .install-strip {
+    background: linear-gradient(135deg, var(--trust-blue), var(--joyride-blue));
+    border-radius: 14px; padding: 32px 36px;
+    display: flex; align-items: center; gap: 28px;
+    margin: 28px 0; color: white;
+    box-shadow: var(--shadow-lg);
+  }
+  .install-strip-icon { font-size: 2.5rem; flex-shrink: 0; }
+  .install-strip-body { flex: 1; }
+  .install-strip-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+  .install-strip-sub { font-size: 0.85rem; opacity: 0.8; line-height: 1.6; }
+  .install-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--energy-aqua); color: white;
+    padding: 12px 22px; border-radius: 8px;
+    font-size: 0.85rem; font-weight: 700;
+    text-decoration: none; white-space: nowrap;
+    flex-shrink: 0; transition: opacity 0.2s;
+  }
+  .install-cta:hover { opacity: 0.88; }
+
+  /* ── Stat bar ── */
+  .stat-row {
+    display: flex; gap: 16px; margin: 24px 0; flex-wrap: wrap;
+  }
+  .stat-box {
+    flex: 1; min-width: 140px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+    text-align: center; box-shadow: var(--shadow);
+  }
+  .stat-num {
+    font-size: 1.7rem; font-weight: 700;
+    color: var(--power-blue); line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: var(--border); margin: 64px 0; }
+
+  /* ── Footer ── */
+  .doc-footer {
+    text-align: center; padding: 32px 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.7rem; color: var(--text-muted);
+  }
+
+  /* ── Objection block ── */
+  .objection {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid #ef4444;
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px; margin: 14px 0;
+  }
+  .objection .obj-label {
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #ef4444; margin-bottom: 4px;
+  }
+  .objection .obj-q { font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; }
+  .objection .obj-a { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.7; }
+
+  /* ── Flow diagram ── */
+  .flow {
+    display: flex; align-items: center; gap: 0;
+    margin: 24px 0; flex-wrap: wrap;
+  }
+  .flow-step {
+    flex: 1; min-width: 120px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 14px;
+    text-align: center; box-shadow: var(--shadow);
+    position: relative;
+  }
+  .flow-step-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--power-blue); color: white;
+    font-size: 0.68rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 8px;
+  }
+  .flow-step-title { font-size: 0.8rem; font-weight: 700; margin-bottom: 4px; }
+  .flow-step-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; }
+  .flow-arrow {
+    color: var(--power-blue); font-size: 1.2rem;
+    padding: 0 4px; flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 1000px) {
+    .page { padding: 0 24px 60px; }
+    .nav-inner { padding: 0 24px; }
+    .card-grid, .card-grid.two, .card-grid.four { grid-template-columns: 1fr; }
+    .install-strip { flex-direction: column; text-align: center; }
+    .doc-title { font-size: 1.8rem; }
+    .flow { gap: 8px; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" title="Toggle theme" onclick="
+  const b = document.body.parentElement;
+  const d = b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  b.setAttribute('data-theme', d);
+  document.getElementById('sun-icon').style.display = d==='dark'?'block':'none';
+  document.getElementById('moon-icon').style.display = d==='light'?'block':'none';
+">
+  <svg id="sun-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <svg id="moon-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<div class="page">
+
+  <!-- ══ HEADER ══ -->
+  <div class="doc-header">
+    <div class="doc-eyebrow">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+      Internal Sales Training — Cox Automotive
+    </div>
+    <h1 class="doc-title">PI Sales Intelligence Extension<br><span>Training Manual</span></h1>
+    <p class="doc-subtitle">Everything your sales team needs to install the extension, capture dealer data automatically, and use all four AI-powered presentation documents to tell a compelling, data-driven story in every dealership meeting.</p>
+    <div class="doc-meta">
+      <span>📄 Internal training document</span>
+      <span>👥 Cox Automotive sales team</span>
+      <span>⏱ ~15 min read</span>
+      <span>🔖 Version 2.3</span>
+    </div>
+  </div>
+
+  <!-- ══ STICKY NAV ══ -->
+  <div class="sticky-nav">
+    <div class="nav-inner">
+      <a class="nav-item" href="#what"><span class="nav-num">1</span> What is this extension?</a>
+      <a class="nav-item" href="#install"><span class="nav-num">2</span> Install from Chrome Store</a>
+      <a class="nav-item" href="#how-it-works"><span class="nav-num">3</span> How it works</a>
+      <a class="nav-item" href="#sidebar"><span class="nav-num">4</span> Using the sidebar</a>
+      <a class="nav-item" href="#doc-2page"><span class="nav-num">5</span> 2-Page Report</a>
+      <a class="nav-item" href="#doc-pi"><span class="nav-num">6</span> PI Dashboard</a>
+      <a class="nav-item" href="#doc-amp"><span class="nav-num">7</span> 10-Page AMP Analysis</a>
+      <a class="nav-item" href="#doc-sd"><span class="nav-num">8</span> Connected Service Drive</a>
+      <a class="nav-item" href="#tips"><span class="nav-num">9</span> Tips for maximum impact</a>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 1: WHAT IS IT ══ -->
+  <div class="doc-section" id="what">
+    <div class="section-heading">
+      <div class="section-num">1</div>
+      <h2>What is this extension?</h2>
+    </div>
+    <p class="section-intro">The PI Sales Intelligence Extension is a Chrome browser tool that lives on top of VinSolutions. It captures a dealer's Predictive Insights data automatically and uses it to instantly populate four professional sales presentation documents — all from a single click.</p>
+
+    <div class="prose">
+      <p>Think of it as your personal backstage crew. Before the extension existed, loading a dealer presentation meant navigating to the Automotive Intelligence dashboard, manually reading off numbers, entering them one by one into a separate document, and hoping you didn't transpose anything. That process took 15-20 minutes and introduced human error into the most important data you'd show a dealer.</p>
+      <p>The extension eliminates all of that. It sits quietly in the background whenever you're on a VinSolutions page. The moment you're on the Automotive Intelligence dashboard, it reads every buying signal metric directly from the page. When you click a button in the sidebar to launch a presentation document, your data is already there — dealer name, market-level signals, source breakdowns, previously sold counts, sales comparisons — all live and accurate, all ready to present.</p>
+    </div>
+
+    <div class="card-grid four" style="margin-top:28px;">
+      <div class="card highlight">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Generate 2-Page Report</div>
+        <div class="card-body">A concise, printable buying signals overview. Perfect for walk-ins or quick follow-up leave-behinds.</div>
+      </div>
+      <div class="card highlight">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">PI Dashboard Presentation</div>
+        <div class="card-body">The full Predictive Insights story — data moat, blind spot narrative, market-level signals, retention vs. acquisition.</div>
+      </div>
+      <div class="card highlight">
+        <div class="card-icon">📈</div>
+        <div class="card-title">10-Page AMP Analysis</div>
+        <div class="card-body">A deep-dive combining Predictive Insights and AMP to show the dealer what's possible across their entire database.</div>
+      </div>
+      <div class="card highlight">
+        <div class="card-icon">🔧</div>
+        <div class="card-title">Connected Service Drive</div>
+        <div class="card-body">The service drive acquisition story — showing how the Cox ecosystem turns service appointments into vehicle sales.</div>
+      </div>
+    </div>
+
+    <div class="callout tip" style="margin-top:8px;">
+      <div class="callout-label">The core shift</div>
+      <p>The old workflow asked you to be a data entry clerk before every meeting. The extension makes you a data-ready storyteller. The numbers are already in the document before you ever open it. Every second you're not typing is a second you're thinking about how to use the data, not where to find it.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2: INSTALL ══ -->
+  <div class="doc-section" id="install">
+    <div class="section-heading">
+      <div class="section-num">2</div>
+      <h2>Install from the Chrome Web Store</h2>
+    </div>
+    <p class="section-intro">The extension is published on the Chrome Web Store and installs in under 60 seconds. No IT ticket, no download, no configuration file — just three clicks.</p>
+
+    <div class="install-strip">
+      <div class="install-strip-icon">🧩</div>
+      <div class="install-strip-body">
+        <div class="install-strip-title">PI Sales Intelligence Extension</div>
+        <div class="install-strip-sub">Available on the Chrome Web Store. Works in Chrome on any computer where you access VinSolutions. No login or account setup required after installation.</div>
+      </div>
+      <a class="install-cta" href="https://chromewebstore.google.com/detail/bjaknmekcihfbflmbghlbackkgijdelc?utm_source=item-share-cb" target="_blank">
+        Open in Chrome Store →
+      </a>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Open the Chrome Web Store listing</div>
+          <div class="step-desc">Click the link above, or search "PI Sales Intelligence" in the Chrome Web Store. Make sure you're using Google Chrome (not Firefox, Safari, or Edge). The extension will not appear in other browsers.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Click "Add to Chrome"</div>
+          <div class="step-desc">A dialog box will appear listing the permissions the extension needs. These are standard — the extension reads data from VinSolutions pages you're already logged into. Click <code>Add extension</code> to confirm.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Pin the extension to your toolbar (recommended)</div>
+          <div class="step-desc">Click the puzzle piece icon (🧩) at the top right of Chrome. Find "PI Sales Intelligence" in the list and click the pin icon to keep it visible in your toolbar. This makes it easier to spot when the extension is active on a page.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Navigate to VinSolutions — you're done</div>
+          <div class="step-desc">Open any VinSolutions page. You'll see a small <code>SI</code> button appear at the bottom-right of the screen. That's your sidebar toggle. The extension is installed and active. No sign-in, no setup, no configuration required.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Works everywhere you use VinSolutions</div>
+      <p>The extension activates on all VinSolutions domains — <strong>vinsolutions.com</strong> and <strong>vinsolutions.app.coxautoinc.com</strong> — including reporting pages. You don't need to be on a specific page for the sidebar to appear. Data capture requires the Automotive Intelligence dashboard, but the document-launch buttons in the sidebar work from any VinSolutions page once data has been captured.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3: HOW IT WORKS ══ -->
+  <div class="doc-section" id="how-it-works">
+    <div class="section-heading">
+      <div class="section-num">3</div>
+      <h2>How it works — the two-step model</h2>
+    </div>
+    <p class="section-intro">The extension has one job: read the dealer's Predictive Insights data from the dashboard and carry it into a presentation document without any manual steps. Here's exactly how that happens.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-step-title">Navigate to PI Dashboard</div>
+        <div class="flow-step-desc">Go to the Automotive Intelligence Dashboard in VinSolutions reporting</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-step-title">Extension reads the page</div>
+        <div class="flow-step-desc">The sidebar auto-captures all buying signal metrics visible on the dashboard</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-num">3</div>
+        <div class="flow-step-title">Click a document button</div>
+        <div class="flow-step-desc">Choose one of four presentation documents from the sidebar</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-num">4</div>
+        <div class="flow-step-title">Document opens pre-populated</div>
+        <div class="flow-step-desc">The dealer's actual data is already inside. Present immediately.</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px;">
+      <p><strong>What data is captured automatically?</strong> When you're on the Automotive Intelligence Dashboard, the extension reads: total customers with buying signals, active leads with buying signals, market-level signal counts (Browsing / Actively Shopping / Ready to Buy), source breakdown counts (Autotrader, KBB, Dealer.com, Accelerate My Deal), previously sold customer counts, retention vs. acquisition figures, and the sales comparison month-over-month data. It also pulls the dealer name from the page context.</p>
+      <p><strong>What requires manual entry?</strong> A small handful of fields aren't on the PI dashboard and must be entered manually: your name and contact details (for the presentation footer), and the dealer's total database size and mailable customer count, which come from the Campaigns tab. The sidebar makes these fields easy to find and edit before launching any document.</p>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-label">Important — be on the main dashboard, not a drill-down</div>
+      <p>Automatic data capture works on the <strong>Automotive Intelligence main dashboard</strong> (the one with the summary tiles and market-level cards). If you're on a drill-down report like Buying Signal Details or Sentiment Analysis, the extension will still show the sidebar but won't capture data from those pages. Navigate back to the main dashboard first, then let the extension capture, then drill into sub-reports if needed.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4: SIDEBAR ══ -->
+  <div class="doc-section" id="sidebar">
+    <div class="section-heading">
+      <div class="section-num">4</div>
+      <h2>Using the sidebar</h2>
+    </div>
+    <p class="section-intro">The sidebar is your control panel — it shows you captured data, lets you fill in any missing fields, and gives you one-click access to all four presentation documents.</p>
+
+    <div class="card-grid two">
+      <div class="card">
+        <div class="card-title">Opening and closing the sidebar</div>
+        <div class="card-body" style="margin-top:6px;">
+          Look for the <strong>SI button</strong> at the bottom-right of any VinSolutions page. Click it to expand the sidebar. Click the <strong>×</strong> in the sidebar header, or click the SI button again, to collapse it. The sidebar slides in from the right without covering the VinSolutions interface — your reports stay fully visible underneath.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sidebar states — what the SI button color means</div>
+        <div class="card-body" style="margin-top:6px;">
+          <strong>Loading (pulsing):</strong> Extension is initializing on the page.<br><br>
+          <strong>Ready (solid blue):</strong> Extension is active. If you're on the PI dashboard, data capture is available. If you're on another page, previously captured data is loaded and document launch buttons are active.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;">
+      <div class="step-title" style="margin-bottom:14px; font-size:1rem;">The four document launch buttons</div>
+      <div class="button-row">
+        <div class="btn-mock primary">📊 Generate 2-Page Report</div>
+        <div class="btn-mock aqua">🎯 PI Dashboard Presentation</div>
+        <div class="btn-mock secondary">📈 Generate 10-Page Analysis</div>
+        <div class="btn-mock secondary">🔧 Connected Service Drive</div>
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:20px;">
+      <div class="step">
+        <div class="step-num" style="background:var(--power-blue);">📊</div>
+        <div class="step-content">
+          <div class="step-title">Generate 2-Page Report</div>
+          <div class="step-desc">Opens the compact buying signals summary. Pulls market-level signal counts, source breakdown, sold customer data, priority signals, and sales comparison. Most fields are auto-populated; manually enter dealership name, database size, mailable count, and your contact info before launching.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:var(--energy-aqua);">🎯</div>
+        <div class="step-content">
+          <div class="step-title">PI Dashboard Presentation</div>
+          <div class="step-desc">Opens the full Predictive Insights presentation — the data moat story, dual customer journey roadmaps, market-level cards, and the retention vs. acquisition comparison. Fully auto-populated from your PI dashboard capture. This is the primary document for Predictive Insights discovery or competitive conversations.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:var(--joyride-blue);">📈</div>
+        <div class="step-content">
+          <div class="step-title">Generate 10-Page Analysis</div>
+          <div class="step-desc">Opens the deeper AMP + Predictive Insights analysis. Combines buying signal data with AMP campaign performance context. Best used in follow-up meetings or when a dealer needs a more comprehensive business case. Auto-populated with the same captured data set.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:var(--impact-orange);">🔧</div>
+        <div class="step-content">
+          <div class="step-title">Connected Service Drive</div>
+          <div class="step-desc">Opens the service drive acquisition presentation, which focuses on the Xtime-to-vAuto-to-VinSolutions ecosystem story. Pulls the same PI data plus a revenue impact calculator. Best used when speaking with a Fixed Ops Director, GM, or Used Car Manager focused on vehicle sourcing costs.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Close the sidebar before presenting</div>
+      <p>The sidebar is your prep area. Once you've launched a document and verified the data looks right, close the sidebar before you share your screen or turn the laptop toward the dealer. The presentation should feel finished and polished — not like something you're actively configuring.</p>
+    </div>
+  </div>
+
+  <!-- ══ DIVIDER ══ -->
+  <div class="divider"></div>
+  <div style="text-align:center; margin: -48px 0 48px; font-size:0.72rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted);">The Four Presentation Documents</div>
+
+  <!-- ══ SECTION 5: 2-PAGE REPORT ══ -->
+  <div class="doc-section" id="doc-2page">
+    <div class="section-heading">
+      <div class="section-num">5</div>
+      <h2>The 2-Page Buying Signals Report</h2>
+    </div>
+    <p class="section-intro">A tight, printable two-pager that puts the dealer's buying signal universe on one screen. Best used as a quick-hit opener in a short meeting or a leave-behind after a longer one.</p>
+
+    <div class="doc-card">
+      <div class="doc-card-header">
+        <div class="doc-card-icon blue">📊</div>
+        <div class="doc-card-meta">
+          <div class="doc-card-title">Generate 2-Page Report</div>
+          <div class="doc-card-subtitle">Predictive Insights Buying Signals Summary — compact, printable, immediately actionable</div>
+        </div>
+        <div class="doc-card-tag">Launch Button: 📊 Generate 2-Page Report</div>
+      </div>
+      <div class="doc-card-body">
+
+        <div class="section-label">When to use it</div>
+        <div class="card-grid two">
+          <div class="card">
+            <div class="card-title">Best situations</div>
+            <div class="card-body">Short meetings (30 min or less), walk-in conversations, when the dealer just wants to see the numbers without a full narrative, or as a personalized leave-behind document after any of the other three presentations.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Audience fit</div>
+            <div class="card-body">Any dealer role — but especially effective with a General Manager or Dealer Principal who wants a quick data snapshot. The two-page format respects their time and makes it easy to share with their team after the meeting.</div>
+          </div>
+        </div>
+
+        <div class="section-label">What auto-populates from the extension</div>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Status</th><th>Where it appears in the document</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Customers shopping for a car</td><td><span class="badge-auto">AUTO</span></td><td>Header hook — the "X customers in your database are shopping RIGHT NOW" headline</td></tr>
+            <tr><td class="field-name">Online activity (72 hrs)</td><td><span class="badge-auto">AUTO</span></td><td>Stats grid, recent engagement indicator</td></tr>
+            <tr><td class="field-name">Market level signals (Browsing / Active / Ready)</td><td><span class="badge-auto">AUTO</span></td><td>Signals breakdown section — all three market tiers</td></tr>
+            <tr><td class="field-name">Source breakdown (Autotrader, KBB, Dealer.com)</td><td><span class="badge-auto">AUTO</span></td><td>Source breakdown bar chart</td></tr>
+            <tr><td class="field-name">Sold customers back in market</td><td><span class="badge-auto">AUTO</span></td><td>Sold customer segment panel</td></tr>
+            <tr><td class="field-name">Priority signals (no leads, penciling deals)</td><td><span class="badge-auto">AUTO</span></td><td>Priority signals panel — the urgency section</td></tr>
+            <tr><td class="field-name">Sales comparison (with / without AMP + PI)</td><td><span class="badge-auto">AUTO</span></td><td>Before/after sales comparison visual</td></tr>
+            <tr><td class="field-name">Dealership name</td><td><span class="badge-manual">MANUAL</span></td><td>Header, intro headline, PDF filename</td></tr>
+            <tr><td class="field-name">Database size (total records)</td><td><span class="badge-manual">MANUAL</span></td><td>Stats grid — "X customers in your database"</td></tr>
+            <tr><td class="field-name">Mailable customers</td><td><span class="badge-manual">MANUAL</span></td><td>Priority signals — reach potential count</td></tr>
+            <tr><td class="field-name">Your name / email / phone</td><td><span class="badge-manual">MANUAL</span></td><td>Footer contact call-to-action</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout warn">
+          <div class="callout-label">Finding database size and mailable count</div>
+          <p>These two fields don't live on the PI dashboard — they're in the <strong>Campaigns Tab</strong> in VinSolutions. Navigate there before your meeting, note the Total Database Size and Mailable Customers count, and enter them in the Edit panel. Format with commas for readability — the document displays numbers exactly as entered, so <code>162,116</code> looks far better than <code>162116</code>.</p>
+        </div>
+
+        <div class="section-label">Presenting this document</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Open with the headline number</div>
+              <div class="step-desc">Lead with the "X customers shopping RIGHT NOW" stat. Don't explain it yet — just let the dealer read it. That number is their data, not a generic figure, and it usually stops them mid-thought.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Walk the stats grid</div>
+              <div class="step-desc">Break down what you're looking at: database size, active shoppers, recent online activity. Tie each number back to real behavior: "These aren't people who said they might be interested — these are customers actively on Autotrader and KBB right now."</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Drill into the signals by market level</div>
+              <div class="step-desc">Walk Browsing → Actively Shopping → Ready to Buy. Emphasize that Ready to Buy customers are 9x more likely to purchase within 30 days. Then point to the source breakdown — show them which Cox platforms are generating the signals in their database specifically.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Land the priority signals section</div>
+              <div class="step-desc">This is the urgency moment. The "no active lead" number and the "penciling deals on competitor sites" number are the ones that sting. Point to them and ask:</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ask-dealer"><p>"These customers are actively shopping and nobody on your team is talking to them. What does your process look like for reaching out to in-market customers who haven't submitted a lead?"</p></div>
+
+        <div class="steps" style="margin-top:16px;">
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Close with the sales comparison</div>
+              <div class="step-desc">The before/after comparison — sales without AMP + PI vs. with — gives the conversation a forward-looking frame. Transition to next steps from here, or export the PDF and send it same day.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Key stats to have ready</div>
+        <div class="stat-row">
+          <div class="stat-box"><div class="stat-num">9×</div><div class="stat-label">More likely to purchase within 30 days (Ready to Buy)</div></div>
+          <div class="stat-box"><div class="stat-num">25%</div><div class="stat-label">Average increase in vehicle sales with AMP + PI</div></div>
+          <div class="stat-box"><div class="stat-num">37%</div><div class="stat-label">More trade-in acquisitions</div></div>
+          <div class="stat-box"><div class="stat-num">11×</div><div class="stat-label">Return on investment for dealers using both</div></div>
+        </div>
+
+        <div class="section-label">Saving and sharing</div>
+        <div class="prose">
+          <p>Click <strong>Save PDF</strong> to download a two-page PDF named automatically as <code>Cox_Buying_Signals_[DealerName].pdf</code>. Click <strong>Email</strong> to open a pre-filled email with the key highlights and your contact info — attach the PDF before sending. Best practice: send within two hours of the meeting while the conversation is fresh. Add a personal note referencing something specific from the discussion before clicking send.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 6: PI DASHBOARD ══ -->
+  <div class="doc-section" id="doc-pi">
+    <div class="section-heading">
+      <div class="section-num">6</div>
+      <h2>The PI Dashboard Presentation</h2>
+    </div>
+    <p class="section-intro">The flagship document. A full narrative presentation that walks a dealer through the invisible customer journey, the Cox data moat, their actual buying signal metrics, and the cost of doing nothing. This is the primary tool for Predictive Insights discovery conversations.</p>
+
+    <div class="doc-card">
+      <div class="doc-card-header">
+        <div class="doc-card-icon aqua">🎯</div>
+        <div class="doc-card-meta">
+          <div class="doc-card-title">PI Dashboard Presentation</div>
+          <div class="doc-card-subtitle">Full Predictive Insights story — data moat, dual journey roadmaps, buying signals dashboard, retention vs. acquisition</div>
+        </div>
+        <div class="doc-card-tag">Launch Button: 🎯 PI Dashboard Presentation</div>
+      </div>
+      <div class="doc-card-body">
+
+        <div class="section-label">When to use it</div>
+        <div class="card-grid two">
+          <div class="card">
+            <div class="card-title">Best situations</div>
+            <div class="card-body">Discovery meetings focused on Predictive Insights, competitive churn risk conversations, any meeting where you need to explain "why Cox data is different," or when a dealer is considering canceling VinSolutions and you need to demonstrate the value of the integrated ecosystem.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Audience fit</div>
+            <div class="card-body">General Manager, Dealer Principal, or Internet/BDC Director. Anyone who controls the CRM vendor decision. This presentation is designed to shift how they think about customer intelligence — from reactive (lead management) to proactive (buying signal-based outreach).</div>
+          </div>
+        </div>
+
+        <div class="section-label">Narrative structure — walk the dealer through this sequence</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">The 84% headline</div>
+              <div class="step-desc">Open with the stat: 84% of the customer journey happens before a lead is submitted. Let it land. Ask the dealer: "Do you know what your customer is doing for the first five weeks before they fill out a form on your website?" Most won't have an answer — that's exactly the point.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">The blind spot narrative</div>
+              <div class="step-desc">Walk them week by week. The customer is on KBB in week 1, Autotrader in weeks 2-3, their Dealer.com website in weeks 4-5, and the lead (maybe) comes in week 6. Let them feel the gap between what they can see and what's actually happening.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">The data moat</div>
+              <div class="step-desc">Point to the source signal counts — these are their real numbers, not hypotheticals. Explain that first-party data from Autotrader, KBB, and Dealer.com is data no other CRM vendor can access. Then direct their attention to the ecosystem stat strip above the source cards.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-label">The numbers that end the debate</div>
+          <p>When a dealer asks "why is your data different?" or a competitor claims similar intelligence, these are the stats that end it: Cox Automotive processes <strong>2.7 billion online visits, 24 billion consumer interactions, 12 billion ad impressions, 180 million service records, 30 million credit applications, and 12 million sales records.</strong> No third-party data provider, no competitor CRM, no standalone marketing tool has access to this. It's not close. When the dealer sees those numbers sitting directly above their own signal counts from Autotrader, KBB, and Dealer.com, the value proposition stops being theoretical.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Why competitors can't replicate this</div>
+              <div class="step-desc">Four cards address the specific angles of competitive differentiation: exclusive data access, cross-platform identity, real-time signals, intent prioritization. Don't read them aloud — let the dealer scan. The 17M Autotrader visitors and 27M KBB users stats land hardest. If a competitor claims similar capabilities, ask: "Do they have access to Autotrader and KBB browsing data?" The answer is always no.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">The dual roadmaps</div>
+              <div class="step-desc">This is the aha moment. Two timelines side by side: the left shows the customer lost at week 4 to a competitor. The right shows Predictive Insights intercepting at week 1-2 and closing by week 3. Ask: "Which outcome do you want?"</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <div class="step-title">"Was that your customer?"</div>
+              <div class="step-desc">Let this question breathe for three to four seconds. Don't fill the silence. Then scroll to the Buying Signals Dashboard — which is now populated with their real data. Every number you show them is a real customer they might be losing right now.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <div class="step-title">The market-level cards and panel stings</div>
+              <div class="step-desc">Walk the five market-level cards left to right: Not in Market → Browsing → Actively Shopping → Ready to Buy. Each card shows the specific behavioral signals the AI measures — not guesswork, real browsing patterns. The Ready to Buy card has the killer stat: <strong>9x more likely to purchase within 30 days.</strong> Let that land, then point to the Ready to Buy sub-metrics in the dashboard below. The italic sting lines under each panel frame the cost of inaction — let the dealer read those themselves.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">8</div>
+            <div class="step-content">
+              <div class="step-title">Retention vs. acquisition — close here</div>
+              <div class="step-desc">The $700 vs. $70 comparison. Point to their Previously Sold Customers count and ask: "How many of these customers are going to buy from a competitor this month because nobody reached out?" Then pause. That's your close.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Common objections for this document</div>
+        <div class="objection">
+          <div class="obj-label">Objection</div>
+          <div class="obj-q">"Our CRM already shows us leads."</div>
+          <div class="obj-a">Your CRM shows you customers who raised their hand. But the customer who's been on Autotrader for three weeks and never submitted a lead is invisible to your CRM — and that's the majority of in-market shoppers. Predictive Insights shows you the 84% of the journey your CRM can't see.</div>
+        </div>
+        <div class="objection">
+          <div class="obj-label">Objection</div>
+          <div class="obj-q">"Another vendor told us they have similar data."</div>
+          <div class="obj-a">Ask them directly: "Does that vendor own Autotrader? Do they own KBB? Do they have 2.7 billion annual site visits?" The data moat isn't a feature — it's a property of who Cox Automotive is. No one else has it because no one else built these properties over the past 25 years.</div>
+        </div>
+
+        <div class="section-label">Presentation tips</div>
+        <div class="callout tip">
+          <div class="callout-label">Don't skip the narrative</div>
+          <p>It's tempting to jump straight to the dashboard numbers. Don't. The story flow — blind spot → data moat → dual roadmaps → "was that your customer?" → their data — builds the emotional context that makes the numbers hit. Without the story, the numbers are just numbers.</p>
+        </div>
+        <div class="callout tip">
+          <div class="callout-label">Use dark mode for screen presentations</div>
+          <p>Dark mode looks more premium on screen and reduces glare in meeting rooms. Use the small toggle in the upper-right corner of the document to switch. Light mode works better if the dealer wants to print or screenshot anything.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 7: 10-PAGE AMP ══ -->
+  <div class="doc-section" id="doc-amp">
+    <div class="section-heading">
+      <div class="section-num">7</div>
+      <h2>The 10-Page AMP Analysis</h2>
+    </div>
+    <p class="section-intro">A deeper business case that pairs Predictive Insights intelligence with AMP (Automotive Marketing Platform) campaign performance. This document is for dealers who want to understand the full picture — not just who's in market, but how to reach them and what to expect in return.</p>
+
+    <div class="doc-card">
+      <div class="doc-card-header">
+        <div class="doc-card-icon blue">📈</div>
+        <div class="doc-card-meta">
+          <div class="doc-card-title">10-Page AMP Analysis</div>
+          <div class="doc-card-subtitle">Predictive Insights + AMP combined — buying signals, campaign performance, database segmentation, ROI framing</div>
+        </div>
+        <div class="doc-card-tag">Launch Button: 📈 Generate 10-Page Analysis</div>
+      </div>
+      <div class="doc-card-body">
+
+        <div class="section-label">When to use it</div>
+        <div class="card-grid two">
+          <div class="card">
+            <div class="card-title">Best situations</div>
+            <div class="card-body">Follow-up meetings after an initial PI discovery conversation, when a dealer wants to understand how PI and AMP work together, or when you need a comprehensive leave-behind document that a dealer can review and share internally with ownership or their marketing team.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Audience fit</div>
+            <div class="card-body">Marketing Director, GM, or Dealer Principal who's evaluating the full Cox marketing ecosystem. This document answers "what do we do with the buying signal data?" — the answer is AMP, which turns signals into targeted campaign reach.</div>
+          </div>
+        </div>
+
+        <div class="section-label">What the document covers — section by section</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">The headline number</div>
+              <div class="step-desc">Opens with the dealer's total "shopping for a car" count from the extension capture. The framing: their database already contains the next sales — the question is whether they have the tools to see and act on them.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Database stats and market segmentation</div>
+              <div class="step-desc">Total database size, the portion actively shopping, and real-time online activity in the last 72 hours. This section establishes the size of the opportunity — not industry estimates, but their actual database.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">How PI and AMP work together</div>
+              <div class="step-desc">PI identifies who is in-market. AMP reaches them with targeted messaging before they submit a lead. The two-product story: identification without activation is just information, and activation without identification is just noise. Together, they're a precision strike.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">ROI benchmarks</div>
+              <div class="step-desc">25% more sales, 37% more trades, 11x ROI. These are the proof points for dealers who need to justify the investment upward. Have them ready to anchor before you show the numbers in the document.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">The buying signals deep-dive (pages 6-10)</div>
+              <div class="step-desc">The second half walks through market level signals, source breakdown, sold customer segments, and priority signals in full detail. This mirrors the PI dashboard data but formatted as a multi-page analytical document rather than a visual presentation. Use this half for leave-behind reading, not for live presenting.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Recommended presenting approach</div>
+        <div class="prose">
+          <p>Don't present all ten pages live — the document is designed as a hybrid: <strong>present pages 1-5 in the meeting</strong> (the story and ROI), then hand off or email the full PDF so they can review the signal breakdown on their own time. Dealers who get the full document as a leave-behind are far more likely to share it internally than dealers who only saw half of it during a meeting.</p>
+        </div>
+
+        <div class="talk-track">
+          <p>"I want to show you something. This is your dealership's buying signal profile — not industry data, not estimates, your actual customers right now. On page 3, you'll see X customers who are actively shopping and haven't submitted a lead. Page 4 shows where they're shopping — Autotrader, KBB, your own website. And page 5 shows what happens to dealers who activate on this: 25% more sales, 37% more trades. I'll leave the full analysis with you so you can review the individual signal breakdowns at your own pace — but let's talk about what you'd want to do with this information first."</p>
+        </div>
+
+        <div class="section-label">Key objections for this document</div>
+        <div class="objection">
+          <div class="obj-label">Objection</div>
+          <div class="obj-q">"We already do email marketing."</div>
+          <div class="obj-a">That's great — but are you targeting the right customers at the right time? Without Predictive Insights, you're sending the same message to someone just starting to browse and someone who's Ready to Buy today. AMP + PI lets you treat them differently. The Ready-to-Buy customer gets urgency. The browser gets nurture. Right message, right person, right moment.</div>
+        </div>
+        <div class="objection">
+          <div class="obj-label">Objection</div>
+          <div class="obj-q">"We don't have budget for new tools."</div>
+          <div class="obj-a">Point to the "Shopping — No Leads" number in the Priority Signals section. That's customers actively in-market who your team isn't talking to. If even 10% of them buy from a competitor this month, calculate the lost gross. The question isn't whether you can afford this — it's whether you can afford to keep not acting on data you're already sitting on.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 8: SERVICE DRIVE ══ -->
+  <div class="doc-section" id="doc-sd">
+    <div class="section-heading">
+      <div class="section-num">8</div>
+      <h2>The Connected Service Drive Presentation</h2>
+    </div>
+    <p class="section-intro">A targeted presentation for the conversation that often gets overlooked: the service drive as a vehicle acquisition channel. This document shows how Xtime, vAuto, VinSolutions, and Predictive Insights connect to turn a routine oil change appointment into a sourcing and sales opportunity.</p>
+
+    <div class="doc-card">
+      <div class="doc-card-header">
+        <div class="doc-card-icon orange">🔧</div>
+        <div class="doc-card-meta">
+          <div class="doc-card-title">Connected Service Drive</div>
+          <div class="doc-card-subtitle">Service drive acquisition story — sourcing cost comparison, iceberg blind spot, ecosystem flow, revenue impact calculator</div>
+        </div>
+        <div class="doc-card-tag">Launch Button: 🔧 Connected Service Drive</div>
+      </div>
+      <div class="doc-card-body">
+
+        <div class="section-label">When to use it</div>
+        <div class="card-grid two">
+          <div class="card">
+            <div class="card-title">Best situations</div>
+            <div class="card-body">Meetings with Fixed Ops Directors, Used Car Managers, or GMs who are frustrated with auction costs, dealers who don't use Xtime but could benefit from the connected workflow, or any conversation where the hook is vehicle sourcing rather than CRM intelligence.</div>
+          </div>
+          <div class="card orange-highlight">
+            <div class="card-title">The core premise</div>
+            <div class="card-body">The average dealer spends $1,800 per unit to source from auction. A vehicle in their service drive costs roughly $350. The service drive customer already trusts the dealership, the vehicle was just on their lift, and Cox data already knows they're back in market. The only thing missing is visibility — and that's exactly what this presentation solves.</div>
+          </div>
+        </div>
+
+        <div class="section-label">Before the meeting — preparation</div>
+        <div class="callout tip">
+          <div class="callout-label">The most important prep step for this document</div>
+          <p>Get the dealer's monthly RO count, their current used vehicle sourcing split (auction vs. trade-in vs. service drive), and their monthly used vehicle target before you walk in. The revenue impact calculator in the document adjusts in real time — if you can enter their actual numbers live in the meeting, the presentation stops being a pitch and becomes a custom analysis. Every field update changes the waterfall chart instantly.</p>
+        </div>
+
+        <div class="section-label">Narrative structure — the 8-stop walkthrough</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Open with a question, not a feature</div>
+              <div class="step-desc">Don't open the tool first. Start with: <em>"If I asked you where your most profitable used car inventory comes from, what would you say?"</em> Most dealers will say trade-ins or auction. Let them answer, then: "What if I told you your service drive is your lowest-cost, highest-margin acquisition channel — and most of those opportunities are completely invisible right now?" Then open the presentation.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">The sourcing problem — anchor on cost</div>
+              <div class="step-desc">Walk the three source cards: auction, walk-in trades, service drive and lease returns. Point to the per-unit acquisition cost under each card. If the dealer questions the auction number, open the sidebar and update it live with their number. This is a powerful moment — they see their own data changing the entire analysis. Then: "If we could shift even 15% of your volume from auction to your service drive, that's [savings amount] per month in acquisition costs alone."</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">The blind spot — transition from cost to visibility</div>
+              <div class="step-desc">Point to the four stat cards: monthly appointments → total acquisition pool → identified today → identified with Cox. The contrast between what they're currently catching (5% organically, through chance conversations) and what the data shows is in market (15-18%) is the emotional hook. Ask: "How many of your service customers do you currently identify as potential trade or purchase opportunities each month?"</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">The iceberg — make the invisible visible</div>
+              <div class="step-desc">This is the visual aha moment. "Think of every service appointment like an iceberg. Your team sees the oil change on the surface. But beneath the waterline, Cox's ecosystem reveals a complete behavioral profile." Walk through each brand logo in the iceberg: KBB trade valuation, Autotrader browsing, Dealertrack lease maturity, Predictive Insights Ready to Buy score. "Your service advisor has no idea." Then ask: "How would it change your process if your salesperson knew all of that before the customer even checked in?"</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">The PI data section — show their numbers</div>
+              <div class="step-desc">If you launched from the extension, the PI data is already here. If not, the defaults still tell a compelling story, but frame them as "typical for a dealership your size." Walk the market levels, then point to the "Customers with no active lead" number. That's the one that stings. Then move to the Previously Sold panel and ask: "How many of these customers are going to buy from a competitor this month because nobody reached out?"</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <div class="step-title">The ecosystem — keep this section brief</div>
+              <div class="step-desc">The animated data flow shows how Xtime → vAuto → VinSolutions → PI connect. Walk it once, name each brand as you point to it, but don't linger. The ecosystem is the mechanism, not the headline. The dealer cares about results, which come next.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <div class="step-title">The revenue calculator — let them change the numbers</div>
+              <div class="step-desc">This is where the presentation becomes a conversation. Open the sidebar if you haven't already. Walk through the waterfall: monthly appointments → back-in-market pool → identified without Cox → identified with Cox. Point to the gap. If the dealer questions any number, lower it immediately and show that the math still works at conservative assumptions. Then ask: "Does that gap surprise you? What would it mean for your store if you could identify even half of those additional opportunities?"</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">8</div>
+            <div class="step-content">
+              <div class="step-title">Competitive positioning — save for last</div>
+              <div class="step-desc">Never lead with competitors. After the dealer has bought into the data story, walk the side-by-side comparison: what CDK, Reynolds, Tekion, and myKaarma see vs. what Cox sees. "They operate within your four walls. Cox sees the 18 billion valuation lookups and 2.3 billion online visits that reveal what your customers are doing before, during, and after they walk through your door." Keep it factual, not disparaging.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Closing the conversation</div>
+        <div class="talk-track">
+          <p>"Based on what we've seen today, where would you want to start: getting your team visibility into Predictive Insights buying signals so you know which service customers are back in market before they arrive, or connecting your Xtime appointments to vAuto's Global Search so your used car team can act on those acquisition opportunities automatically?"</p>
+        </div>
+
+        <div class="section-label">Key objections for this document</div>
+        <div class="objection">
+          <div class="obj-label">Objection</div>
+          <div class="obj-q">"We already do this with our DMS."</div>
+          <div class="obj-a">Your DMS sees the appointment. But does it know that customer browsed F-150s on Autotrader for three weeks, checked their trade value on KBB twice, and Predictive Insights scores them Ready to Buy? The DMS manages the transaction. Cox identifies the opportunity before the transaction exists.</div>
+        </div>
+        <div class="objection">
+          <div class="obj-label">Objection</div>
+          <div class="obj-q">"We don't have time for another tool."</div>
+          <div class="obj-a">This isn't another tool your team has to log into. The buying signals surface inside VinSolutions CRM, where your team already works. The Xtime-to-vAuto connection runs automatically. We're adding visibility to your existing workflow, not adding a new one.</div>
+        </div>
+        <div class="objection">
+          <div class="obj-label">Objection</div>
+          <div class="obj-q">"These numbers seem inflated."</div>
+          <div class="obj-a">Don't defend — adjust. "These are starting points. Let me drop the back-in-market rate to 12% — does the math still work for you?" Lower the number live in the sidebar. When the business case survives conservative assumptions, you've won the credibility battle.</div>
+        </div>
+        <div class="objection">
+          <div class="obj-label">Objection</div>
+          <div class="obj-q">"We're happy with our auction sourcing."</div>
+          <div class="obj-a">I'm not saying stop going to auction. What if 15-20% of your used inventory came from your own service drive at $350 per unit instead of $1,800? That's not replacing auction — that's diversifying your supply chain and improving your margin on every unit you shift.</div>
+        </div>
+
+        <div class="section-label">Sidebar inputs reference</div>
+        <table class="field-table">
+          <thead><tr><th>Input</th><th>Default</th><th>Where to get the dealer's actual number</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Monthly service appointments</td><td>1,400</td><td>Xtime reporting if they're a customer; otherwise ask the Service Manager</td></tr>
+            <tr><td class="field-name">Monthly lease maturities</td><td>30</td><td>VinSolutions CRM filter by lease maturity date range</td></tr>
+            <tr><td class="field-name">% back-in-market</td><td>15%</td><td>Cox benchmark: 15-20% of service customers show intent signals</td></tr>
+            <tr><td class="field-name">Avg auction cost (all-in)</td><td>$1,800</td><td>Ask: "What's your average all-in cost per auction unit including fees, transport, and recon?"</td></tr>
+            <tr><td class="field-name">Avg service drive cost</td><td>$350</td><td>Minimal — no auction fees, no transport, minimal recon (vehicle just serviced)</td></tr>
+            <tr><td class="field-name">Monthly used vehicle target</td><td>120</td><td>Ask the Used Car Manager or GM directly</td></tr>
+            <tr><td class="field-name">% from auction (current)</td><td>65%</td><td>Ask the Used Car Manager for their current sourcing split</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 9: TIPS ══ -->
+  <div class="doc-section" id="tips">
+    <div class="section-heading">
+      <div class="section-num">9</div>
+      <h2>Tips for maximum impact</h2>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Always use their data</div>
+      <p>A presentation that says "Heritage Toyota" at the top and shows their actual numbers is 10x more impactful than a generic demo with placeholder data. Launch from the extension, capture the PI dashboard, and enter the dealer name and contact info before you walk into the room. That 5 minutes of prep is the difference between a pitch and a conversation.</p>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Pick the right document for the room</div>
+      <p>The 2-Page Report is a quick gut-punch. The PI Dashboard Presentation is the full story. The 10-Page AMP Analysis is the leave-behind business case. The Connected Service Drive is the acquisition and fixed ops conversation. You don't need to use all four in every meeting — match the document to the audience and time available. They all pull from the same captured data, so switching between them is a single click.</p>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Let silence do work for you</div>
+      <p>After a big number lands — 9x more likely to buy, the "no active lead" count, the retention vs. acquisition cost gap — don't fill the silence with explanation. Let the dealer sit with it. The pause is not dead air; it's processing time. The best closes in this toolkit come after a three-second silence, not after a rush of talking points.</p>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Adjust numbers live to build credibility</div>
+      <p>If a dealer pushes back on any calculator input, change it immediately and let them watch the analysis update. Lowering a number on the spot signals confidence — you're not attached to the defaults because the business case works at conservative assumptions too. Rigidity kills deals. Flexibility builds trust.</p>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Use dark mode for screen presentations</div>
+      <p>Every document supports a dark/light theme toggle in the upper-right corner. Dark mode looks more premium on screen and reduces glare in meeting rooms. Switch to light mode if the dealer wants to print, screenshot, or read on their own device.</p>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-label">Close the sidebar before you present</div>
+      <p>The sidebar is your backstage prep area. Make sure it's collapsed before you share your screen or turn the laptop toward the dealer. The presentation should feel polished and complete — not like you're still configuring it.</p>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-label">Send the PDF the same day</div>
+      <p>Use the Save PDF or GoFullPage capture option to generate a personalized PDF and email it within two hours of the meeting while the conversation is still fresh. A dealer who has their own numbers in a document they can share with their team or their ownership group is far more likely to move the conversation forward than one who just saw a screen for 45 minutes.</p>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Don't skip the narrative sections</div>
+      <p>It's tempting to jump straight to the dealer's data. Don't. The story that precedes the numbers — the blind spot, the data moat, the invisible journey — is what gives the numbers emotional weight. Without the story, you're showing a dealer a spreadsheet. With the story, you're showing them what they're missing.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div style="border-top:1px solid var(--border); background:var(--bg-surface);">
+  <div class="page" style="padding-top:0; padding-bottom:0;">
+    <div class="doc-footer">
+      &copy;2026 Cox Automotive, Inc. &nbsp;&bull;&nbsp; Internal use only &nbsp;&bull;&nbsp; Not for distribution outside the organization
+    </div>
+  </div>
+</div>
+
+<script>
+// Highlight active nav item on scroll
+const sections = document.querySelectorAll('.doc-section');
+const navItems = document.querySelectorAll('.nav-item');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(item => item.classList.remove('active'));
+      const id = entry.target.getAttribute('id');
+      const match = document.querySelector(`.nav-item[href="#${id}"]`);
+      if (match) match.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -65% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
