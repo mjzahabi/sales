@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bullish Buzz — S-Corp Tax & Payroll Decision Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0C0F14;
+    --surface: #141820;
+    --surface-raised: #1A1F2B;
+    --surface-hover: #222836;
+    --border: #2A3040;
+    --border-accent: #3A4258;
+    --text: #E8ECF4;
+    --text-muted: #8B95A8;
+    --text-dim: #5A6478;
+    --gold: #D4A843;
+    --gold-dim: #A68430;
+    --gold-glow: rgba(212, 168, 67, 0.12);
+    --green: #34C77B;
+    --green-dim: rgba(52, 199, 123, 0.12);
+    --red: #E85454;
+    --red-dim: rgba(232, 84, 84, 0.10);
+    --blue: #4A9EF5;
+    --blue-dim: rgba(74, 158, 245, 0.10);
+    --purple: #9B7BF7;
+    --purple-dim: rgba(155, 123, 247, 0.10);
+    --orange: #E8923A;
+    --orange-dim: rgba(232, 146, 58, 0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 80px 0 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold-glow);
+    border: 1px solid var(--gold-dim);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+  .hero-badge::before {
+    content: '◆';
+    font-size: 8px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 span {
+    color: var(--gold);
+  }
+  .hero p {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin: 0 auto 12px;
+    line-height: 1.7;
+  }
+  .hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 24px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section {
+    padding: 64px 0 0;
+  }
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-label.gold { color: var(--gold); }
+  .section-label.blue { color: var(--blue); }
+  .section-label.green { color: var(--green); }
+  .section-label.purple { color: var(--purple); }
+  .section-label.orange { color: var(--orange); }
+
+  .section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 3.5vw, 36px);
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .section .subtitle {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin-bottom: 40px;
+  }
+
+  /* ─── DECISION FLOW ─── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 40px 0;
+  }
+  .flow-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    position: relative;
+    transition: border-color 0.3s;
+  }
+  .flow-node:hover {
+    border-color: var(--border-accent);
+  }
+  .flow-node.question {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-raised) 100%);
+    border-color: var(--gold-dim);
+    text-align: center;
+  }
+  .flow-node.question h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--gold);
+  }
+  .flow-connector {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+    color: var(--text-dim);
+    font-size: 18px;
+  }
+  .flow-branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 4px;
+  }
+  .branch {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .branch:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-accent);
+  }
+  .branch.yes {
+    border-top: 3px solid var(--green);
+  }
+  .branch.no {
+    border-top: 3px solid var(--orange);
+  }
+  .branch-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .branch.yes .branch-tag { color: var(--green); }
+  .branch.no .branch-tag { color: var(--orange); }
+  .branch h4 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .branch p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* ─── COMPARISON CARDS ─── */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+  .card.recommended {
+    border-color: var(--gold-dim);
+    background: linear-gradient(180deg, rgba(212,168,67,0.04) 0%, var(--surface) 40%);
+  }
+  .card.recommended::before {
+    content: '★ BEST FIT';
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    background: var(--gold-glow);
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--gold-dim);
+  }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .card-icon.gusto { background: var(--green-dim); color: var(--green); }
+  .card-icon.qb { background: var(--blue-dim); color: var(--blue); }
+  .card-icon.patriot { background: var(--orange-dim); color: var(--orange); }
+  .card-icon.onpay { background: var(--purple-dim); color: var(--purple); }
+  .card-icon.taxact { background: var(--blue-dim); color: var(--blue); }
+  .card-icon.turbotax { background: var(--red-dim); color: var(--red); }
+  .card-icon.freetax { background: var(--green-dim); color: var(--green); }
+  .card-icon.hrblock { background: var(--purple-dim); color: var(--purple); }
+
+  .card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .card .card-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .card .card-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 18px;
+    flex: 1;
+  }
+
+  .pros-cons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .pro, .con {
+    font-size: 13px;
+    line-height: 1.5;
+    padding-left: 20px;
+    position: relative;
+  }
+  .pro::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: var(--green);
+    font-size: 14px;
+  }
+  .con::before {
+    content: '–';
+    position: absolute;
+    left: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: var(--red);
+    font-size: 14px;
+  }
+  .pro { color: var(--text); }
+  .con { color: var(--text-muted); }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid var(--gold-dim);
+    border-radius: 8px;
+    transition: all 0.2s;
+    margin-top: auto;
+    align-self: flex-start;
+  }
+  .card-link:hover {
+    background: var(--gold-glow);
+    border-color: var(--gold);
+  }
+  .card-link::after {
+    content: '→';
+  }
+
+  /* ─── COST TABLE ─── */
+  .cost-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 32px 0;
+  }
+  .cost-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .cost-table thead th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface-raised);
+    padding: 16px 24px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .cost-table tbody td {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .cost-table tbody tr:last-child td { border-bottom: none; }
+  .cost-table tbody tr:hover { background: var(--surface-hover); }
+  .cost-table .row-label {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .cost-table .row-total {
+    background: rgba(212,168,67,0.04);
+  }
+  .cost-table .row-total td {
+    font-weight: 700;
+    color: var(--gold);
+    border-top: 2px solid var(--gold-dim);
+  }
+  .cost-table .highlight {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* ─── WORKER TYPE COMPARISON ─── */
+  .comparison-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .comp-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    position: relative;
+  }
+  .comp-panel.w2 { border-top: 3px solid var(--blue); }
+  .comp-panel.c1099 { border-top: 3px solid var(--green); }
+  .comp-panel h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .comp-panel .panel-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .comp-panel.w2 .panel-sub { color: var(--blue); }
+  .comp-panel.c1099 .panel-sub { color: var(--green); }
+
+  .comp-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .comp-list li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .comp-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+    font-weight: 700;
+  }
+  .comp-list li strong { color: var(--text); font-weight: 600; }
+
+  .comp-cost {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .comp-cost .amount {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--text);
+  }
+  .comp-cost .per {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 32px 0 48px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-item {
+    position: relative;
+    padding-bottom: 28px;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute;
+    left: -32px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--gold-dim);
+  }
+  .tl-item.active .tl-dot {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 12px rgba(212,168,67,0.3);
+  }
+  .tl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .tl-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .tl-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .tl-form {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    background: linear-gradient(135deg, rgba(212,168,67,0.06) 0%, rgba(212,168,67,0.02) 100%);
+    border: 1px solid var(--gold-dim);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .callout h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .callout p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .callout strong { color: var(--text); }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    padding: 48px 0;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    margin-top: 64px;
+  }
+  .footer p {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 800px) {
+    .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr; }
+    .card-grid.cols-2 { grid-template-columns: 1fr; }
+    .flow-branches { grid-template-columns: 1fr; }
+    .comparison-split { grid-template-columns: 1fr; }
+    .cost-table-wrap { overflow-x: auto; }
+    .hero { padding: 48px 0 32px; }
+    .section { padding: 48px 0 0; }
+  }
+  @media (max-width: 600px) {
+    .container { padding: 0 16px; }
+    .card { padding: 22px; }
+    .branch { padding: 22px; }
+    .comp-panel { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <header class="hero">
+    <div class="hero-badge">The Bullish Buzz</div>
+    <h1>S-Corp Tax & Payroll<br><span>Decision Guide</span></h1>
+    <p>Everything Jake needs to run taxes and payroll for his Missouri-based S-Corp — from worker classification to software picks to filing deadlines.</p>
+    <div class="hero-meta">S-CORP · MISSOURI · 3 WORKERS + OWNER · SUBSCRIPTION REVENUE</div>
+  </header>
+
+  <!-- ═══════════ DECISION 1: WORKER CLASSIFICATION ═══════════ -->
+  <section class="section">
+    <div class="section-label gold">◆ Decision 01</div>
+    <h2>W-2 Employees or 1099 Contractors?</h2>
+    <p class="subtitle">This decision reshapes every other choice — payroll obligations, tax filings, compliance burden, and annual cost. Start here.</p>
+
+    <div class="flow">
+      <div class="flow-node question">
+        <h3>Do you control when, where, and how the work gets done?</h3>
+      </div>
+      <div class="flow-connector">↓</div>
+      <div class="flow-branches">
+        <div class="branch yes">
+          <div class="branch-tag">Yes → W-2 Employee</div>
+          <h4>You set schedules, methods, and provide tools</h4>
+          <p>If workers are in Discord during market hours following your playbook, they're employees. You handle withholding, FICA, SUI, workers' comp, and quarterly filings. More overhead, but more control and less audit risk.</p>
+        </div>
+        <div class="branch no">
+          <div class="branch-tag">No → 1099 Contractor</div>
+          <h4>You define deliverables, they choose how</h4>
+          <p>If workers deliver finished content on their own schedule with their own tools and serve other clients, they're contractors. You file a 1099-NEC once a year. Simpler, but you can't dictate the process.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="comparison-split">
+      <div class="comp-panel w2">
+        <h3>W-2 Route</h3>
+        <div class="panel-sub">Full employee compliance</div>
+        <ul class="comp-list">
+          <li><strong>Withhold</strong> federal & MO state income tax each pay period</li>
+          <li><strong>Pay</strong> employer FICA (7.65%), FUTA (0.6%), MO SUI (~2.51%)</li>
+          <li><strong>File</strong> Form 941 quarterly, 940 annually, W-2s by Jan 31</li>
+          <li><strong>Carry</strong> workers' comp insurance</li>
+          <li><strong>Track</strong> shareholder-employee salary for reasonable comp</li>
+          <li><strong>More control</strong> over schedules, methods, and team integration</li>
+        </ul>
+        <div class="comp-cost">
+          <span class="amount">~$55K</span>
+          <span class="per">/ worker / year at $50K salary (incl. employer taxes)</span>
+        </div>
+      </div>
+      <div class="comp-panel c1099">
+        <h3>1099 Route</h3>
+        <div class="panel-sub">Contractor simplicity</div>
+        <ul class="comp-list">
+          <li><strong>No withholding</strong> — contractors handle their own taxes</li>
+          <li><strong>No employer FICA</strong>, FUTA, SUI, or workers' comp</li>
+          <li><strong>File</strong> 1099-NEC by Jan 31 for each contractor paid $600+</li>
+          <li><strong>Collect</strong> W-9 from each contractor before first payment</li>
+          <li><strong>Document</strong> independence with written contractor agreements</li>
+          <li><strong>Less control</strong> — cannot dictate hours or methods</li>
+        </ul>
+        <div class="comp-cost">
+          <span class="amount">~$50K</span>
+          <span class="per">/ contractor / year at $50K flat (no added taxes)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>⚠ Misclassification Risk</h4>
+      <p>Missouri uses the IRS 20-factor test. If the IRS reclassifies contractors as employees, Jake faces <strong>100% of the employee's unpaid FICA + employer share</strong>, penalties up to <strong>$50 per unfiled W-2</strong>, plus compounding interest going back <strong>3+ years</strong>. A contract alone doesn't protect you — actual practices must match the paperwork.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ DECISION 2: PAYROLL ═══════════ -->
+  <section class="section">
+    <div class="section-label blue">◆ Decision 02</div>
+    <h2>Payroll: Software Picks</h2>
+    <p class="subtitle">Even with 1099 contractors, Jake still runs payroll for himself as the S-Corp's shareholder-employee. With W-2 workers, he needs full-service automation. Here are the best options ranked for his situation.</p>
+
+    <div class="card-grid cols-4">
+      <!-- GUSTO -->
+      <div class="card recommended">
+        <div class="card-icon gusto">G</div>
+        <h4>Gusto</h4>
+        <div class="card-price">$49/mo + $6/person</div>
+        <div class="card-desc">The most intuitive payroll platform for first-timers. Handles W-2 and 1099 workers in one system, auto-files all tax forms, and tracks shareholder-employee wages.</div>
+        <div class="pros-cons">
+          <div class="pro">Best-in-class UI, easiest setup</div>
+          <div class="pro">Auto-files 941, 940, W-2s, 1099s</div>
+          <div class="pro">Unlimited payroll runs included</div>
+          <div class="pro">Missouri state tax supported</div>
+          <div class="con">Pricier than Patriot at small scale</div>
+          <div class="con">$200 fee per new state registration</div>
+        </div>
+        <a href="https://gusto.com/product/pricing" target="_blank" class="card-link">Visit Gusto</a>
+      </div>
+      <!-- QB PAYROLL -->
+      <div class="card">
+        <div class="card-icon qb">Q</div>
+        <h4>QuickBooks Payroll</h4>
+        <div class="card-price">$50/mo + $6/person</div>
+        <div class="card-desc">Best if Jake already uses QuickBooks for bookkeeping. Payroll data flows directly into his books — no double entry. Simplifies year-end tax prep significantly.</div>
+        <div class="pros-cons">
+          <div class="pro">Seamless QuickBooks integration</div>
+          <div class="pro">Same-day direct deposit</div>
+          <div class="pro">Auto tax filing included</div>
+          <div class="con">Less polished UI than Gusto</div>
+          <div class="con">Upsells can be aggressive</div>
+        </div>
+        <a href="https://quickbooks.intuit.com/payroll/" target="_blank" class="card-link">Visit QuickBooks</a>
+      </div>
+      <!-- PATRIOT -->
+      <div class="card">
+        <div class="card-icon patriot">P</div>
+        <h4>Patriot Payroll</h4>
+        <div class="card-price">$17/mo + $4/person</div>
+        <div class="card-desc">The budget champion. Lowest cost entry point with top-rated customer support. Full-service tax filing included. No frills, but rock-solid on the fundamentals.</div>
+        <div class="pros-cons">
+          <div class="pro">Cheapest option (~$33/mo for Jake)</div>
+          <div class="pro">Highest-rated customer support</div>
+          <div class="pro">Unlimited payroll runs</div>
+          <div class="con">Simpler interface, fewer features</div>
+          <div class="con">Limited HR/benefits tools</div>
+        </div>
+        <a href="https://www.patriotsoftware.com/payroll/" target="_blank" class="card-link">Visit Patriot</a>
+      </div>
+      <!-- ONPAY -->
+      <div class="card">
+        <div class="card-icon onpay">O</div>
+        <h4>OnPay</h4>
+        <div class="card-price">$40/mo + $6/person</div>
+        <div class="card-desc">One flat price, no tiers, no upsells. Full-service payroll + HR + benefits in all 50 states. Clean and predictable — you always know what you'll pay.</div>
+        <div class="pros-cons">
+          <div class="pro">Transparent flat pricing</div>
+          <div class="pro">Strong niche industry support</div>
+          <div class="pro">Benefits admin included</div>
+          <div class="con">No time tracking built in</div>
+          <div class="con">Fewer integrations than Gusto</div>
+        </div>
+        <a href="https://onpay.com/" target="_blank" class="card-link">Visit OnPay</a>
+      </div>
+    </div>
+
+    <!-- COST TABLE -->
+    <h3 style="font-size:16px; font-weight:600; margin-bottom: 16px; margin-top: 40px;">Jake's Annual Payroll Software Cost <span style="color:var(--text-dim); font-weight:400;">(Jake + 3 workers = 4 people)</span></h3>
+    <div class="cost-table-wrap">
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th>Provider</th>
+            <th>Base/mo</th>
+            <th>Per Person/mo</th>
+            <th>Monthly Total</th>
+            <th>Annual Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Gusto Simple</td>
+            <td>$49</td>
+            <td>$6 × 4</td>
+            <td>$73</td>
+            <td class="highlight">$876</td>
+          </tr>
+          <tr>
+            <td class="row-label">QuickBooks Payroll</td>
+            <td>$50</td>
+            <td>$6 × 4</td>
+            <td>$74</td>
+            <td class="highlight">$888</td>
+          </tr>
+          <tr>
+            <td class="row-label">OnPay</td>
+            <td>$40</td>
+            <td>$6 × 4</td>
+            <td>$64</td>
+            <td class="highlight">$768</td>
+          </tr>
+          <tr>
+            <td class="row-label">Patriot Full-Service</td>
+            <td>$17</td>
+            <td>$4 × 4</td>
+            <td>$33</td>
+            <td class="highlight">$396</td>
+          </tr>
+          <tr class="row-total">
+            <td colspan="4">Typical CPA/Payroll Service (for comparison)</td>
+            <td>$2,000 – $4,000+</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════ DECISION 3: TAX SOFTWARE ═══════════ -->
+  <section class="section">
+    <div class="section-label green">◆ Decision 03</div>
+    <h2>Tax Filing: Software Picks</h2>
+    <p class="subtitle">Jake files two returns: Form 1120S for the S-Corp (due March 15) and his personal Form 1040 with K-1 pass-through. Most software handles these separately.</p>
+
+    <div class="card-grid cols-4">
+      <!-- TAXACT -->
+      <div class="card recommended">
+        <div class="card-icon taxact">T</div>
+        <h4>TaxAct Business</h4>
+        <div class="card-price">~$100–150 (1120S) · State extra</div>
+        <div class="card-desc">Best value for first-time S-Corp filers. K-1 data imports directly into a TaxAct personal return. Strong interview-style guidance specifically designed for 1120S.</div>
+        <div class="pros-cons">
+          <div class="pro">Most user-friendly for 1120S beginners</div>
+          <div class="pro">K-1 auto-syncs to personal return</div>
+          <div class="pro">$100K accuracy guarantee</div>
+          <div class="pro">Expert full-service option at $299</div>
+          <div class="con">Desktop download, not cloud-native</div>
+        </div>
+        <a href="https://www.taxact.com/business-taxes/download/s-corporation" target="_blank" class="card-link">Visit TaxAct</a>
+      </div>
+      <!-- TURBOTAX -->
+      <div class="card">
+        <div class="card-icon turbotax">T</div>
+        <h4>TurboTax Business</h4>
+        <div class="card-price">~$180–190 (1120S) · State extra</div>
+        <div class="card-desc">Premium guided experience. The most thorough interview process walks through depreciation, K-1s, and basis tracking. Separate purchase required for personal 1040.</div>
+        <div class="pros-cons">
+          <div class="pro">Most educational walkthrough</div>
+          <div class="pro">Industry-specific deduction finder</div>
+          <div class="pro">Audit defense included</div>
+          <div class="con">Most expensive option</div>
+          <div class="con">Requires separate personal software</div>
+        </div>
+        <a href="https://turbotax.intuit.com/small-business-taxes/s-corporation-tax/" target="_blank" class="card-link">Visit TurboTax</a>
+      </div>
+      <!-- FREETAXUSA -->
+      <div class="card">
+        <div class="card-icon freetax">F</div>
+        <h4>FreeTaxUSA</h4>
+        <div class="card-price">Free federal · ~$15 state</div>
+        <div class="card-desc">The wildcard budget option. Supports 1120S with free federal filing. Bare-bones compared to others, but if Jake's situation is straightforward, it works.</div>
+        <div class="pros-cons">
+          <div class="pro">Free federal 1120S filing</div>
+          <div class="pro">State returns very cheap</div>
+          <div class="con">Minimal guidance and hand-holding</div>
+          <div class="con">No expert support included</div>
+        </div>
+        <a href="https://www.freetaxusa.com/business-taxes" target="_blank" class="card-link">Visit FreeTaxUSA</a>
+      </div>
+      <!-- H&R BLOCK -->
+      <div class="card">
+        <div class="card-icon hrblock">H</div>
+        <h4>H&R Block Business</h4>
+        <div class="card-price">~$150 (1120S) · State extra</div>
+        <div class="card-desc">Solid middle-ground with AI Tax Assist and unlimited live chat on all paid plans. Good fallback if Jake gets stuck on S-Corp questions.</div>
+        <div class="pros-cons">
+          <div class="pro">AI assistant + unlimited live chat</div>
+          <div class="pro">In-person office support available</div>
+          <div class="con">Less S-Corp specific than TaxAct</div>
+          <div class="con">Can push upsells aggressively</div>
+        </div>
+        <a href="https://www.hrblock.com/tax-software/business-taxes/" target="_blank" class="card-link">Visit H&R Block</a>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>💡 First-Year Strategy</h4>
+      <p>Consider spending ~$600 with a CPA for year one to set the foundation — establish reasonable salary documentation, confirm basis tracking, and ensure Missouri MO-1120S is filed correctly. Then <strong>take that return as a template</strong> and switch to TaxAct or TurboTax for subsequent years. Think of it as paying for the playbook once, then running it yourself.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ TOTAL COST BREAKDOWN ═══════════ -->
+  <section class="section">
+    <div class="section-label purple">◆ The Bottom Line</div>
+    <h2>Annual Cost: Full DIY Stack</h2>
+    <p class="subtitle">Here's what Jake's complete self-managed tax and payroll system costs per year, compared to outsourcing everything.</p>
+
+    <div class="cost-table-wrap">
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Budget Pick</th>
+            <th>Best Fit Pick</th>
+            <th>Premium Pick</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Payroll Software</td>
+            <td>Patriot · $396</td>
+            <td>Gusto · $876</td>
+            <td>QB Payroll · $888</td>
+          </tr>
+          <tr>
+            <td class="row-label">Business Tax (1120S)</td>
+            <td>FreeTaxUSA · $15</td>
+            <td>TaxAct · $130</td>
+            <td>TurboTax · $190</td>
+          </tr>
+          <tr>
+            <td class="row-label">Personal Tax (1040)</td>
+            <td>FreeTaxUSA · $15</td>
+            <td>TaxAct · $60</td>
+            <td>TurboTax · $120</td>
+          </tr>
+          <tr class="row-total">
+            <td class="row-label" style="color:var(--text)">Annual Total</td>
+            <td class="highlight" style="font-size:18px">~$426</td>
+            <td class="highlight" style="font-size:18px">~$1,066</td>
+            <td class="highlight" style="font-size:18px">~$1,198</td>
+          </tr>
+          <tr>
+            <td class="row-label" style="color: var(--text-dim)">vs. CPA + Payroll Service</td>
+            <td colspan="3" style="color: var(--red); font-weight:600;">$2,500 – $5,000+ / year</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════ FILING CALENDAR ═══════════ -->
+  <section class="section">
+    <div class="section-label orange">◆ Filing Calendar</div>
+    <h2>What Jake Files & When</h2>
+    <p class="subtitle">Every deadline, every form, all year. Payroll software handles the recurring items automatically — these are for Jake's awareness.</p>
+
+    <div class="timeline">
+      <div class="tl-item active">
+        <div class="tl-dot"></div>
+        <div class="tl-date">January 31</div>
+        <div class="tl-title">W-2s / 1099-NECs Due</div>
+        <div class="tl-desc">Distribute W-2s to employees and 1099-NECs to contractors. File copies with SSA/IRS.</div>
+        <span class="tl-form">W-2</span> <span class="tl-form">W-3</span> <span class="tl-form">1099-NEC</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">March 15</div>
+        <div class="tl-title">S-Corp Return Due</div>
+        <div class="tl-desc">File Form 1120S and generate K-1s for shareholders. Missouri MO-1120S due same date. Extension to Sep 15 available via Form 7004.</div>
+        <span class="tl-form">1120S</span> <span class="tl-form">K-1</span> <span class="tl-form">MO-1120S</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">April 15</div>
+        <div class="tl-title">Personal Return + Q1 Estimated Tax</div>
+        <div class="tl-desc">File personal 1040 with K-1 pass-through income. Pay Q1 estimated taxes if applicable. Missouri individual return also due.</div>
+        <span class="tl-form">1040</span> <span class="tl-form">1040-ES</span> <span class="tl-form">MO-1040</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">April 30</div>
+        <div class="tl-title">Q1 Payroll Tax Returns</div>
+        <div class="tl-desc">File quarterly Form 941 for Q1. MO withholding return due. MO SUI quarterly report due.</div>
+        <span class="tl-form">941</span> <span class="tl-form">MO Withholding</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">June 15</div>
+        <div class="tl-title">Q2 Estimated Tax Payment</div>
+        <div class="tl-desc">Second quarterly estimated tax payment due for personal income taxes.</div>
+        <span class="tl-form">1040-ES</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">July 31</div>
+        <div class="tl-title">Q2 Payroll Tax Returns</div>
+        <div class="tl-desc">File 941 for Q2. MO withholding and SUI quarterly returns due.</div>
+        <span class="tl-form">941</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">September 15</div>
+        <div class="tl-title">Q3 Estimated Tax + Extended 1120S</div>
+        <div class="tl-desc">Third estimated tax payment. If Jake extended his S-Corp return, it's due now.</div>
+        <span class="tl-form">1040-ES</span> <span class="tl-form">1120S ext.</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">October 31</div>
+        <div class="tl-title">Q3 Payroll Tax Returns</div>
+        <div class="tl-desc">File 941 for Q3. MO quarterly returns due.</div>
+        <span class="tl-form">941</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">January 15 (next year)</div>
+        <div class="tl-title">Q4 Estimated Tax Payment</div>
+        <div class="tl-desc">Fourth and final estimated tax payment for the prior year.</div>
+        <span class="tl-form">1040-ES</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">January 31 (next year)</div>
+        <div class="tl-title">Annual Payroll Returns + FUTA</div>
+        <div class="tl-desc">File Q4 Form 941 and annual Form 940 (FUTA). Distribute new W-2s and 1099s.</div>
+        <span class="tl-form">941</span> <span class="tl-form">940</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="footer">
+    <p>
+      Built for Jake @ The Bullish Buzz · Missouri S-Corp · Updated April 2026<br>
+      This guide is for informational purposes only and does not constitute tax, legal, or financial advice.<br>
+      Consult a qualified CPA or tax professional for decisions specific to your situation.
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
