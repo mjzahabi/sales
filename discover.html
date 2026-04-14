@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dealertrack &amp; Xtime Discovery Workbook</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg:#f4f3f0;--surface:#fff;--surface2:#f0eeeb;--border:#dddbd7;--border-strong:#bbb9b5;
+    --text:#1a1917;--text-muted:#6b6965;--text-faint:#9b9895;
+    --accent:#0057B8;--accent-light:#E5F0FA;--accent2:#FF570C;--accent2-light:#FFF1EB;--cox-blue:#0057B8;--xt-orange:#FF570C;--xt-orange-d:#D94200;
+    --tab-active-bg:#fff;--tab-hover:#e8e6e2;--input-bg:#fafaf8;--input-border:#d0cec9;
+    --input-focus:#0057b8;--section-head:#1a1917;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+    --shadow-md:0 4px 12px rgba(0,0,0,.1);--radius:8px;--radius-sm:5px;--transition:.18s ease;
+  }
+  [data-theme="dark"] {
+    --bg:#111110;--surface:#1c1b1a;--surface2:#242321;--border:#333230;--border-strong:#4a4845;
+    --text:#e8e6e1;--text-muted:#9b9895;--text-faint:#5a5856;
+    --accent:#4A9EFF;--accent-light:#0F2040;--accent2:#FF7A3D;--accent2-light:#2A1508;--cox-blue:#4A9EFF;--xt-orange:#FF7A3D;--xt-orange-d:#CC4500;
+    --tab-active-bg:#1c1b1a;--tab-hover:#2a2927;--input-bg:#161514;--input-border:#3a3835;
+    --input-focus:#4a9eff;--section-head:#e8e6e1;--shadow:0 1px 3px rgba(0,0,0,.3);
+    --shadow-md:0 4px 12px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;transition:background var(--transition),color var(--transition);}
+
+  /* ── TOP BAR ── */
+  .topbar{width:100%;background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);}
+  .topbar-brand{display:flex;align-items:center;gap:10px;}
+  .brand-logo{width:44px;height:44px;background:linear-gradient(135deg,var(--cox-blue) 0%,#003d82 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,87,184,.3);}
+  .brand-logo svg{width:24px;height:24px;}
+  .brand-text{display:flex;flex-direction:column;line-height:1.2;}
+  .brand-title{font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.02em;}
+  .brand-sub{font-size:11px;color:var(--text-faint);font-weight:500;letter-spacing:.04em;text-transform:uppercase;}
+  .topbar-right{display:flex;align-items:center;gap:8px;}
+
+  .btn{height:32px;padding:0 14px;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:opacity var(--transition),background var(--transition);}
+  .btn-primary{background:var(--accent);color:white;}
+  .btn-primary:hover{opacity:.88;}
+  .btn-primary:disabled{opacity:.45;cursor:not-allowed;}
+  .btn-secondary{background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);}
+  .btn-secondary:hover{background:var(--tab-hover);color:var(--text);}
+
+  /* Excel export button with spinner */
+  .btn-excel{background:#1d6f42;color:white;display:flex;align-items:center;gap:6px;}
+  .btn-excel:hover{opacity:.88;}
+  .btn-excel:disabled{opacity:.45;cursor:not-allowed;}
+  .btn-excel svg{width:14px;height:14px;flex-shrink:0;}
+  .spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .theme-toggle{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background var(--transition);}
+  .theme-toggle:hover{background:var(--tab-hover);}
+  .theme-toggle svg{width:16px;height:16px;stroke:var(--text-muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .theme-toggle .sun{display:none;}
+  .theme-toggle .moon{display:block;}
+  [data-theme="dark"] .theme-toggle .sun{display:block;}
+  [data-theme="dark"] .theme-toggle .moon{display:none;}
+
+
+
+  /* ── OUTER ── */
+  .outer{max-width:1600px;width:100%;margin:0 auto;padding:0 24px 48px;}
+
+  /* ── TAB BAR ── */
+  .tab-bar-wrap{position:sticky;top:56px;z-index:90;background:var(--bg);border-bottom:2px solid var(--border);margin-bottom:28px;}
+  .tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;max-width:1600px;margin:0 auto;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .tab-btn{padding:14px 16px 12px;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;white-space:nowrap;transition:color var(--transition),border-color var(--transition),background var(--transition);display:flex;align-items:center;gap:6px;}
+  .tab-btn:hover{color:var(--text);background:var(--tab-hover);}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
+  .tab-dot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);flex-shrink:0;transition:background var(--transition);}
+  .tab-btn.has-data .tab-dot{background:var(--accent2);}
+
+  /* ── TAB PANELS ── */
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  /* ── CARD ── */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow);animation:cardIn .22s ease both;}
+  @keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .card-header{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .card-icon{width:30px;height:30px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .card-icon svg{width:15px;height:15px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .card-title{font-size:15px;font-weight:600;color:var(--section-head);letter-spacing:-.01em;}
+  .card-subtitle{font-size:12px;color:var(--text-faint);font-weight:400;margin-left:auto;}
+
+  /* ── FORMS ── */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+  .form-full{grid-column:1/-1;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field label{font-size:12px;font-weight:500;color:var(--text-muted);letter-spacing:.01em;}
+  .field input,.field select,.field textarea{background:var(--input-bg);border:1px solid var(--input-border);border-radius:var(--radius-sm);padding:8px 11px;font-family:inherit;font-size:13.5px;color:var(--text);transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);width:100%;outline:none;resize:vertical;}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--input-focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--input-focus) 12%,transparent);}
+  .field textarea{min-height:80px;}
+  .field textarea.lg{min-height:120px;}
+  .field textarea.xl{min-height:160px;}
+  .section-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);padding:14px 0 10px;display:flex;align-items:center;gap:8px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+  .store-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+
+  /* ── Y/N ── */
+  .yn-group{display:flex;gap:6px;align-items:center;}
+  .yn-btn{padding:5px 14px;border-radius:var(--radius-sm);border:1px solid var(--input-border);background:var(--input-bg);font-family:inherit;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all var(--transition);}
+  .yn-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .yn-btn.active-y{background:var(--accent);border-color:var(--accent);color:white;}
+  .yn-btn.active-n{background:var(--accent2);border-color:var(--accent2);color:white;}
+
+  /* ── SOLUTIONS GRID ── */
+  .solutions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px;}
+  .solution-item{display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;gap:8px;}
+  .solution-name{font-size:12.5px;font-weight:500;color:var(--text);}
+
+  /* ── TABLE ── */
+  .data-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .data-table th{text-align:left;padding:8px 10px;background:var(--surface2);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text-faint);border-bottom:1px solid var(--border);white-space:nowrap;}
+  .data-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table input{background:var(--input-bg);border:1px solid var(--input-border);border-radius:var(--radius-sm);padding:5px 8px;font-family:inherit;font-size:13px;color:var(--text);width:100%;outline:none;transition:border-color var(--transition);}
+  .data-table input:focus{border-color:var(--input-focus);}
+  .data-table .row-label{font-size:12.5px;color:var(--text);font-weight:400;white-space:nowrap;}
+  .data-table .total-row td{background:var(--surface2);font-weight:600;color:var(--accent);}
+
+  /* ── SUMMARY ── */
+  .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+  .summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);}
+  .summary-card-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);margin-bottom:8px;}
+  .summary-card-value{font-size:22px;font-weight:700;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:-.02em;line-height:1;margin-bottom:4px;}
+  .summary-card-sub{font-size:12px;color:var(--text-muted);}
+  .summary-section{margin-bottom:20px;}
+  .summary-section-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+  .summary-field-row{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);align-items:baseline;}
+  .summary-field-row:last-child{border-bottom:none;}
+  .summary-field-label{font-size:12px;color:var(--text-faint);flex-shrink:0;width:200px;}
+  .summary-field-val{font-size:13px;color:var(--text);font-weight:500;}
+  .empty-tag{font-size:11px;color:var(--text-faint);font-style:italic;}
+  .progress-wrap{display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);}
+  .progress-bar-outer{flex:1;height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
+  .progress-bar-inner{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease;}
+  .progress-pct{font-size:12px;font-weight:600;color:var(--accent);font-family:'DM Mono',monospace;width:38px;text-align:right;}
+
+  /* ── TIMELINE ── */
+  .timeline{display:flex;flex-direction:column;gap:0;position:relative;padding-left:20px;}
+  .timeline::before{content:'';position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--border);}
+  .timeline-item{position:relative;display:flex;align-items:flex-start;gap:14px;padding:10px 0;}
+  .timeline-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);box-shadow:0 0 0 2px var(--accent);flex-shrink:0;position:absolute;left:-17px;top:14px;}
+  .timeline-time{font-size:11.5px;font-family:'DM Mono',monospace;font-weight:500;color:var(--text-faint);min-width:80px;}
+  .timeline-label-wrap{display:flex;flex-direction:column;gap:3px;}
+  .timeline-label{font-size:13.5px;font-weight:500;color:var(--text);}
+  .tl-input{background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;padding:3px 6px;font-family:inherit;color:var(--text);font-size:12px;outline:none;}
+
+  /* ── TOAST ── */
+  .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+  .toast{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;box-shadow:var(--shadow-md);font-size:13px;color:var(--text);display:flex;align-items:center;gap:10px;min-width:280px;max-width:380px;pointer-events:all;animation:toastIn .25s ease;transition:opacity .25s ease;}
+  .toast.out{opacity:0;}
+  .toast svg{width:16px;height:16px;flex-shrink:0;}
+  .toast.success{border-left:3px solid #1d6f42;}
+  .toast.success svg{stroke:#1d6f42;}
+  .toast.error{border-left:3px solid var(--accent2);}
+  .toast.error svg{stroke:var(--accent2);}
+  .toast.info{border-left:3px solid var(--accent);}
+  .toast.info svg{stroke:var(--accent);}
+  @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+
+
+  /* ── PERSONNEL ── */
+  .personnel-wrap{overflow-x:auto;}
+  .personnel-table{min-width:800px;}
+
+  @media(max-width:900px){.form-grid{grid-template-columns:1fr}.form-grid-3{grid-template-columns:1fr 1fr}.solutions-grid{grid-template-columns:repeat(2,1fr)}.summary-grid{grid-template-columns:1fr 1fr}}
+
+  /* ── Cox Automotive / Xtime pillar section styles ── */
+  .xtime-section-header {
+    background: linear-gradient(110deg, var(--xt-orange) 0%, #FF8C4B 100%);
+    border-radius: var(--radius);
+    padding: 20px 28px;
+    margin-bottom: 20px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .xtime-section-header .xth-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,.2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .xtime-section-header .xth-icon svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .xtime-section-header h3 { font-size: 16px; font-weight: 700; margin-bottom: 2px; letter-spacing: -.02em; }
+  .xtime-section-header p { font-size: 12.5px; opacity: .88; font-weight: 400; }
+  .xtime-badge { flex-shrink: 0; margin-left: auto; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3); border-radius: 6px; padding: 6px 14px; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+
+  /* Timebox row */
+  .timebox-row { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .timebox-group { display: flex; flex-direction: column; gap: 8px; }
+  .timebox-group-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--text-muted); }
+  .timebox-divider { width: 1px; height: 48px; background: var(--border); }
+  .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .radio-label {
+    display: flex; align-items: center; gap: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 500; color: var(--text);
+    padding: 7px 13px; border: 1.5px solid var(--input-border);
+    border-radius: var(--radius-sm); background: var(--input-bg);
+    transition: all .18s; user-select: none;
+  }
+  .radio-label:hover { border-color: var(--xt-orange); background: var(--accent2-light); color: var(--xt-orange); }
+  .radio-label input[type="radio"] { display: none; }
+  label.radio-label:has(input:checked) {
+    border-color: var(--xt-orange); background: var(--accent2-light); color: var(--xt-orange); font-weight: 600;
+  }
+  .radio-label small { font-size: 10.5px; opacity: .6; }
+
+  /* Pillars grid */
+  .pillars-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  @media(max-width:1100px){ .pillars-grid { grid-template-columns: 1fr 1fr; } }
+  .pillar-card {
+    border: 2px solid var(--border); border-radius: var(--radius);
+    background: var(--surface2); padding: 16px 18px; cursor: default;
+    transition: all .2s; position: relative; overflow: hidden;
+  }
+  .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: transparent; transition: background .2s; }
+  .pillar-card.selected { border-color: var(--xt-orange); background: var(--accent2-light); }
+  .pillar-card.selected::before { background: var(--xt-orange); }
+  .pillar-card input[type="checkbox"] { display: none; }
+  .pillar-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+  .pillar-name { font-size: 13.5px; font-weight: 700; color: var(--text); letter-spacing: -.01em; }
+  .pillar-card.selected .pillar-name { color: var(--xt-orange); }
+  .pillar-check {
+    width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all .18s; margin-top: 1px;
+  }
+  .pillar-card.selected .pillar-check { background: var(--xt-orange); border-color: var(--xt-orange); }
+  .pillar-card.selected .pillar-check::after {
+    content: ''; width: 10px; height: 6px;
+    border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+  }
+  .pillar-win {
+    font-size: 11px; font-style: italic; color: var(--text-faint); line-height: 1.5;
+    margin-bottom: 12px; padding: 7px 10px; border-radius: 5px;
+    background: var(--surface); border-left: 3px solid var(--border); transition: border-color .2s;
+  }
+  .pillar-card.selected .pillar-win { border-left-color: var(--xt-orange); color: var(--text-muted); }
+  .pillar-fields { display: flex; flex-direction: column; gap: 9px; }
+  .pillar-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text-faint); margin-bottom: 3px; }
+  .pillar-fields textarea {
+    width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 5px; padding: 7px 9px; font-size: 12px; font-family: inherit;
+    color: var(--text); outline: none; resize: vertical; min-height: 52px;
+    line-height: 1.5; transition: border-color .18s;
+  }
+  .pillar-fields textarea:focus { border-color: var(--xt-orange); }
+  .pillar-fields textarea:disabled { opacity: .4; cursor: not-allowed; }
+  .discovery-list { font-size: 11px; color: var(--text-faint); line-height: 1.8; padding-left: 2px; }
+  .discovery-list span { display: block; padding-left: 12px; position: relative; }
+  .discovery-list span::before { content: '•'; position: absolute; left: 0; color: var(--xt-orange); font-weight: 700; }
+
+  /* Close plan rows */
+  .close-row { display: flex; align-items: flex-start; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .close-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .close-question { font-size: 13.5px; font-weight: 600; color: var(--text); flex: 0 0 280px; padding-top: 8px; }
+  .close-answer { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+  /* Pro tip banner */
+  .tip-banner {
+    background: var(--accent2-light); border: 1px solid var(--border);
+    border-left: 4px solid var(--xt-orange); border-radius: var(--radius);
+    padding: 14px 20px; margin-bottom: 20px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .tip-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+  .tip-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .tip-text strong { color: var(--xt-orange); }
+
+
+  /* Server status pill */
+  .server-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--surface2);color:var(--text-faint);transition:all var(--transition);cursor:default;user-select:none;}
+  .server-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--text-faint);transition:background var(--transition);}
+  .server-pill.online{color:#1a7a3c;border-color:#9ed4b4;background:#edf7f2;}
+  .server-pill.online .dot{background:#1a7a3c;}
+  [data-theme="dark"] .server-pill.online{color:#4eca82;border-color:#1a4a2e;background:#0a2a18;}
+  [data-theme="dark"] .server-pill.online .dot{background:#4eca82;}
+
+  .btn-add-store{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--accent-light);color:var(--accent);border:1.5px dashed var(--accent);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all var(--transition);}
+  .btn-add-store:hover{background:var(--accent);color:white;border-style:solid;}
+  .btn-add-store svg{width:14px;height:14px;}
+  .store-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;padding:6px 0;}
+  .store-remove{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text-faint);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition);flex-shrink:0;}
+  .store-remove:hover{background:#fee2e2;border-color:#fca5a5;color:#dc2626;}
+  .store-remove svg{width:12px;height:12px;}
+
+  .m2m-toggle{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:11px;font-weight:500;color:var(--text-muted);letter-spacing:0;text-transform:none;}
+  .m2m-toggle input{display:none;}
+  .m2m-label{padding:2px 8px;border-radius:99px;border:1.5px solid var(--input-border);background:var(--input-bg);transition:all var(--transition);font-size:11px;}
+  .m2m-toggle input:checked ~ .m2m-label{background:var(--accent2);border-color:var(--accent2);color:white;}
+  input#ced:disabled{opacity:.4;cursor:not-allowed;background:var(--surface2);}
+
+  .cox-solutions-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+  @media(max-width:900px){.cox-solutions-grid{grid-template-columns:repeat(3,1fr);}}
+  .cox-sol-item{display:flex;align-items:center;gap:9px;padding:10px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);user-select:none;}
+  .cox-sol-item:hover{border-color:var(--accent);background:var(--accent-light);}
+  .cox-sol-item input{display:none;}
+  .cox-sol-check{width:17px;height:17px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all var(--transition);}
+  .cox-sol-item input:checked ~ .cox-sol-check{background:var(--accent);border-color:var(--accent);}
+  .cox-sol-item input:checked ~ .cox-sol-check::after{content:'';width:9px;height:5px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translateY(-1px);}
+  .cox-sol-item input:checked ~ .cox-sol-name{color:var(--accent);font-weight:600;}
+  label.cox-sol-item:has(input:checked){border-color:var(--accent);background:var(--accent-light);}
+  .cox-sol-name{font-size:13px;font-weight:500;color:var(--text);transition:color var(--transition);}
+
+  .internal-use-banner{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#fff1f1;border:1.5px solid #fca5a5;border-radius:var(--radius-sm);color:#b91c1c;font-size:13px;font-weight:500;margin-bottom:18px;}
+  .internal-use-banner svg{width:18px;height:18px;flex-shrink:0;stroke:#b91c1c;}
+  [data-theme="dark"] .internal-use-banner{background:#2d0a0a;border-color:#7f1d1d;color:#fca5a5;}
+  [data-theme="dark"] .internal-use-banner svg{stroke:#fca5a5;}
+
+  .btn-autofill{margin-left:auto;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent);border-radius:var(--radius-sm);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all var(--transition);flex-shrink:0;}
+  .btn-autofill:hover{background:var(--accent);color:white;}
+  .btn-autofill svg{width:13px;height:13px;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-logo">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="rgba(255,255,255,0.35)"/>
+        <path d="M12 6l1.5 3 3.3.5-2.4 2.3.57 3.3L12 13.6l-2.97 1.5.57-3.3L7.2 9.5l3.3-.5L12 6z" fill="white"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <span class="brand-title">Dealertrack &amp; Xtime Discovery Workbook</span>
+      <span class="brand-sub">Cox Automotive · Internal Use Only</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="server-pill" id="serverPill" title="Run python3 server.py for exact-format Excel export">
+      <div class="dot"></div>
+      <span id="serverPillText">Checking…</span>
+    </div>
+    <button class="btn btn-excel" id="btnExcel" onclick="exportExcel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Export to Excel
+    </button>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+      <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+
+
+<!-- MAIN -->
+<div class="outer">
+
+  <!-- TAB BAR -->
+  <div class="tab-bar-wrap">
+    <div class="tab-bar" id="tabBar">
+      <button class="tab-btn active" data-tab="summary" onclick="switchTab('summary',this)"><span class="tab-dot"></span>Summary</button>
+      <button class="tab-btn" data-tab="dealership" onclick="switchTab('dealership',this)"><span class="tab-dot"></span>Dealership Facts</button>
+      <button class="tab-btn" data-tab="accounting" onclick="switchTab('accounting',this)"><span class="tab-dot"></span>Accounting</button>
+      <button class="tab-btn" data-tab="fixedops" onclick="switchTab('fixedops',this)"><span class="tab-dot"></span>Fixed Ops</button>
+      <button class="tab-btn" data-tab="sales" onclick="switchTab('sales',this)"><span class="tab-dot"></span>Sales &amp; F&amp;I</button>
+      <button class="tab-btn" data-tab="opennotes" onclick="switchTab('opennotes',this)"><span class="tab-dot"></span>Open Notes</button>
+      <button class="tab-btn" data-tab="hardware" onclick="switchTab('hardware',this)"><span class="tab-dot"></span>Hardware</button>
+      <button class="tab-btn" data-tab="personnel" onclick="switchTab('personnel',this)"><span class="tab-dot"></span>Personnel</button>
+      <button class="tab-btn" data-tab="agenda" onclick="switchTab('agenda',this)"><span class="tab-dot"></span>Agenda</button>
+      <button class="tab-btn" data-tab="meetingstrategy" onclick="switchTab('meetingstrategy',this)"><span class="tab-dot"></span>Meeting Strategy</button>
+      <button class="tab-btn" data-tab="pcnotes" onclick="switchTab('pcnotes',this)"><span class="tab-dot"></span>PC Notes</button>
+      <button class="tab-btn" data-tab="implementation" onclick="switchTab('implementation',this)"><span class="tab-dot"></span>Implementation</button>
+    </div>
+  </div>
+
+  <!-- ═══ SUMMARY ═══ -->
+  <div class="tab-panel active" id="tab-summary">
+    <div class="summary-grid">
+      <div class="summary-card"><div class="summary-card-label">Dealership Group</div><div class="summary-card-value" id="sum-groupname">—</div><div class="summary-card-sub" id="sum-oem">OEM not set</div></div>
+      <div class="summary-card"><div class="summary-card-label">Current DMS</div><div class="summary-card-value" id="sum-dms">—</div><div class="summary-card-sub" id="sum-ced">CED not set</div></div>
+      <div class="summary-card"><div class="summary-card-label">Desired Install</div><div class="summary-card-value" id="sum-install">—</div><div class="summary-card-sub" id="sum-consultant">Consultant not set</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><span class="card-title">Workbook Completion</span></div>
+      <div id="completion-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="card-title">Discovery Snapshot</span></div>
+      <div class="summary-section"><div class="summary-section-title">Dealership Facts</div><div id="snap-dealership"></div></div>
+      <div class="summary-section"><div class="summary-section-title">Accounting</div><div id="snap-accounting"></div></div>
+      <div class="summary-section"><div class="summary-section-title">Sales &amp; F&amp;I</div><div id="snap-sales"></div></div>
+      <div class="summary-section"><div class="summary-section-title">Fixed Ops</div><div id="snap-fixedops"></div></div>
+      <div class="summary-section"><div class="summary-section-title">Open Notes</div><div id="snap-opennotes"></div></div>
+      <div class="summary-section"><div class="summary-section-title">Meeting Strategy</div><div id="snap-strategy"></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ DEALERSHIP FACTS ═══ -->
+  <div class="tab-panel" id="tab-dealership">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="card-title">Dealership Facts</span></div>
+      <div class="form-grid-3">
+        <div class="field"><label>Group Name</label><input type="text" id="groupName" placeholder="e.g. ABC Auto Group" oninput="markDirty('dealership');updateSummary()"></div>
+        <div class="field"><label>CAID</label><input type="text" id="caid" placeholder="Cox Automotive ID" oninput="markDirty('dealership')"></div>
+        <div class="field"><label>OEM(s)</label><input type="text" id="oem" placeholder="e.g. Ford, Toyota, GM" oninput="markDirty('dealership');updateSummary()"></div>
+        <div class="field"><label>Store 1 Name</label><input type="text" id="store1" placeholder="Primary store name" oninput="markDirty('dealership')"></div>
+        <div class="field"><label>Phone</label><input type="tel" id="phone" placeholder="(___) ___-____" oninput="markDirty('dealership')"></div>
+        <div class="field"><label># of Buildings</label><input type="number" id="buildings" placeholder="0" min="0" oninput="markDirty('dealership')"></div>
+        <div class="field"><label>Consultant Name</label><input type="text" id="consultant" placeholder="Consultant name" oninput="markDirty('dealership');updateSummary()"></div>
+        <div class="field"><label>Decision Makers</label><input type="text" id="decisionMakers" placeholder="Names and titles" oninput="markDirty('dealership')"></div>
+      </div>
+      <div class="section-label" style="margin-bottom:10px">Additional Stores</div>
+      <div id="storeList" class="store-list" style="margin-bottom:10px"></div>
+      <button type="button" class="btn-add-store" onclick="addStore()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Store
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><span class="card-title">Current DMS Information</span></div>
+      <div class="form-grid-3">
+        <div class="field"><label>Current DMS</label><input type="text" id="currentDMS" placeholder="e.g. CDK, Reynolds" oninput="markDirty('dealership');updateSummary()"></div>
+        <div class="field">
+          <label style="display:flex;align-items:center;justify-content:space-between">
+            CED (Contract End Date)
+            <label class="m2m-toggle" title="Month to Month">
+              <input type="checkbox" id="cedM2M" onchange="toggleM2M(this)">
+              <span class="m2m-label">Month-to-Month</span>
+            </label>
+          </label>
+          <input type="date" id="ced" oninput="markDirty('dealership');updateSummary()">
+        </div>
+        <div class="field"><label>Desired Install Date</label><input type="date" id="desiredInstall" oninput="markDirty('dealership');updateSummary()"></div>
+        <div class="field form-full"><label>DMS Notes</label><textarea id="dmsNotes" placeholder="Notes about current DMS setup…" oninput="markDirty('dealership')"></textarea></div>
+        <div class="field form-full"><label>Other DMS Vendors Under Consideration</label><textarea id="dmsCompetitors" placeholder="Competitor DMS systems being evaluated…" oninput="markDirty('dealership')"></textarea></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><span class="card-title">General Questions</span></div>
+      <div class="field"><label>1. Dealer reasons for considering a DMS change / objectives of a DMS switch</label><textarea class="lg" id="q_reasons" placeholder="Capture dealer's motivations for switching…" oninput="markDirty('dealership')"></textarea></div><br>
+      <div class="field"><label>2. Dealer's goals for the DMS presentation and areas of focus</label><textarea class="lg" id="q_goals" placeholder="What does the dealer want to see/accomplish in the demo…" oninput="markDirty('dealership')"></textarea></div><br>
+      <div class="field"><label>3. List the businesses (Tax IDs) that comprise the organization — OEM Dealerships, Independents, Body Shops, Holding Companies</label><textarea id="q_taxids" placeholder="Business entities and tax IDs…" oninput="markDirty('dealership')"></textarea></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><span class="card-title">4. Cox Automotive Solutions in Use</span><span class="card-subtitle">Check all that apply</span></div>
+      <div class="cox-solutions-grid">
+        <label class="cox-sol-item"><input type="checkbox" id="sol_dealertrack" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">Dealertrack</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_kbb" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">KBB</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_autotrader" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">Autotrader</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_dealercom" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">Dealer.com</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_xtime" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">Xtime</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_vinsolutions" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">VinSolutions</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_vauto" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">vAuto</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_homenet" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">Homenet</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_nextgear" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">NextGear</span></label>
+        <label class="cox-sol-item"><input type="checkbox" id="sol_manheim" onchange="markDirty('dealership')"><span class="cox-sol-check"></span><span class="cox-sol-name">Manheim</span></label>
+      </div><br>
+      <div class="field"><label>5. Third-Party Vendors in Use Today</label><textarea id="thirdPartyVendors" placeholder="List all third-party vendor solutions…" oninput="markDirty('dealership')"></textarea></div><br>
+      <div class="field"><label>6. Ownership and Maintenance Agreements currently in place for network, printers and phones</label><textarea id="networkOwnership" placeholder="Describe ownership and maintenance agreements for network, printers and phones…" oninput="markDirty('dealership')"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ═══ ACCOUNTING ═══ -->
+  <div class="tab-panel" id="tab-accounting">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><span class="card-title">Accounting Department</span></div>
+      <div class="form-grid">
+        <div class="field"><label>Contact Name</label><input type="text" id="acct_contact" placeholder="Controller / Office Manager" oninput="markDirty('accounting')"></div>
+        <div class="field"><label>Cell Number</label><input type="tel" id="acct_cell" placeholder="(___) ___-____" oninput="markDirty('accounting')"></div>
+        <div class="field"><label>Email Address</label><input type="email" id="acct_email" placeholder="contact@dealership.com" oninput="markDirty('accounting')"></div>
+        <div class="field"><label>Number of GL Accounts</label><input type="number" id="acct_gls" placeholder="0" min="0" oninput="markDirty('accounting')"></div>
+      </div>
+      <div class="section-label">Accounting Structure</div>
+      <div class="field"><label>Current Accounting Structure — Centralized / Consolidated / Intercompany</label><textarea id="acct_centralized" placeholder="Describe current accounting structure across stores (centralized, consolidated, intercompany, etc.)…" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>Special Setups / Notes on Accounting Configurations</label><textarea id="acct_special_setups" placeholder="Any unique or special accounting requirements…" oninput="markDirty('accounting')"></textarea></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span class="card-title">Reporting &amp; Tools</span></div>
+      <div class="field"><label>DMS Reporting Tools Used Today (Canned or Advanced) — Including 3rd Party</label><textarea id="acct_reporting" placeholder="What reporting tools do they use?" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>Top 5 Accounting Reports Used Daily</label><textarea id="acct_top5reports" placeholder="Most critical daily accounting reports…" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>Document Scanning / Archiving Solutions</label><textarea id="acct_scanning" placeholder="DMS-based or 3rd party? Single or multiple?" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>Payroll Solution — Direct Deposit / Gaps</label><textarea id="acct_payroll" placeholder="Current payroll system and any gaps…" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>DOC Usage — Forecasting, Who Uses It</label><textarea id="acct_doc" placeholder="Who provides DOC? Current system or 3rd party?" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>Bank Reconciliation Process (Daily / Weekly?)</label><textarea id="acct_bankrec" placeholder="How often and by whom?" oninput="markDirty('accounting')"></textarea></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><span class="card-title">Challenges, Goals &amp; Additional</span></div>
+      <div class="field"><label>Top Challenges / Gaps</label><textarea class="lg" id="acct_challenges" placeholder="What pain points is accounting experiencing?" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>Goals &amp; Plans</label><textarea class="lg" id="acct_goals" placeholder="What does accounting want to improve?" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>Unique Accounting Processes</label><textarea id="acct_unique" placeholder="Any custom workflows needing attention in DMS transition…" oninput="markDirty('accounting')"></textarea></div><br>
+      <div class="field"><label>Cashiering Process — Who Performs It? Online Payment?</label><textarea id="acct_cashier" placeholder="Describe cashiering workflow…" oninput="markDirty('accounting')"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ═══ FIXED OPS ═══ -->
+  <div class="tab-panel" id="tab-fixedops">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><span class="card-title">Fixed Operations — Contact</span></div>
+      <div class="form-grid">
+        <div class="field"><label>Fixed Ops Contact Name</label><input type="text" id="fo_contact" placeholder="Service/Parts Director or Manager" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Cell / Phone</label><input type="tel" id="fo_phone" placeholder="(___) ___-____" oninput="markDirty('fixedops')"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></div><span class="card-title">Parts Department</span></div>
+      <div class="form-grid">
+        <div class="field"><label>Average Monthly Parts Wholesale</label><input type="text" id="fo_parts_wholesale" placeholder="$ amount" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Number of Parts Trucks</label><input type="number" id="fo_parts_trucks" placeholder="0" min="0" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Number of Parts Warehouses</label><input type="number" id="fo_parts_warehouses" placeholder="0" min="0" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Parts Scanning Usage &amp; Vendor</label><input type="text" id="fo_parts_scanning" placeholder="Scanning tool and vendor" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Parts Catalog Used</label><input type="text" id="fo_parts_catalog" placeholder="EPC, OEM catalog, etc." oninput="markDirty('fixedops')"></div>
+        <div class="field form-full"><label>Third-Party Parts Solutions &amp; Warehouse Tools</label><textarea id="fo_parts_3p" placeholder="List all third-party parts integrations and warehouse tools in use…" oninput="markDirty('fixedops')"></textarea></div>
+      </div>
+      <div class="section-label">Parts Operations</div>
+      <div class="field"><label>Workflow between Parts and Service Departments</label><textarea id="fo_parts_service_workflow" placeholder="How do parts and service coordinate?" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>PO Usage &amp; Process</label><textarea id="fo_parts_po" placeholder="Do they use POs? Describe the process." oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>Special Order Tracking</label><textarea id="fo_parts_special_orders" placeholder="How are special orders tracked?" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>Physical Inventory Frequency / Perpetual Inventory</label><textarea id="fo_parts_inventory_freq" placeholder="How often? Perpetual?" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>Parts Matrix Usage (How many?)</label><textarea id="fo_parts_matrix" placeholder="Do they use parts matrix? How many?" oninput="markDirty('fixedops')"></textarea></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="card-title">Service Department</span></div>
+      <div class="field"><label>RO Write-Up Process</label><textarea id="fo_svc_ro_writeup" placeholder="Describe the repair order write-up workflow…" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>ERO and / or Automated Dispatch Usage</label><textarea id="fo_svc_ero" placeholder="Electronic RO, dispatch tools…" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>Quoting Tools / SPG Usage</label><textarea id="fo_svc_spg" placeholder="Service Price Guide or quoting tool…" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>Scheduling, Lane, and Inspection Processes</label><textarea id="fo_svc_scheduling" placeholder="Online scheduling, drive lane, inspection tools…" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>Third-Party Service Solutions</label><textarea id="fo_svc_3p" placeholder="List all third-party service integrations…" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="field"><label>RO Close-Out Process</label><textarea id="fo_svc_closeout" placeholder="Walk through how an RO is closed out…" oninput="markDirty('fixedops')"></textarea></div><br>
+      <div class="form-grid">
+        <div class="field"><label>Labor Matrix Usage</label><input type="text" id="fo_svc_labor_matrix" placeholder="Yes / No — describe" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Online Payment Collection</label><input type="text" id="fo_svc_online_pay" placeholder="Yes / No — how?" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Separate ROs per Labor Type?</label><input type="text" id="fo_svc_ro_types" placeholder="Yes / No" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Customer Email &amp; Text Capability</label><input type="text" id="fo_svc_email_text" placeholder="Yes / No — platform?" oninput="markDirty('fixedops')"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div><span class="card-title">Body Shop</span></div>
+      <div class="form-grid">
+        <div class="field"><label>Body Shop Location</label><input type="text" id="fo_bs_location" placeholder="Address or on-site" oninput="markDirty('fixedops')"></div>
+        <div class="field"><label>Estimating Tool</label><input type="text" id="fo_bs_estimating" placeholder="e.g. CCC, Mitchell, Audatex" oninput="markDirty('fixedops')"></div>
+        <div class="field form-full"><label>Body Shop Notes</label><textarea id="fo_bs_notes" placeholder="Additional body shop information…" oninput="markDirty('fixedops')"></textarea></div>
+      </div>
+    </div>
+    <!-- Discovery — Pains & Outcomes -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div><span class="card-title">Fixed Ops — Top Pains &amp; Desired Outcomes</span><div style="font-size:11px;color:var(--text-faint);margin-top:2px">Use their words exactly as stated in discovery</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+        <div>
+          <div class="section-label" style="margin-bottom:12px">Top 3 Pains <span style="font-style:italic;font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(use their words)</span></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:24px;height:24px;border-radius:50%;background:var(--xt-orange);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:9px">1</div><input type="text" id="fo_pain1" class="tl-input" style="flex:1;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--radius-sm);padding:9px 12px;font-family:inherit;font-size:13.5px;color:var(--text);outline:none;width:100%" placeholder="Describe pain in dealer's own language..." oninput="markDirty('fixedops')"></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:24px;height:24px;border-radius:50%;background:var(--xt-orange);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:9px">2</div><input type="text" id="fo_pain2" class="tl-input" style="flex:1;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--radius-sm);padding:9px 12px;font-family:inherit;font-size:13.5px;color:var(--text);outline:none;width:100%" placeholder="Describe pain in dealer's own language..." oninput="markDirty('fixedops')"></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:24px;height:24px;border-radius:50%;background:var(--xt-orange);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:9px">3</div><input type="text" id="fo_pain3" class="tl-input" style="flex:1;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--radius-sm);padding:9px 12px;font-family:inherit;font-size:13.5px;color:var(--text);outline:none;width:100%" placeholder="Describe pain in dealer's own language..." oninput="markDirty('fixedops')"></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom:12px">Top 3 Outcomes / Success Criteria</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:24px;height:24px;border-radius:50%;background:var(--cox-blue);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:9px">1</div><input type="text" id="fo_outcome1" class="tl-input" style="flex:1;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--radius-sm);padding:9px 12px;font-family:inherit;font-size:13.5px;color:var(--text);outline:none;width:100%" placeholder="What does success look like for them?" oninput="markDirty('fixedops')"></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:24px;height:24px;border-radius:50%;background:var(--cox-blue);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:9px">2</div><input type="text" id="fo_outcome2" class="tl-input" style="flex:1;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--radius-sm);padding:9px 12px;font-family:inherit;font-size:13.5px;color:var(--text);outline:none;width:100%" placeholder="What does success look like for them?" oninput="markDirty('fixedops')"></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:24px;height:24px;border-radius:50%;background:var(--cox-blue);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:9px">3</div><input type="text" id="fo_outcome3" class="tl-input" style="flex:1;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--radius-sm);padding:9px 12px;font-family:inherit;font-size:13.5px;color:var(--text);outline:none;width:100%" placeholder="What does success look like for them?" oninput="markDirty('fixedops')"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timebox & Demo Style -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><span class="card-title">Timebox &amp; Demo Style</span><div style="font-size:11px;color:var(--text-faint);margin-top:2px">Set the format before you walk in</div></div>
+      </div>
+      <div class="timebox-row">
+        <div class="timebox-group">
+          <div class="timebox-group-label">Duration</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="xt_duration" value="30" /> 30 min <small>(single workflow)</small></label>
+            <label class="radio-label"><input type="radio" name="xt_duration" value="45" /> 45 min <small>(workflow + reporting)</small></label>
+            <label class="radio-label"><input type="radio" name="xt_duration" value="60" /> 60 min <small>(end-to-end + deep dive)</small></label>
+          </div>
+        </div>
+        <div class="timebox-divider"></div>
+        <div class="timebox-group">
+          <div class="timebox-group-label">Live Demo</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="xt_live" value="yes" /> Yes</label>
+            <label class="radio-label"><input type="radio" name="xt_live" value="no" /> No</label>
+          </div>
+        </div>
+        <div class="timebox-divider"></div>
+        <div class="timebox-group">
+          <div class="timebox-group-label">Recording</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="xt_recording" value="yes" /> Yes</label>
+            <label class="radio-label"><input type="radio" name="xt_recording" value="no" /> No</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pillar-to-Demo Mapping -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div><span class="card-title">Pillar-to-Demo Mapping</span><div style="font-size:11px;color:var(--text-faint);margin-top:2px">Select what matters — show only what you need. Notes fields unlock when a pillar is checked.</div></div>
+      </div>
+      <div class="pillars-grid" id="pillarsGrid">
+
+        <div class="pillar-card" data-pillar="cx">
+          <input type="checkbox" name="pillar" value="cx" />
+          <div class="pillar-head" onclick="togglePillar(this.closest('.pillar-card'))" style="cursor:pointer">
+            <div class="pillar-name">☐ &nbsp;Customer Experience</div>
+            <div class="pillar-check" id="pc-cx"></div>
+          </div>
+          <div class="pillar-win" onclick="event.stopPropagation()">"Make it easy for customers to book and stay informed — less friction, more retention."</div>
+          <div class="pillar-fields" onclick="event.stopPropagation()">
+            <div><div class="pillar-section-label">Discovery Prompts to Confirm</div><div class="discovery-list"><span>Online / Call-in / Walk-in mix</span><span>Transportation options</span><span>Text/Email communication</span></div></div>
+            <div><div class="pillar-section-label">Confirmed Discovery Notes</div><textarea placeholder="Capture their answers here..." disabled></textarea></div>
+            <div><div class="pillar-section-label">Demo Beats to Show</div><div class="discovery-list"><span>Consumer Scheduling: search/login, vehicle selection</span><span>Service selection/menus + recalls</span><span>Transportation + dynamic appointment times</span><span>Confirmation + opt-in texting</span></div></div>
+            <div><div class="pillar-section-label">Demo Notes / Customizations</div><textarea placeholder="Specific beats to emphasize for this dealer..." disabled></textarea></div>
+          </div>
+        </div>
+
+        <div class="pillar-card" data-pillar="advisor">
+          <input type="checkbox" name="pillar" value="advisor" />
+          <div class="pillar-head" onclick="togglePillar(this.closest('.pillar-card'))" style="cursor:pointer">
+            <div class="pillar-name">☐ &nbsp;Advisor Efficiency</div>
+            <div class="pillar-check" id="pc-advisor"></div>
+          </div>
+          <div class="pillar-win" onclick="event.stopPropagation()">"Reduce time per RO by removing manual steps and duplicate entry."</div>
+          <div class="pillar-fields" onclick="event.stopPropagation()">
+            <div><div class="pillar-section-label">Discovery Prompts to Confirm</div><div class="discovery-list"><span># advisors &amp; peak times</span><span>Missed calls handling</span><span>Dispatching model</span></div></div>
+            <div><div class="pillar-section-label">Confirmed Discovery Notes</div><textarea placeholder="Capture their answers here..." disabled></textarea></div>
+            <div><div class="pillar-section-label">Demo Beats to Show</div><div class="discovery-list"><span>In-dealership scheduling + advisor/team routing</span><span>Workbook views (day/week/advisor/team)</span><span>Promise time + Notes for DMS + notifications</span></div></div>
+            <div><div class="pillar-section-label">Demo Notes / Customizations</div><textarea placeholder="Specific beats to emphasize for this dealer..." disabled></textarea></div>
+          </div>
+        </div>
+
+        <div class="pillar-card" data-pillar="mpi">
+          <input type="checkbox" name="pillar" value="mpi" />
+          <div class="pillar-head" onclick="togglePillar(this.closest('.pillar-card'))" style="cursor:pointer">
+            <div class="pillar-name">☐ &nbsp;MPI &amp; Upsell</div>
+            <div class="pillar-check" id="pc-mpi"></div>
+          </div>
+          <div class="pillar-win" onclick="event.stopPropagation()">"Turn inspections into clear, visual recommendations customers say yes to."</div>
+          <div class="pillar-fields" onclick="event.stopPropagation()">
+            <div><div class="pillar-section-label">Discovery Prompts to Confirm</div><div class="discovery-list"><span>MPI tool + writeback</span><span>Walk-around + photos/videos</span><span>Sold vs declined tracking</span></div></div>
+            <div><div class="pillar-section-label">Confirmed Discovery Notes</div><textarea placeholder="Capture their answers here..." disabled></textarea></div>
+            <div><div class="pillar-section-label">Demo Beats to Show</div><div class="discovery-list"><span>Highlight re-presenting previously declined services</span><span>(If applicable) walkaround utilization + media workflow</span></div></div>
+            <div><div class="pillar-section-label">Demo Notes / Customizations</div><textarea placeholder="Specific beats to emphasize for this dealer..." disabled></textarea></div>
+          </div>
+        </div>
+
+        <div class="pillar-card" data-pillar="reporting">
+          <input type="checkbox" name="pillar" value="reporting" />
+          <div class="pillar-head" onclick="togglePillar(this.closest('.pillar-card'))" style="cursor:pointer">
+            <div class="pillar-name">☐ &nbsp;Visibility &amp; Reporting</div>
+            <div class="pillar-check" id="pc-reporting"></div>
+          </div>
+          <div class="pillar-win" onclick="event.stopPropagation()">"Give leadership real-time visibility into status, revenue, and missed opportunity."</div>
+          <div class="pillar-fields" onclick="event.stopPropagation()">
+            <div><div class="pillar-section-label">Discovery Prompts to Confirm</div><div class="discovery-list"><span>CP ROs &amp; $/RO</span><span>Lost opportunity tracking</span><span>Reporting importance</span></div></div>
+            <div><div class="pillar-section-label">Confirmed Discovery Notes</div><textarea placeholder="Capture their answers here..." disabled></textarea></div>
+            <div><div class="pillar-section-label">Demo Beats to Show</div><div class="discovery-list"><span>Dashboard snapshot + status/capacity views</span><span>Reporting: show rate, web business, RO revenue</span><span>Top reports (BDC/appointments/ASRs if relevant)</span></div></div>
+            <div><div class="pillar-section-label">Demo Notes / Customizations</div><textarea placeholder="Specific beats to emphasize for this dealer..." disabled></textarea></div>
+          </div>
+        </div>
+
+        <div class="pillar-card" data-pillar="capacity">
+          <input type="checkbox" name="pillar" value="capacity" />
+          <div class="pillar-head" onclick="togglePillar(this.closest('.pillar-card'))" style="cursor:pointer">
+            <div class="pillar-name">☐ &nbsp;Capacity &amp; Operational Control</div>
+            <div class="pillar-check" id="pc-capacity"></div>
+          </div>
+          <div class="pillar-win" onclick="event.stopPropagation()">"Control load, protect throughput, and smooth peaks without guessing."</div>
+          <div class="pillar-fields" onclick="event.stopPropagation()">
+            <div><div class="pillar-section-label">Discovery Prompts to Confirm</div><div class="discovery-list"><span># service drives</span><span>Shared OEM drives</span><span>Waiter/loaner limits</span></div></div>
+            <div><div class="pillar-section-label">Confirmed Discovery Notes</div><textarea placeholder="Capture their answers here..." disabled></textarea></div>
+            <div><div class="pillar-section-label">Demo Beats to Show</div><div class="discovery-list"><span>Shop Capacity + thresholds (appts or tech hours)</span><span>Skills Capacity (limit specialty work)</span><span>Web appt limits + discounted timeslots</span></div></div>
+            <div><div class="pillar-section-label">Demo Notes / Customizations</div><textarea placeholder="Specific beats to emphasize for this dealer..." disabled></textarea></div>
+          </div>
+        </div>
+
+        <div class="pillar-card" data-pillar="tech">
+          <input type="checkbox" name="pillar" value="tech" />
+          <div class="pillar-head" onclick="togglePillar(this.closest('.pillar-card'))" style="cursor:pointer">
+            <div class="pillar-name">☐ &nbsp;Tech &amp; Integration</div>
+            <div class="pillar-check" id="pc-tech"></div>
+          </div>
+          <div class="pillar-win" onclick="event.stopPropagation()">"Integrations eliminate rekeying and keep everyone on the same record."</div>
+          <div class="pillar-fields" onclick="event.stopPropagation()">
+            <div><div class="pillar-section-label">Discovery Prompts to Confirm</div><div class="discovery-list"><span>Current DMS + other tools</span><span>Need to reduce double entry</span><span>Connectivity/device constraints</span></div></div>
+            <div><div class="pillar-section-label">Confirmed Discovery Notes</div><textarea placeholder="Capture their answers here..." disabled></textarea></div>
+            <div><div class="pillar-section-label">Demo Beats to Show</div><div class="discovery-list"><span>DMS-connected workflow touchpoints (where data flows)</span><span>Notes for DMS + RO history via Timeline</span><span>Mention core suite: Schedule / Engage / Inspect / Invite</span></div></div>
+            <div><div class="pillar-section-label">Demo Notes / Customizations</div><textarea placeholder="Specific beats to emphasize for this dealer..." disabled></textarea></div>
+          </div>
+        </div>
+
+      </div><!-- /pillarsGrid -->
+    </div>
+
+    <!-- Close Plan -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><span class="card-title">Close Plan</span><div style="font-size:11px;color:var(--text-faint);margin-top:2px">Capture before the demo ends</div></div>
+      </div>
+      <div class="close-row">
+        <div class="close-question">Decision process / next meeting already scheduled?</div>
+        <div class="close-answer">
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="xt_next_meeting" value="yes" /> Yes</label>
+            <label class="radio-label"><input type="radio" name="xt_next_meeting" value="no" /> No</label>
+          </div>
+          <div class="field"><label>Notes</label><input type="text" id="close_next_meeting" placeholder="Date, time, participants, format..." oninput="markDirty('fixedops')"></div>
+        </div>
+      </div>
+      <div class="close-row">
+        <div class="close-question">Key stakeholders not present / follow-up needed</div>
+        <div class="close-answer">
+          <div class="field"><textarea id="close_stakeholders" placeholder="List any decision-makers who weren't in the room and what follow-up is required..." oninput="markDirty('fixedops')"></textarea></div>
+        </div>
+      </div>
+      <div class="close-row">
+        <div class="close-question">Objections raised during demo</div>
+        <div class="close-answer">
+          <div class="field"><textarea id="close_objections" placeholder="Note any objections and how they were addressed..." oninput="markDirty('fixedops')"></textarea></div>
+        </div>
+      </div>
+      <div class="close-row">
+        <div class="close-question">Committed next steps</div>
+        <div class="close-answer">
+          <div class="field"><textarea id="close_next_steps" placeholder="List confirmed next steps with owners and dates..." oninput="markDirty('fixedops')"></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pro Tip Banner -->
+    <div class="tip-banner">
+      <div class="tip-icon">💡</div>
+      <div class="tip-text">
+        <strong>Pro Tip:</strong> If time is tight, pick <strong>2 pillars only</strong> — usually <strong>Customer Experience + Visibility &amp; Reporting</strong> — and anchor the entire demo to their stated pains and outcomes above.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ SALES ═══ -->
+  <div class="tab-panel" id="tab-sales">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><span class="card-title">Sales &amp; F&amp;I — Contacts &amp; Tools</span></div>
+      <div class="form-grid">
+        <div class="field"><label>Contact Name</label><input type="text" id="sales_contact" placeholder="Sales / F&I Manager" oninput="markDirty('sales')"></div>
+        <div class="field"><label>Cell / Phone</label><input type="tel" id="sales_phone" placeholder="(___) ___-____" oninput="markDirty('sales')"></div>
+        <div class="field"><label>Inventory Management Tool</label><input type="text" id="sales_inventory" placeholder="e.g. vAuto, FirstLook" oninput="markDirty('sales')"></div>
+        <div class="field"><label>Digital Retailing</label><input type="text" id="sales_digital_retailing" placeholder="Platform used" oninput="markDirty('sales')"></div>
+        <div class="field"><label>CRM Used</label><input type="text" id="sales_crm" placeholder="e.g. VinSolutions, DealerSocket" oninput="markDirty('sales')"></div>
+        <div class="field"><label>Number of Salespeople</label><input type="number" id="sales_salespeople" placeholder="0" min="0" oninput="markDirty('sales')"></div>
+      </div>
+      <div class="section-label">Deal Process</div>
+      <div class="field"><label>Deal Desking Process</label><textarea id="sales_desking" placeholder="How does the dealership desk deals today?" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>F&amp;I Menu &amp; Process</label><textarea id="sales_fni" placeholder="Describe F&I menu presentation and workflow…" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>Laser Forms &amp; / or Impact Forms Usage</label><textarea id="sales_forms" placeholder="What forms do they use and how?" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>Third-Party Front-End Solutions</label><textarea id="sales_3p" placeholder="List all front-end third-party tools…" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>Compliance Tools &amp; Processes</label><textarea id="sales_compliance" placeholder="RouteOne, DealerTrack compliance, OFAC tools…" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>We-Owes &amp; Purchase Order Handling</label><textarea id="sales_weowes" placeholder="How are we-owes and POs managed?" oninput="markDirty('sales')"></textarea></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><span class="card-title">Sales &amp; F&amp;I Challenges, Goals &amp; Insight</span></div>
+      <div class="field"><label>Critical Applications / Features for Sales &amp; F&amp;I Success</label><textarea id="sales_critical_features" placeholder="Must-have features…" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>Top Challenges / Gaps</label><textarea class="lg" id="sales_challenges" placeholder="What problems is the sales team facing today?" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>What They Like / Dislike About Current Vendor</label><textarea id="sales_vendor_feedback" placeholder="Pros and cons of current DMS from sales perspective…" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>Other Technology / Vendors Not Yet Discussed</label><textarea id="sales_other_tech" placeholder="Any other tools or vendors in use?" oninput="markDirty('sales')"></textarea></div><br>
+      <div class="field"><label>Top 5 Things Reviewed to Start the Day</label><textarea id="sales_top5" placeholder="What KPIs or reports start their morning?" oninput="markDirty('sales')"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ═══ OPEN NOTES ═══ -->
+  <div class="tab-panel" id="tab-opennotes">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><span class="card-title">Open Notes Section</span></div>
+      <div class="internal-use-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <strong>INTERNAL USE ONLY</strong> — Do not share this tab with the dealer or include in any client-facing materials.
+      </div>
+      <div class="field"><label>Tell Us — Why Are We Here?</label><textarea class="lg" id="on_why" placeholder="What initiated this discovery conversation?" oninput="markDirty('opennotes')"></textarea></div><br>
+      <div class="field"><label>What Does Your Current Provider Do Well?</label><textarea id="on_doing_well" placeholder="Strengths of their current DMS…" oninput="markDirty('opennotes')"></textarea></div><br>
+      <div class="field"><label>What Could Your Current Provider Do Better?</label><textarea id="on_improvement" placeholder="Gaps, frustrations, shortcomings…" oninput="markDirty('opennotes')"></textarea></div><br>
+      <div class="field"><label>What Personalities Are We Dealing With?</label><textarea id="on_personalities" placeholder="Describe key stakeholder personalities and dynamics…" oninput="markDirty('opennotes')"></textarea></div><br>
+      <div class="field"><label>Any Problem People in the Demo? Identify and Share Their Concerns.</label><textarea id="on_problem_people" placeholder="Who might resist change or cause issues?" oninput="markDirty('opennotes')"></textarea></div><br>
+      <div class="field"><label>General Notes</label><textarea class="xl" id="on_notes" placeholder="Capture any other important observations…" oninput="markDirty('opennotes')"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ═══ HARDWARE ═══ -->
+  <div class="tab-panel" id="tab-hardware">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div><span class="card-title">Existing Hardware</span><span class="card-subtitle">Quantities by store</span></div>
+      <div style="overflow-x:auto"><table class="data-table"><thead><tr id="ehwHead"><th>Hardware Item</th></tr></thead><tbody id="ehwBody"></tbody><tfoot><tr class="total-row" id="ehwTotals"><td>TOTAL</td></tr></tfoot></table></div>
+    </div>
+  </div>
+
+  <!-- ═══ PERSONNEL ═══ -->
+  <div class="tab-panel" id="tab-personnel">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><span class="card-title">Dealership Personnel — DMS Training Headcount</span></div>
+      <div class="personnel-wrap"><table class="data-table personnel-table"><thead><tr id="perHead"><th>Role</th></tr></thead><tbody id="perBody"></tbody><tfoot><tr class="total-row" id="perTotals"><td>Total DMS Users</td></tr><tr id="perPayroll"><td class="row-label">Employees on Payroll</td></tr></tfoot></table></div>
+    </div>
+  </div>
+
+  <!-- ═══ AGENDA ═══ -->
+  <div class="tab-panel" id="tab-agenda">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="card-title">Presentation Agenda</span><button type="button" class="btn-autofill" onclick="autoFillAgenda()" title="Pre-fill from captured discovery data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        Auto-Fill from Discovery
+      </button></div>
+      <div class="form-grid">
+        <div class="field"><label>Presentation Date</label><input type="date" id="agenda_date" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Presentation Time</label><input type="time" id="agenda_time" oninput="markDirty('agenda')"></div>
+      </div>
+      <div class="section-label">Meeting Attendees — Dealership</div>
+      <div class="form-grid">
+        <div class="field"><label>Attendee 1</label><input type="text" id="attendee1" placeholder="Name and title" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Attendee 2</label><input type="text" id="attendee2" placeholder="Name and title" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Attendee 3</label><input type="text" id="attendee3" placeholder="Name and title" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Attendee 4</label><input type="text" id="attendee4" placeholder="Name and title" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Attendee 5</label><input type="text" id="attendee5" placeholder="Name and title" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Attendee 6</label><input type="text" id="attendee6" placeholder="Name and title" oninput="markDirty('agenda')"></div>
+      </div>
+      <div class="section-label">Meeting Objectives / Goals <span style="font-weight:400;font-size:11px;letter-spacing:0;text-transform:none;color:var(--text-faint)">(auto-fills from Dealership Facts Q2)</span></div>
+      <div class="form-grid">
+        <div class="field"><label>Objective 1</label><input type="text" id="obj1" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Objective 2</label><input type="text" id="obj2" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Objective 3</label><input type="text" id="obj3" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Objective 4</label><input type="text" id="obj4" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Objective 5</label><input type="text" id="obj5" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Objective 6</label><input type="text" id="obj6" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Objective 7</label><input type="text" id="obj7" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>Objective 8</label><input type="text" id="obj8" oninput="markDirty('agenda')"></div>
+      </div>
+      <div class="section-label">Meeting Attendees — Dealertrack</div>
+      <div class="form-grid">
+        <div class="field"><label>DT Attendee 1</label><input type="text" id="dt_att1" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>DT Attendee 2</label><input type="text" id="dt_att2" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>DT Attendee 3</label><input type="text" id="dt_att3" oninput="markDirty('agenda')"></div>
+        <div class="field"><label>DT Attendee 4</label><input type="text" id="dt_att4" oninput="markDirty('agenda')"></div>
+      </div>
+      <div class="section-label">Presentation Timeline</div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time"><input type="time" id="tl_intro_time" value="11:00" class="tl-input" oninput="markDirty('agenda')"></div><div class="timeline-label-wrap"><div class="timeline-label">Brief Introduction</div><div class="field"><input type="text" id="tl_intro_presenter" placeholder="Presenter" style="width:220px" oninput="markDirty('agenda')"></div></div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time"><input type="time" id="tl_sales_time" value="11:10" class="tl-input" oninput="markDirty('agenda')"></div><div class="timeline-label-wrap"><div class="timeline-label">Sales / F&amp;I</div><div class="field"><input type="text" id="tl_sales_presenter" placeholder="Presenter" style="width:220px" oninput="markDirty('agenda')"></div></div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time"><input type="time" id="tl_acct_time" value="11:30" class="tl-input" oninput="markDirty('agenda')"></div><div class="timeline-label-wrap"><div class="timeline-label">Accounting / Payroll</div><div class="field"><input type="text" id="tl_acct_presenter" placeholder="Presenter" style="width:220px" oninput="markDirty('agenda')"></div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--text-faint)"></div><div class="timeline-time"><input type="time" id="tl_break_time" value="13:00" class="tl-input" oninput="markDirty('agenda')"></div><div class="timeline-label-wrap"><div class="timeline-label" style="color:var(--text-muted)">Break</div></div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time"><input type="time" id="tl_xtime_time" value="13:15" class="tl-input" oninput="markDirty('agenda')"></div><div class="timeline-label-wrap"><div class="timeline-label">xTime</div><div class="field"><input type="text" id="tl_xtime_presenter" placeholder="Presenter" style="width:220px" oninput="markDirty('agenda')"></div></div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time"><input type="time" id="tl_service_time" value="14:00" class="tl-input" oninput="markDirty('agenda')"></div><div class="timeline-label-wrap"><div class="timeline-label">Service</div><div class="field"><input type="text" id="tl_service_presenter" placeholder="Presenter" style="width:220px" oninput="markDirty('agenda')"></div></div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time"><input type="time" id="tl_parts_time" value="14:45" class="tl-input" oninput="markDirty('agenda')"></div><div class="timeline-label-wrap"><div class="timeline-label">Parts</div><div class="field"><input type="text" id="tl_parts_presenter" placeholder="Presenter" style="width:220px" oninput="markDirty('agenda')"></div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent2)"></div><div class="timeline-time"><input type="time" id="tl_wrapup_time" value="15:30" class="tl-input" oninput="markDirty('agenda')"></div><div class="timeline-label-wrap"><div class="timeline-label">Wrap Up / Next Steps</div><div class="field"><input type="text" id="tl_wrapup_presenter" placeholder="Presenter" style="width:220px" oninput="markDirty('agenda')"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MEETING STRATEGY ═══ -->
+  <div class="tab-panel" id="tab-meetingstrategy">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="card-title">Meeting Strategy &amp; Flow</span><button type="button" class="btn-autofill" onclick="autoFillStrategy()" title="Pre-fill from captured discovery data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        Auto-Fill from Discovery
+      </button></div>
+      <div class="section-label">Meeting Objectives</div>
+      <div class="form-grid">
+        <div class="field"><label>1</label><input type="text" id="ms_obj1" oninput="markDirty('meetingstrategy')"></div>
+        <div class="field"><label>2</label><input type="text" id="ms_obj2" oninput="markDirty('meetingstrategy')"></div>
+        <div class="field"><label>3</label><input type="text" id="ms_obj3" oninput="markDirty('meetingstrategy')"></div>
+        <div class="field"><label>4</label><input type="text" id="ms_obj4" oninput="markDirty('meetingstrategy')"></div>
+        <div class="field"><label>5</label><input type="text" id="ms_obj5" oninput="markDirty('meetingstrategy')"></div>
+        <div class="field"><label>6</label><input type="text" id="ms_obj6" oninput="markDirty('meetingstrategy')"></div>
+        <div class="field"><label>7</label><input type="text" id="ms_obj7" oninput="markDirty('meetingstrategy')"></div>
+        <div class="field"><label>8</label><input type="text" id="ms_obj8" oninput="markDirty('meetingstrategy')"></div>
+      </div>
+      <div class="section-label">Dealership State</div>
+      <div class="form-grid">
+        <div class="field"><label>Overall Current State</label><textarea class="lg" id="ms_current_state" placeholder="How is the dealership operating today?" oninput="markDirty('meetingstrategy')"></textarea></div>
+        <div class="field"><label>Overall Desired State</label><textarea class="lg" id="ms_desired_state" placeholder="Where does the dealership want to be?" oninput="markDirty('meetingstrategy')"></textarea></div>
+      </div>
+      <div class="section-label">Focus Per Department</div>
+      <div class="field"><label>Accounting — Main Focus / Goals</label><textarea id="ms_acct_focus" placeholder="Key accounting themes and demo focus areas…" oninput="markDirty('meetingstrategy')"></textarea></div><br>
+      <div class="field"><label>Sales — Main Focus / Goals</label><textarea id="ms_sales_focus" placeholder="Key sales themes and demo focus areas…" oninput="markDirty('meetingstrategy')"></textarea></div><br>
+      <div class="field"><label>Fixed Ops — Main Focus / Goals</label><textarea id="ms_fo_focus" placeholder="Key fixed ops themes and demo focus areas…" oninput="markDirty('meetingstrategy')"></textarea></div>
+      <div class="section-label">Demo Flow</div>
+      <div class="field"><label>Demo Flow / Roadmap / Notes (To be completed with SE and RSM)</label><textarea class="xl" id="ms_demo_flow" placeholder="Outline the recommended demo flow and roadmap…" oninput="markDirty('meetingstrategy')"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ═══ PC NOTES ═══ -->
+  <div class="tab-panel" id="tab-pcnotes">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><span class="card-title">PC Take-A-Ways &amp; Notes</span></div>
+      <div class="field"><label>Follow-Up Items</label><textarea class="xl" id="pc_followup" placeholder="List all follow-up items with owner and due date…" oninput="markDirty('pcnotes')"></textarea></div><br>
+      <div class="field"><label>Notes from Your Perspective — What Did You Hear That Was Important?</label><textarea class="xl" id="pc_notes" placeholder="Key takeaways, observations, and insights…" oninput="markDirty('pcnotes')"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ═══ IMPLEMENTATION ═══ -->
+  <div class="tab-panel" id="tab-implementation">
+    <div class="card">
+      <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="card-title">Implementation Additional Information</span></div>
+      <div class="form-grid">
+        <div class="field"><label>Main Contact / Title</label><input type="text" id="impl_contact" placeholder="Primary implementation contact and title" oninput="markDirty('implementation')"></div>
+        <div class="field"><label>Main Contact Email</label><input type="email" id="impl_email" placeholder="email@dealership.com" oninput="markDirty('implementation')"></div>
+        <div class="field"><label>Cell Phone</label><input type="tel" id="impl_phone" placeholder="(___) ___-____" oninput="markDirty('implementation')"></div>
+      </div>
+      <div class="section-label">Other Key Contacts</div>
+      <div class="field"><label>Additional Contacts</label><textarea class="xl" id="impl_other_contacts" placeholder="Name / Title / Email / Phone for each contact…" oninput="markDirty('implementation')"></textarea></div>
+    </div>
+  </div>
+
+</div><!-- /outer -->
+
+<script>
+// ══ CONSTANTS ══════════════════════════════════
+const HW_NEW  = ['Dot Matrix/Impact F&I Printers','Laser Check Printers','Laser Accounting Printers','Laser Service/BS (2nd Drawers)','Laser Parts Printers','Laser Sales Printers','Laser Cashier Printers','Router','Scanners'];
+const HW_EXIST= ['Dot Matrix/Impact F&I Printers','Laser Check Printers','Laser Accounting Printers','Laser Service/BS (2 Drawers)','Laser Parts Printers','Laser Sales Printers','Laser Cashier Printers','Router','Scanners'];
+const PER_ROLES=['Dealer','General Manager','General Sales Manager','Sales Manager/Deal Desker','F&I Managers','Controller','Office Manager','Payroll (Even if included above)','Accounting Staff','Cashier (Only if not included above)','Fixed Ops Director','Service Manager','Service Writers – Main Drive','Service Technicians – Main Drive','Service Writers – Quick Lube','Technicians – Quick Lube','Warranty Administrator','Rental','Body Shop Manager','Body Shop Estimators','Body Shop Technicians','Parts Manager','Parts Counterpeople','Parts Other','Misc. Other DMS Users'];
+
+// ══ THEME ══════════════════════════════════════
+function toggleTheme(){const h=document.documentElement;const c=h.getAttribute('data-theme');h.setAttribute('data-theme',c==='dark'?'light':'dark');localStorage.setItem('theme',h.getAttribute('data-theme'));}
+(function(){const s=localStorage.getItem('theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');})();
+
+// ══ TABS ═══════════════════════════════════════
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='summary') updateSummary();
+}
+
+// ══ DIRTY ══════════════════════════════════════
+const dirtyTabs=new Set();
+function markDirty(tab){
+  dirtyTabs.add(tab);
+  const btn=document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+  if(btn) btn.classList.add('has-data');
+  autoSave();
+}
+
+// ══ Y/N ════════════════════════════════════════
+function ynToggle(btn,val){
+  const g=btn.closest('.yn-group');
+  g.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('active-y','active-n'));
+  btn.classList.add(val==='Y'?'active-y':'active-n');
+  markDirty('dealership');
+}
+
+// ══ STORES ═════════════════════════════════════
+let storeCount = 0;
+
+function addStore(name='') {
+  storeCount++;
+  const id = `dynstore_${storeCount}`;
+  const list = document.getElementById('storeList');
+  const row = document.createElement('div');
+  row.className = 'store-row';
+  row.id = `storerow_${storeCount}`;
+  row.innerHTML = `
+    <div class="field"><label>Store ${storeCount + 1}</label><input type="text" id="${id}" placeholder="Store name" value="${name}" oninput="markDirty('dealership')"></div>
+    <div class="field"><label>CAID / Store ID</label><input type="text" id="${id}_caid" placeholder="Store CAID" oninput="markDirty('dealership')"></div>
+    <button type="button" class="store-remove" onclick="removeStore(${storeCount})" title="Remove store">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>`;
+  list.appendChild(row);
+  markDirty('dealership');
+}
+
+function removeStore(n) {
+  const row = document.getElementById(`storerow_${n}`);
+  if (row) { row.remove(); markDirty('dealership'); }
+}
+
+function getStores() {
+  const stores = [(document.getElementById('store1')?.value || '').trim() || 'Store 1'];
+  document.querySelectorAll('#storeList input[id^="dynstore_"]').forEach((inp, i) => {
+    if (!inp.id.includes('_caid')) stores.push(inp.value.trim() || `Store ${i+2}`);
+  });
+  // Pad to 9
+  while (stores.length < 9) stores.push(`Store ${stores.length + 1}`);
+  return stores;
+}
+
+// ══ M2M TOGGLE ═════════════════════════════════
+function toggleM2M(cb) {
+  const cedInput = document.getElementById('ced');
+  cedInput.disabled = cb.checked;
+  if (cb.checked) { cedInput.value = ''; }
+  markDirty('dealership');
+}
+
+// ══ BUILD DYNAMIC TABLES ══════════════════════
+function buildTable(headId,tbodyId,totalsId,items,prefix){
+  const head=document.getElementById(headId);
+  const tbody=document.getElementById(tbodyId);
+  const totals=document.getElementById(totalsId);
+  const stores=getStores();
+  while(head.cells.length>1) head.deleteCell(1);
+  while(totals.cells.length>1) totals.deleteCell(1);
+  stores.forEach((s,si)=>{
+    const th=document.createElement('th');th.textContent=s;head.appendChild(th);
+    const td=document.createElement('td');td.className='total-row';td.id=`${prefix}_total_${si}`;td.textContent='0';totals.appendChild(td);
+  });
+  tbody.innerHTML='';
+  items.forEach((item,ri)=>{
+    const tr=document.createElement('tr');
+    const lbl=document.createElement('td');lbl.className='row-label';lbl.innerHTML=item;tr.appendChild(lbl);
+    stores.forEach((s,si)=>{
+      const td=document.createElement('td');
+      const inp=document.createElement('input');inp.type='number';inp.min='0';inp.placeholder='0';inp.id=`${prefix}_r${ri}_s${si}`;
+      inp.addEventListener('input',()=>{recalcTotals(prefix,items.length,stores.length);markDirty('hardware');});
+      td.appendChild(inp);tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+function buildMetricsTable(headId,tbodyId,rowLabels,prefix){
+  const head=document.getElementById(headId);
+  const tbody=document.getElementById(tbodyId);
+  const stores=getStores();
+  while(head.cells.length>1) head.deleteCell(1);
+  stores.forEach(s=>{const th=document.createElement('th');th.textContent=s;head.appendChild(th);});
+  tbody.innerHTML='';
+  rowLabels.forEach((label,ri)=>{
+    const tr=document.createElement('tr');
+    const td0=document.createElement('td');td0.className='row-label';td0.textContent=label;tr.appendChild(td0);
+    stores.forEach((s,si)=>{
+      const td=document.createElement('td');
+      const inp=document.createElement('input');inp.type='text';inp.placeholder='—';inp.id=`${prefix}_r${ri}_s${si}`;
+      inp.addEventListener('input',()=>markDirty(prefix==='sv'?'sales':'fixedops'));
+      td.appendChild(inp);tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+function buildPersonnelTable(){
+  const head=document.getElementById('perHead');
+  const tbody=document.getElementById('perBody');
+  const totals=document.getElementById('perTotals');
+  const payroll=document.getElementById('perPayroll');
+  const stores=getStores();
+  while(head.cells.length>1) head.deleteCell(1);
+  while(totals.cells.length>1) totals.deleteCell(1);
+  while(payroll.cells.length>1) payroll.deleteCell(1);
+  stores.forEach((s,si)=>{
+    const th=document.createElement('th');th.textContent=s;head.appendChild(th);
+    const td=document.createElement('td');td.className='total-row';td.id=`per_total_${si}`;td.textContent='0';totals.appendChild(td);
+    const td2=document.createElement('td');
+    const inp=document.createElement('input');inp.type='number';inp.min='0';inp.placeholder='0';inp.id=`per_payroll_${si}`;
+    inp.addEventListener('input',()=>markDirty('personnel'));
+    td2.appendChild(inp);payroll.appendChild(td2);
+  });
+  tbody.innerHTML='';
+  PER_ROLES.forEach((role,ri)=>{
+    const tr=document.createElement('tr');
+    const lbl=document.createElement('td');lbl.className='row-label';lbl.textContent=role;tr.appendChild(lbl);
+    stores.forEach((s,si)=>{
+      const td=document.createElement('td');
+      const inp=document.createElement('input');inp.type='number';inp.min='0';inp.placeholder='0';inp.id=`per_r${ri}_s${si}`;
+      inp.addEventListener('input',()=>{recalcPersonnel(stores.length);markDirty('personnel');});
+      td.appendChild(inp);tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+function recalcTotals(prefix,numRows,numStores){
+  for(let si=0;si<numStores;si++){
+    let t=0;for(let ri=0;ri<numRows;ri++){t+=parseInt(document.getElementById(`${prefix}_r${ri}_s${si}`)?.value||0)||0;}
+    const c=document.getElementById(`${prefix}_total_${si}`);if(c) c.textContent=t;
+  }
+}
+function recalcPersonnel(numStores){
+  for(let si=0;si<numStores;si++){
+    let t=0;PER_ROLES.forEach((r,ri)=>{t+=parseInt(document.getElementById(`per_r${ri}_s${si}`)?.value||0)||0;});
+    const c=document.getElementById(`per_total_${si}`);if(c) c.textContent=t;
+  }
+}
+
+function buildAllTables(){
+  buildTable('ehwHead','ehwBody','ehwTotals',HW_EXIST,'ehw');
+  buildPersonnelTable();
+}
+
+// ══ SUMMARY ════════════════════════════════════
+function v(id){return(document.getElementById(id)?.value||'').trim();}
+function set(id,val){const el=document.getElementById(id);if(el) el.textContent=val;}
+function truncate(s,n){return s.length>n?s.slice(0,n)+'…':s;}
+
+function updateSummary(){
+  set('sum-groupname',v('groupName')||'—');
+  set('sum-oem',v('oem')?'OEM: '+v('oem'):'OEM not set');
+  set('sum-dms',v('currentDMS')||'—');
+  set('sum-ced',v('ced')?'CED: '+v('ced'):'CED not set');
+  set('sum-install',v('desiredInstall')||'—');
+  set('sum-consultant',v('consultant')?'Consultant: '+v('consultant'):'Consultant not set');
+  const sections=[
+    {id:'dealership',label:'Dealership Facts',fields:['groupName','oem','currentDMS','q_reasons']},
+    {id:'accounting',label:'Accounting',fields:['acct_contact','acct_challenges','acct_goals']},
+    {id:'fixedops',label:'Fixed Ops',fields:['fo_contact','fo_challenges','fo_goals']},
+    {id:'sales',label:'Sales & F&I',fields:['sales_contact','sales_challenges','sales_vendor_feedback']},
+    {id:'opennotes',label:'Open Notes',fields:['on_why','on_doing_well','on_improvement']},
+    {id:'hardware',label:'Hardware',fields:[]},
+    {id:'personnel',label:'Personnel',fields:[]},
+    {id:'agenda',label:'Agenda',fields:['agenda_date','attendee1']},
+    {id:'meetingstrategy',label:'Meeting Strategy',fields:['ms_current_state','ms_desired_state']},
+    {id:'pcnotes',label:'PC Notes',fields:['pc_notes']},
+    {id:'implementation',label:'Implementation',fields:['impl_contact','impl_email']},
+  ];
+  const cl=document.getElementById('completion-list');cl.innerHTML='';
+  sections.forEach(sec=>{
+    const filled=sec.fields.filter(f=>v(f).length>0).length;
+    const total=sec.fields.length||1;
+    const pct=sec.fields.length===0?(dirtyTabs.has(sec.id)?100:0):Math.round(filled/total*100);
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);';
+    row.innerHTML=`<span style="font-size:13px;width:160px;flex-shrink:0;color:var(--text)">${sec.label}</span><div class="progress-wrap" style="flex:1"><div class="progress-bar-outer"><div class="progress-bar-inner" style="width:${pct}%"></div></div><span class="progress-pct">${pct}%</span></div>`;
+    cl.appendChild(row);
+  });
+  function snap(id,pairs){
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=pairs.map(([l,val])=>`<div class="summary-field-row"><span class="summary-field-label">${l}</span><span class="summary-field-val">${val?truncate(val,120):'<span class="empty-tag">Not filled</span>'}</span></div>`).join('');
+  }
+  snap('snap-dealership',[['Group Name',v('groupName')],['OEM',v('oem')],['Store 1',v('store1')],['Current DMS',v('currentDMS')],['CED',v('ced')],['Desired Install',v('desiredInstall')],['Consultant',v('consultant')],['Decision Makers',v('decisionMakers')],['Reasons for Change',v('q_reasons')],['Demo Goals',v('q_goals')]]);
+  snap('snap-accounting',[['Contact',v('acct_contact')],['Structure',v('acct_structure_current')],['Challenges',v('acct_challenges')],['Goals',v('acct_goals')],['Reporting',v('acct_reporting')],['Payroll',v('acct_payroll')]]);
+  snap('snap-sales',[['Contact',v('sales_contact')],['CRM',v('sales_crm')],['Desking Process',v('sales_desking')],['Challenges',v('sales_challenges')],['Vendor Feedback',v('sales_vendor_feedback')]]);
+  snap('snap-fixedops',[['Contact',v('fo_contact')],['Parts Wholesale',v('fo_parts_wholesale')],['Scheduling',v('fo_svc_scheduling')],['Challenges',v('fo_challenges')],['Goals',v('fo_goals')]]);
+  snap('snap-opennotes',[['Why Are We Here?',v('on_why')],['Current Provider Strengths',v('on_doing_well')],['Areas for Improvement',v('on_improvement')],['Personalities',v('on_personalities')]]);
+  snap('snap-strategy',[['Current State',v('ms_current_state')],['Desired State',v('ms_desired_state')],['Demo Flow',v('ms_demo_flow')]]);
+}
+
+// ══ FORM DATA ══════════════════════════════════
+function getFormData(){
+  const data={};
+  document.querySelectorAll('input[id],textarea[id],select[id]').forEach(el=>{if(el.id) data[el.id]=el.value;});
+  // Cox solutions checkboxes
+  ['dealertrack','kbb','autotrader','dealercom','xtime','vinsolutions','vauto','homenet','nextgear','manheim'].forEach(id=>{
+    const el = document.getElementById(`sol_${id}`);
+    data[`sol_${id}`] = el ? (el.checked ? 'Y' : '') : '';
+  });
+  // M2M
+  data['cedM2M'] = document.getElementById('cedM2M')?.checked ? 'Y' : '';
+  // Dynamic stores
+  data['storeCount'] = storeCount;
+  document.querySelectorAll('#storeList input[id^="dynstore_"]').forEach(inp => {
+    data[inp.id] = inp.value;
+  });
+  return data;
+}
+
+function setFormData(data){
+  Object.entries(data).forEach(([id,val])=>{
+    if(id.startsWith('sol_')){
+      const el=document.getElementById(id);
+      if(el) el.checked = (val==='Y');
+      return;
+    }
+    if(id==='cedM2M'){
+      const el=document.getElementById('cedM2M');
+      if(el){ el.checked=(val==='Y'); toggleM2M(el); }
+      return;
+    }
+    if(id==='storeCount'){
+      // handled separately
+      return;
+    }
+    const el=document.getElementById(id);
+    if(el&&el.tagName!=='BUTTON') el.value=val;
+  });
+}
+
+// ══ AUTOSAVE ═══════════════════════════════════
+let saveTimer;
+function autoSave(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{try{localStorage.setItem('dtdms_workbook',JSON.stringify(getFormData()));}catch(e){}},600);
+}
+function loadSaved(){
+  const s=localStorage.getItem('dtdms_workbook');
+  if(s){try{setFormData(JSON.parse(s));['dealership','accounting','fixedops','sales','opennotes','hardware','personnel','agenda','meetingstrategy','pcnotes','implementation'].forEach(tab=>{const btn=document.querySelector(`.tab-btn[data-tab="${tab}"]`);if(btn) btn.classList.add('has-data');});}catch(e){}}
+}
+
+// ══ SERVER STATUS ══════════════════════════════
+const SERVER = 'http://localhost:5757';
+let serverOnline = false;
+
+async function checkServer(){
+  try{
+    const r = await fetch(SERVER+'/health', {signal: AbortSignal.timeout(1200)});
+    serverOnline = r.ok;
+  } catch { serverOnline = false; }
+  const pill = document.getElementById('serverPill');
+  const txt  = document.getElementById('serverPillText');
+  if(serverOnline){
+    pill.className = 'server-pill online';
+    txt.textContent = 'Server Online';
+    document.getElementById('btnExcel').title = 'Export filled Excel workbook (exact original format)';
+  } else {
+    pill.className = 'server-pill';
+    txt.textContent = 'Server Offline';
+    document.getElementById('btnExcel').title = 'Server offline — will export basic Excel. Run python3 server.py for exact format.';
+  }
+}
+
+// ══ EXPORT EXCEL ════════════════════════════════
+async function exportExcel(){
+  const btn = document.getElementById('btnExcel');
+  const origHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Building…';
+
+  // ── Try server first (exact template format) ──
+  if(serverOnline){
+    try{
+      const data = getFormData();
+      const resp = await fetch(SERVER+'/export_xlsx', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      if(!resp.ok) throw new Error('Server error '+resp.status);
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (v('groupName')||'Discovery').replace(/\s+/g,'_') + '_DMS_Discovery.xlsx';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('Excel workbook downloaded (exact format)', 'success');
+      btn.disabled = false; btn.innerHTML = origHTML;
+      return;
+    } catch(e){
+      serverOnline = false;
+      checkServer();
+      toast('Server export failed — falling back to basic Excel', 'info');
+    }
+  }
+
+  // ── Fallback: client-side SheetJS basic export ──
+  // Lazy-load SheetJS from CDN
+  if(!window.XLSX){
+    await new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload=res; s.onerror=rej;
+      document.head.appendChild(s);
+    });
+  }
+
+  try{
+    const data=getFormData();
+    const stores=getStores();
+    const group=(v('groupName')||'Discovery').replace(/\s+/g,'_');
+    const wb=XLSX.utils.book_new();
+
+    // ── helper ──────────────────────────────────
+    function addSheet(name, rows){
+      const ws=XLSX.utils.aoa_to_sheet(rows);
+      // Auto column width
+      const colWidths=rows.reduce((acc,row)=>{
+        row.forEach((cell,i)=>{
+          const len=cell?String(cell).length:0;
+          acc[i]=Math.min(Math.max(acc[i]||10, len+2),80);
+        });
+        return acc;
+      },[]);
+      ws['!cols']=colWidths.map(w=>({wch:w}));
+      XLSX.utils.book_append_sheet(wb, ws, name);
+    }
+
+    // ── helper: section header row style marker ──
+    const H = (label) => label; // just text; xlsx-lite doesn't need markers
+
+    // ── SHEET 1: Dealership Facts ────────────────
+    addSheet('Dealership Facts', [
+      ['DEALERTRACK & XTIME DISCOVERY WORKBOOK'],
+      [''],
+      ['DEALERSHIP FACTS'],
+      ['Group Name', data.groupName||''],
+      ['OEM', data.oem||''],
+      ['Store 1 Name', data.store1||''],
+      ['Additional OEM(s)', data.addlOem||''],
+      ['Phone', data.phone||''],
+      ['# Buildings', data.buildings||''],
+      ['Consultant', data.consultant||''],
+      ['Decision Makers', data.decisionMakers||''],
+      [''],
+      ['ADDITIONAL STORES'],
+      ['Store 2', data.store2||'', 'Store 6', data.store6||''],
+      ['Store 3', data.store3||'', 'Store 7', data.store7||''],
+      ['Store 4', data.store4||'', 'Store 8', data.store8||''],
+      ['Store 5', data.store5||'', 'Store 9', data.store9||''],
+      [''],
+      ['CURRENT DMS INFORMATION'],
+      ['Current DMS', data.currentDMS||''],
+      ['CED (Contract End Date)', data.ced||''],
+      ['Desired Install Date', data.desiredInstall||''],
+      ['DMS Notes', data.dmsNotes||''],
+      ['Other DMS Vendors Under Consideration', data.dmsCompetitors||''],
+      [''],
+      ['GENERAL QUESTIONS'],
+      ['1. Reasons for Considering DMS Change'],
+      [data.q_reasons||''],
+      [''],
+      ['2. Goals for DMS Presentation / Areas of Focus'],
+      [data.q_goals||''],
+      [''],
+      ['3. Businesses / Tax IDs in Organization'],
+      [data.q_taxids||''],
+      [''],
+      ['COX AUTOMOTIVE SOLUTIONS'],
+      ['Solution','In Use','Solution','In Use'],
+      ['Dealertrack F&I', data.coxsol_0||'', 'KBB / ICO', data.coxsol_1||''],
+      ['Dealer.com', data.coxsol_2||'', 'Autotrader', data.coxsol_3||''],
+      ['F&I Express', data.coxsol_4||'', 'Xtime Schedule', data.coxsol_5||''],
+      ['Deal Central', data.coxsol_6||'', 'Xtime Engage', data.coxsol_7||''],
+      ['vAuto', data.sol_vauto||'', 'Homenet', data.sol_homenet||'', 'NextGear', data.sol_nextgear||''],
+      ['Manheim', data.sol_manheim||''],
+      [''],
+      ['5. Third-Party Vendors in Use'],
+      [data.thirdPartyVendors||''],
+      [''],
+      ['6. Network / Printer / Phone Ownership'],
+      [data.networkOwnership||''],
+
+    ]);
+
+    // ── SHEET 2: Accounting ──────────────────────
+    addSheet('Accounting', [
+      ['ACCOUNTING DEPARTMENT'],
+      ['Contact Name', data.acct_contact||''],
+      ['Cell Number', data.acct_cell||''],
+      ['Email', data.acct_email||''],
+      ['Number of GL Accounts', data.acct_gls||''],
+      [''],
+      ['ACCOUNTING STRUCTURE'],
+      ['Centralized / Intercompany Usage'],
+      [data.acct_centralized||''],
+      ['Current Accounting Structure'],
+      [data.acct_structure_current||''],
+      ['Special Setups / Configurations'],
+      [data.acct_special_setups||''],
+      [''],
+      ['REPORTING & TOOLS'],
+      ['DMS Reporting Tools (Canned / Advanced / 3rd Party)'],
+      [data.acct_reporting||''],
+      ['Document Scanning / Archiving'],
+      [data.acct_scanning||''],
+      ['Payroll Solution / Direct Deposit / Gaps'],
+      [data.acct_payroll||''],
+      ['DOC Usage / Forecasting'],
+      [data.acct_doc||''],
+      ['Bank Reconciliation Process'],
+      [data.acct_bankrec||''],
+      ['Top 5 Daily Reports'],
+      [data.acct_top5reports||''],
+      [''],
+      ['CHALLENGES & GOALS'],
+      ['Top Challenges / Gaps'],
+      [data.acct_challenges||''],
+      ['Goals & Plans'],
+      [data.acct_goals||''],
+      ['Unique Processes'],
+      [data.acct_unique||''],
+      ['Cashiering Process / Online Payment'],
+      [data.acct_cashier||''],
+    ]);
+
+    // ── SHEET 3: Fixed Ops & Xtime ───────────────
+    const foRows = [
+      ['FIXED OPERATIONS & XTIME DISCOVERY'],
+      ['Contact Name', data.fo_contact||''],
+      ['Cell / Phone', data.fo_phone||''],
+      [''],
+      ['PARTS DEPARTMENT'],
+      ['Average Monthly Parts Wholesale', data.fo_parts_wholesale||''],
+      ['Number of Parts Trucks', data.fo_parts_trucks||''],
+      ['Number of Parts Warehouses', data.fo_parts_warehouses||''],
+      ['Parts Scanning / Vendor', data.fo_parts_scanning||''],
+      ['Parts Catalog', data.fo_parts_catalog||''],
+      ['Third-Party Parts Solutions'],
+      [data.fo_parts_3p||''],
+      ['Parts–Service Workflow'],
+      [data.fo_parts_service_workflow||''],
+      ['PO Usage & Process'],
+      [data.fo_parts_po||''],
+      ['Special Order Tracking'],
+      [data.fo_parts_special_orders||''],
+      ['Physical Inventory Frequency'],
+      [data.fo_parts_inventory_freq||''],
+      ['Parts Matrix Usage'],
+      [data.fo_parts_matrix||''],
+      [''],
+      ['SERVICE DEPARTMENT'],
+      ['RO Write-Up Process'],
+      [data.fo_svc_ro_writeup||''],
+      ['ERO / Automated Dispatch'],
+      [data.fo_svc_ero||''],
+      ['Quoting Tools / SPG'],
+      [data.fo_svc_spg||''],
+      ['Scheduling / Lane / Inspection Processes'],
+      [data.fo_svc_scheduling||''],
+      ['Third-Party Service Solutions'],
+      [data.fo_svc_3p||''],
+      ['RO Close-Out Process'],
+      [data.fo_svc_closeout||''],
+      ['Labor Matrix Usage', data.fo_svc_labor_matrix||''],
+      ['Online Payment Collection', data.fo_svc_online_pay||''],
+      ['Separate ROs per Labor Type', data.fo_svc_ro_types||''],
+      ['Customer Email & Text Capability', data.fo_svc_email_text||''],
+      [''],
+      ['BODY SHOP'],
+      ['Location', data.fo_bs_location||''],
+      ['Estimating Tool', data.fo_bs_estimating||''],
+      ['Notes'],
+      [data.fo_bs_notes||''],
+      [''],
+      ['XTIME DISCOVERY & DEMO PLANNING'],
+      ['Top Pain 1', data.fo_pain1||''],
+      ['Top Pain 2', data.fo_pain2||''],
+      ['Top Pain 3', data.fo_pain3||''],
+      ['Outcome 1', data.fo_outcome1||''],
+      ['Outcome 2', data.fo_outcome2||''],
+      ['Outcome 3', data.fo_outcome3||''],
+      [''],
+      ['TIMEBOX & DEMO STYLE'],
+      ['Duration (min)', document.querySelector('input[name="xt_duration"]:checked')?.value||''],
+      ['Live Demo', document.querySelector('input[name="xt_live"]:checked')?.value||''],
+      ['Recording', document.querySelector('input[name="xt_recording"]:checked')?.value||''],
+      [''],
+      ['PILLAR-TO-DEMO MAPPING'],
+    ];
+    // Add selected pillars
+    const pillarNames={cx:'Customer Experience',advisor:'Advisor Efficiency',mpi:'MPI & Upsell',reporting:'Visibility & Reporting',capacity:'Capacity & Operational Control',tech:'Tech & Integration'};
+    document.querySelectorAll('.pillar-card').forEach(card=>{
+      const key=card.getAttribute('data-pillar');
+      const selected=card.classList.contains('selected');
+      const tas=card.querySelectorAll('textarea');
+      foRows.push([pillarNames[key], selected?'SELECTED':'']);
+      if(selected){
+        foRows.push(['  Confirmed Discovery Notes', tas[0]?.value||'']);
+        foRows.push(['  Demo Notes / Customizations', tas[1]?.value||'']);
+      }
+    });
+    foRows.push(['']);
+    foRows.push(['CLOSE PLAN']);
+    foRows.push(['Next Meeting Scheduled', document.querySelector('input[name="xt_next_meeting"]:checked')?.value||'']);
+    foRows.push(['Next Meeting Notes', data.close_next_meeting||'']);
+    foRows.push(['Stakeholders Not Present / Follow-Up']);
+    foRows.push([data.close_stakeholders||'']);
+    foRows.push(['Objections Raised']);
+    foRows.push([data.close_objections||'']);
+    foRows.push(['Committed Next Steps']);
+    foRows.push([data.close_next_steps||'']);
+    // Parts/RO metrics
+    foRows.push(['']);
+    foRows.push(['PARTS INVOICE METRICS']);
+    foRows.push(['Store','# Invoices/Mo (COD)','# Invoices/Mo (Wholesale)','Avg Gross COD','Avg Gross Wholesale']);
+    stores.forEach((s,si)=>foRows.push([s, data[`pi_r0_s${si}`]||'', data[`pi_r1_s${si}`]||'', data[`pi_r2_s${si}`]||'', data[`pi_r3_s${si}`]||'']));
+    foRows.push(['']);
+    foRows.push(["RO VOLUME METRICS"]);
+    foRows.push(['Store',"# RO's/Mo (COD)","# RO's/Mo (Warranty)",'Avg Gross COD','Avg Gross Warranty']);
+    stores.forEach((s,si)=>foRows.push([s, data[`ro_r0_s${si}`]||'', data[`ro_r1_s${si}`]||'', data[`ro_r2_s${si}`]||'', data[`ro_r3_s${si}`]||'']));
+    addSheet('Fixed Ops & Xtime', foRows);
+
+    // ── SHEET 4: Sales & F&I ─────────────────────
+    const svRows=[
+      ['SALES & F&I'],
+      ['Contact Name', data.sales_contact||''],
+      ['Cell / Phone', data.sales_phone||''],
+      ['Inventory Management Tool', data.sales_inventory||''],
+      ['Digital Retailing', data.sales_digital_retailing||''],
+      ['CRM Used', data.sales_crm||''],
+      ['Number of Salespeople', data.sales_salespeople||''],
+      [''],
+      ['Deal Desking Process'],
+      [data.sales_desking||''],
+      ['F&I Menu & Process'],
+      [data.sales_fni||''],
+      ['Laser / Impact Forms'],
+      [data.sales_forms||''],
+      ['Third-Party Front-End Solutions'],
+      [data.sales_3p||''],
+      ['Compliance Tools & Processes'],
+      [data.sales_compliance||''],
+      ['We-Owes & PO Handling'],
+      [data.sales_weowes||''],
+      [''],
+      ['Critical Applications / Features'],
+      [data.sales_critical_features||''],
+      ['Top Challenges / Gaps'],
+      [data.sales_challenges||''],
+      ['Like / Dislike About Current Vendor'],
+      [data.sales_vendor_feedback||''],
+      ['Other Technology Not Yet Discussed'],
+      [data.sales_other_tech||''],
+      ['Top 5 Things Reviewed to Start Day'],
+      [data.sales_top5||''],
+      [''],
+      ['VEHICLES SOLD PER MONTH'],
+      ['Store','New/Mo','Used/Mo','Avg Gross New','Avg Gross Used'],
+      ...stores.map((s,si)=>[s, data[`sv_r0_s${si}`]||'', data[`sv_r1_s${si}`]||'', data[`sv_r2_s${si}`]||'', data[`sv_r3_s${si}`]||'']),
+    ];
+    addSheet('Sales & FI', svRows);
+
+    // ── SHEET 5: Open Notes ──────────────────────
+    addSheet('Open Notes', [
+      ['OPEN NOTES'],
+      ['Why Are We Here?'],
+      [data.on_why||''],
+      [''],
+      ['What Does Current Provider Do Well?'],
+      [data.on_doing_well||''],
+      [''],
+      ['What Could Current Provider Do Better?'],
+      [data.on_improvement||''],
+      [''],
+      ['Personalities'],
+      [data.on_personalities||''],
+      [''],
+      ['Problem People / Demo Concerns'],
+      [data.on_problem_people||''],
+      [''],
+      ['General Notes'],
+      [data.on_notes||''],
+    ]);
+
+    // ── SHEET 6: Hardware ────────────────────────
+    const hwHeader=['Hardware Item',...stores];
+    const hwNewRows=HW_NEW.map((item,ri)=>[item,...stores.map((_,si)=>data[`nhw_r${ri}_s${si}`]||0)]);
+    const hwExRows=HW_EXIST.map((item,ri)=>[item,...stores.map((_,si)=>data[`ehw_r${ri}_s${si}`]||0)]);
+    addSheet('Hardware', [
+      ['HARDWARE REVIEW'],
+      [''],
+      ['NEW HARDWARE NEEDED'],
+      hwHeader,
+      ...hwNewRows,
+      [''],
+      ['EXISTING / REPURPOSE HARDWARE'],
+      hwHeader,
+      ...hwExRows,
+    ]);
+
+    // ── SHEET 7: Personnel ───────────────────────
+    const perHeader=['Role',...stores];
+    const perRows=PER_ROLES.map((role,ri)=>[role,...stores.map((_,si)=>data[`per_r${ri}_s${si}`]||0)]);
+    const payrollRow=['Employees on Payroll',...stores.map((_,si)=>data[`per_payroll_${si}`]||0)];
+    addSheet('Personnel', [
+      ['DEALERSHIP PERSONNEL — DMS TRAINING HEADCOUNT'],
+      [''],
+      perHeader,
+      ...perRows,
+      ['Total DMS Users',...stores.map((_,si)=>PER_ROLES.reduce((t,r,ri)=>t+(parseInt(data[`per_r${ri}_s${si}`])||0),0))],
+      payrollRow,
+    ]);
+
+    // ── SHEET 8: Agenda ──────────────────────────
+    const agendaRows=[
+      ['PRESENTATION AGENDA'],
+      ['Date', data.agenda_date||''],
+      ['Time', data.agenda_time||''],
+      [''],
+      ['MEETING ATTENDEES — DEALERSHIP'],
+    ];
+    for(let i=1;i<=6;i++) if(data[`attendee${i}`]) agendaRows.push([`Attendee ${i}`, data[`attendee${i}`]]);
+    agendaRows.push(['']);
+    agendaRows.push(['MEETING OBJECTIVES / GOALS']);
+    for(let i=1;i<=8;i++) if(data[`obj${i}`]) agendaRows.push([`${i}.`, data[`obj${i}`]]);
+    agendaRows.push(['']);
+    agendaRows.push(['MEETING ATTENDEES — DEALERTRACK']);
+    for(let i=1;i<=4;i++) if(data[`dt_att${i}`]) agendaRows.push([`DT Attendee ${i}`, data[`dt_att${i}`]]);
+    agendaRows.push(['']);
+    agendaRows.push(['PRESENTATION TIMELINE','Time','Presenter']);
+    const tl=[['Brief Introduction','tl_intro_time','tl_intro_presenter'],['Sales/F&I','tl_sales_time','tl_sales_presenter'],['Accounting/Payroll','tl_acct_time','tl_acct_presenter'],['Break','tl_break_time',''],['xTime','tl_xtime_time','tl_xtime_presenter'],['Service','tl_service_time','tl_service_presenter'],['Parts','tl_parts_time','tl_parts_presenter'],['Wrap Up/Next Steps','tl_wrapup_time','tl_wrapup_presenter']];
+    tl.forEach(([label,tk,pk])=>agendaRows.push([label, data[tk]||'', data[pk]||'']));
+    addSheet('Agenda', agendaRows);
+
+    // ── SHEET 9: Meeting Strategy ────────────────
+    const msRows=[
+      ['MEETING STRATEGY & FLOW'],
+      [''],
+      ['MEETING OBJECTIVES'],
+    ];
+    for(let i=1;i<=8;i++) if(data[`ms_obj${i}`]) msRows.push([`${i}.`, data[`ms_obj${i}`]]);
+    msRows.push(['']);
+    msRows.push(['DEALERSHIP STATE','Current State','Desired State']);
+    msRows.push(['', data.ms_current_state||'', data.ms_desired_state||'']);
+    msRows.push(['']);
+    msRows.push(['MAIN FOCUS PER DEPARTMENT']);
+    msRows.push(['Accounting Focus'],[data.ms_acct_focus||'']);
+    msRows.push(['Sales Focus'],[data.ms_sales_focus||'']);
+    msRows.push(['Fixed Ops Focus'],[data.ms_fo_focus||'']);
+    msRows.push(['']);
+    msRows.push(['DEMO FLOW / ROADMAP']);
+    msRows.push([data.ms_demo_flow||'']);
+    addSheet('Meeting Strategy', msRows);
+
+    // ── SHEET 10: PC Notes ───────────────────────
+    addSheet('PC Notes', [
+      ['PC TAKE-A-WAYS & NOTES'],
+      [''],
+      ['FOLLOW-UP ITEMS'],
+      [data.pc_followup||''],
+      [''],
+      ['NOTES FROM YOUR PERSPECTIVE'],
+      [data.pc_notes||''],
+    ]);
+
+    // ── SHEET 11: Implementation ─────────────────
+    addSheet('Implementation', [
+      ['IMPLEMENTATION ADDITIONAL INFORMATION'],
+      ['Main Contact / Title', data.impl_contact||''],
+      ['Main Contact Email', data.impl_email||''],
+      ['Cell Phone', data.impl_phone||''],
+      [''],
+      ['OTHER KEY CONTACTS'],
+      [data.impl_other_contacts||''],
+    ]);
+
+    // ── DOWNLOAD ─────────────────────────────────
+    XLSX.writeFile(wb, `${group}_DMS_Discovery.xlsx`);
+    toast('Excel workbook downloaded','success');
+
+  } catch(err){
+    console.error(err);
+    toast('Export failed: '+err.message,'error');
+  } finally{
+    btn.disabled=false;
+    btn.innerHTML=origHTML;
+  }
+}
+
+// ══ TOAST ══════════════════════════════════════
+const ICONS={success:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',error:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'};
+function toast(msg,type='info',duration=3500){
+  const wrap=document.getElementById('toastWrap');
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;
+  el.innerHTML=`${ICONS[type]}<span>${msg}</span>`;
+  wrap.appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300);},duration);
+}
+
+// ══ INIT ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  buildAllTables();
+  loadSaved();
+  updateSummary();
+  checkServer();
+  setInterval(checkServer, 10000);
+});
+
+  /* ─── Xtime Pillar Toggle ─── */
+  function togglePillar(card) {
+    card.classList.toggle('selected');
+    const cb = card.querySelector('input[type="checkbox"]');
+    const textareas = card.querySelectorAll('textarea');
+    cb.checked = card.classList.contains('selected');
+    textareas.forEach(ta => {
+      ta.disabled = !cb.checked;
+      ta.style.opacity = cb.checked ? '1' : '';
+    });
+    const nameEl = card.querySelector('.pillar-name');
+    const pillarNames = {
+      cx: 'Customer Experience', advisor: 'Advisor Efficiency', mpi: 'MPI & Upsell',
+      reporting: 'Visibility & Reporting', capacity: 'Capacity & Operational Control', tech: 'Tech & Integration'
+    };
+    const key = card.getAttribute('data-pillar');
+    nameEl.textContent = (cb.checked ? '✓' : '☐') + '\u00a0\u00a0' + pillarNames[key];
+    markDirty('fixedops');
+  }
+
+
+// ══ AUTO-FILL AGENDA ══════════════════════════
+function autoFillAgenda() {
+  // Pre-fill objectives from q_goals
+  const goals = v('q_goals');
+  if(goals) {
+    const lines = goals.split('\n').filter(l=>l.trim()).slice(0,8);
+    lines.forEach((line,i)=>{
+      const el = document.getElementById(`obj${i+1}`);
+      if(el && !el.value) el.value = line.trim();
+    });
+  }
+  // Pre-fill attendees from contacts captured across tabs
+  const contacts = [
+    {id:'attendee1', src: v('acct_contact'),    label:'Accounting'},
+    {id:'attendee2', src: v('fo_contact'),       label:'Fixed Ops'},
+    {id:'attendee3', src: v('sales_contact'),    label:'Sales'},
+  ];
+  contacts.forEach(c=>{
+    const el = document.getElementById(c.id);
+    if(el && !el.value && c.src) el.value = c.src;
+  });
+  // Group name and date hint
+  const group = v('groupName');
+  if(group) { const el=document.getElementById('attendee4'); if(el&&!el.value) el.value=group+' — Decision Maker'; }
+  markDirty('agenda');
+  toast('Agenda pre-filled from discovery data — review and edit as needed','info');
+}
+
+// ══ AUTO-FILL MEETING STRATEGY ════════════════
+function autoFillStrategy() {
+  // Objectives from q_goals
+  const goals = v('q_goals');
+  if(goals){
+    const lines = goals.split('\n').filter(l=>l.trim()).slice(0,8);
+    lines.forEach((line,i)=>{
+      const el = document.getElementById(`ms_obj${i+1}`);
+      if(el && !el.value) el.value = line.trim();
+    });
+  }
+  // Current state = DMS + top challenges rolled up
+  if(!v('ms_current_state')){
+    const parts = [];
+    if(v('currentDMS')) parts.push(`Currently on ${v('currentDMS')}`);
+    if(v('acct_challenges')) parts.push(`Accounting: ${v('acct_challenges').slice(0,120)}`);
+    if(v('fo_challenges')) parts.push(`Fixed Ops: ${v('fo_challenges').slice(0,120)}`);
+    if(v('sales_challenges')) parts.push(`Sales: ${v('sales_challenges').slice(0,120)}`);
+    if(parts.length){
+      const el = document.getElementById('ms_current_state');
+      if(el) el.value = parts.join('\n\n');
+    }
+  }
+  // Desired state from q_goals
+  if(!v('ms_desired_state') && v('q_goals')){
+    const el = document.getElementById('ms_desired_state');
+    if(el) el.value = v('q_goals').slice(0,400);
+  }
+  // Department focus from challenges/goals
+  if(!v('ms_acct_focus') && v('acct_challenges')){
+    const el = document.getElementById('ms_acct_focus');
+    if(el) el.value = v('acct_challenges').slice(0,300);
+  }
+  if(!v('ms_sales_focus') && v('sales_challenges')){
+    const el = document.getElementById('ms_sales_focus');
+    if(el) el.value = v('sales_challenges').slice(0,300);
+  }
+  if(!v('ms_fo_focus') && v('fo_challenges')){
+    const el = document.getElementById('ms_fo_focus');
+    if(el) el.value = v('fo_challenges').slice(0,300);
+  }
+  markDirty('meetingstrategy');
+  toast('Meeting Strategy pre-filled from discovery data — review and edit as needed','info');
+}
+
+</script>
+</body>
+</html>
