@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Prompting Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c0c0f;--bg2:#13131a;--bg3:#1a1a24;--bg4:#22222e;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#e8e8f0;--text2:#9898b0;--text3:#5a5a72;
+  --a1:#6c63ff;--a2:#00d4aa;--a3:#ff6b6b;--a4:#ffa94d;--a5:#74c0fc;
+  --a1d:rgba(108,99,255,0.13);--a2d:rgba(0,212,170,0.13);
+  --a3d:rgba(255,107,107,0.13);--a4d:rgba(255,169,77,0.13);--a5d:rgba(116,192,252,0.13);
+  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:15px;line-height:1.7;min-height:100vh}
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh;max-width:1900px;margin:0 auto}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);padding:2rem 0;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
+.sidebar-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.sidebar-logo h1{font-family:var(--fh);font-size:.95rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--text);line-height:1.3}
+.sidebar-logo p{font-size:10px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
+.nav-sec{margin-bottom:1.5rem}
+.nav-sec-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:0 1.5rem;margin-bottom:.35rem}
+.nav-link{display:flex;align-items:center;gap:10px;padding:.4rem 1.5rem;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s;border-left:2px solid transparent}
+.nav-link:hover{color:var(--text);background:var(--bg3)}
+.nav-link.active{color:var(--a1);border-left-color:var(--a1);background:var(--a1d)}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;opacity:.6}
+.main{padding:3rem 4.5rem 6rem;max-width:1150px}
+.hero{margin-bottom:4rem;padding-bottom:3rem;border-bottom:1px solid var(--border)}
+.hero-ey{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--a2);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.hero-ey::before{content:'';display:inline-block;width:24px;height:2px;background:var(--a2)}
+.hero h1{font-family:var(--fh);font-size:3.8rem;font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.25rem}
+.hero h1 span{background:linear-gradient(135deg,var(--a1),var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.05rem;color:var(--text2);max-width:600px;line-height:1.8}
+section{margin-bottom:4.5rem;scroll-margin-top:2rem}
+.sec-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.sec-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-top:3px}
+.sec-hdr-txt h2{font-family:var(--fh);font-size:1.75rem;font-weight:700;color:var(--text);letter-spacing:-.01em;line-height:1.2;margin-bottom:.3rem}
+.sec-hdr-txt p{font-size:13.5px;color:var(--text2)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.25rem;margin-bottom:2rem}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:14px 14px 0 0}
+.card:hover{border-color:var(--border2);background:var(--bg3)}
+.card h3{font-family:var(--fh);font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.card p{font-size:13.5px;color:var(--text2);line-height:1.65;margin-bottom:1rem}
+.card-meta{font-size:12px;color:var(--text3);border-top:1px solid var(--border);padding-top:.75rem}
+.card-meta strong{color:var(--text2);font-weight:500}
+.ctag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:.75rem}
+.card.cp::before{background:var(--a1)}.card.ct::before{background:var(--a2)}.card.ca::before{background:var(--a4)}.card.cr::before{background:var(--a3)}.card.cb::before{background:var(--a5)}
+.tp{background:var(--a1d);color:var(--a1)}.tt{background:var(--a2d);color:var(--a2)}.ta{background:var(--a4d);color:var(--a4)}.tr{background:var(--a3d);color:var(--a3)}.tb{background:var(--a5d);color:var(--a5)}
+.code-block{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:1rem 0}
+.code-hdr{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border)}
+.code-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--text3)}
+.badge{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;letter-spacing:.04em}
+.bsys{background:var(--a1d);color:var(--a1)}.busr{background:var(--a2d);color:var(--a2)}.bast{background:var(--a4d);color:var(--a4)}.bzs{background:var(--a5d);color:var(--a5)}.bfs{background:var(--a1d);color:var(--a1)}.bcot{background:var(--a3d);color:var(--a3)}
+.code-body{padding:1rem 1.25rem;font-family:var(--fm);font-size:13px;line-height:1.75;color:var(--text2);white-space:pre-wrap;word-break:break-word}
+.cr-role{color:var(--text3);font-style:italic;font-size:11px;display:block;margin-bottom:2px}
+.cr-hl{color:var(--a2)}.cr-key{color:var(--a1)}.cr-val{color:var(--a4)}.cr-cmt{color:var(--text3);font-style:italic}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;align-items:start}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.panel-hdr{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.25rem;background:var(--bg3);border-bottom:1px solid var(--border)}
+.panel-hdr span{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.panel-body{padding:1.25rem;font-family:var(--fm);font-size:12.5px;line-height:1.75;color:var(--text2);white-space:pre-wrap}
+.analogy{background:var(--bg3);border-left:3px solid var(--a2);border-radius:0 8px 8px 0;padding:.9rem 1.25rem;margin:1.25rem 0;font-size:13.5px;color:var(--text2);font-style:italic}
+.analogy strong{color:var(--a2);font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:3px}
+.info-box{background:var(--a1d);border:1px solid rgba(108,99,255,.22);border-radius:10px;padding:1rem 1.25rem;font-size:13.5px;color:var(--text2);margin:1.5rem 0}
+.info-box strong{color:var(--a1)}
+.warn-box{background:var(--a4d);border:1px solid rgba(255,169,77,.22);border-radius:10px;padding:1rem 1.25rem;font-size:13.5px;color:var(--text2);margin:1.5rem 0}
+.warn-box strong{color:var(--a4)}
+.use-table{width:100%;border-collapse:collapse;font-size:13.5px;margin:1rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.use-table th{text-align:left;padding:.65rem 1rem;background:var(--bg3);color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;border-bottom:1px solid var(--border)}
+.use-table td{padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.use-table tr:last-child td{border-bottom:none}
+.use-table tr:hover td{background:var(--bg3)}
+.use-table td:first-child{font-family:var(--fh);font-weight:600;font-size:13px;color:var(--text);white-space:nowrap}
+.technique{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:1.5rem;overflow:hidden}
+.tech-hdr{padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;cursor:pointer;user-select:none;transition:background .15s}
+.tech-hdr:hover{background:var(--bg3)}
+.tech-num{font-family:var(--fh);font-size:2rem;font-weight:800;opacity:.1;min-width:48px;text-align:right}
+.tech-titles h3{font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--text)}
+.tech-titles p{font-size:13px;color:var(--text2);margin-top:2px}
+.tech-chev{margin-left:auto;color:var(--text3);font-size:18px;transition:transform .25s;flex-shrink:0}
+.technique.open .tech-chev{transform:rotate(180deg)}
+.tech-body{display:none;padding:0 1.5rem 1.5rem;border-top:1px solid var(--border)}
+.technique.open .tech-body{display:block}
+.tech-body p{font-size:14px;color:var(--text2);line-height:1.75;margin:1rem 0}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin:.75rem 0}
+.pill{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;border:1px solid}
+.pill-p{background:var(--a1d);color:var(--a1);border-color:rgba(108,99,255,.3)}
+.pill-t{background:var(--a2d);color:var(--a2);border-color:rgba(0,212,170,.3)}
+.pill-r{background:var(--a3d);color:var(--a3);border-color:rgba(255,107,107,.3)}
+.pill-a{background:var(--a4d);color:var(--a4);border-color:rgba(255,169,77,.3)}
+.pill-b{background:var(--a5d);color:var(--a5);border-color:rgba(116,192,252,.3)}
+.compare-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.5rem 0}
+.compare-hdr{display:grid;grid-template-columns:160px repeat(5,1fr);background:var(--bg3);border-bottom:1px solid var(--border)}
+.compare-hdr div{padding:.7rem 1rem;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);border-right:1px solid var(--border)}
+.compare-hdr div:last-child{border-right:none}
+.compare-row{display:grid;grid-template-columns:160px repeat(5,1fr);border-bottom:1px solid var(--border);transition:background .15s}
+.compare-row:last-child{border-bottom:none}
+.compare-row:hover{background:var(--bg3)}
+.compare-row div{padding:.75rem 1rem;font-size:13px;color:var(--text2);border-right:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.compare-row div:last-child{border-right:none}
+.compare-row div:first-child{font-family:var(--fh);font-weight:700;font-size:13px;color:var(--text)}
+.dot-y{width:8px;height:8px;border-radius:50%;background:var(--a2);flex-shrink:0}
+.dot-n{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.dot-m{width:8px;height:8px;border-radius:50%;background:var(--a4);flex-shrink:0}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+@media(max-width:1100px){.layout{grid-template-columns:220px 1fr}.main{padding:2rem 2.5rem 4rem}.hero h1{font-size:2.75rem}.two-col{grid-template-columns:1fr}}
+@media(max-width:768px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:1.5rem}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>LLM Prompting<br>Guide</h1>
+    <p>Types &amp; Patterns</p>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-lbl">Prompt Types</div>
+    <a href="#types-overview" class="nav-link active"><span class="nav-dot" style="background:#6c63ff"></span>Overview</a>
+    <a href="#system-prompt" class="nav-link"><span class="nav-dot" style="background:#6c63ff"></span>System Prompt</a>
+    <a href="#user-prompt" class="nav-link"><span class="nav-dot" style="background:#00d4aa"></span>User Prompt</a>
+    <a href="#assistant-prefill" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Assistant Prefill</a>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-lbl">Prompt Patterns</div>
+    <a href="#zero-shot" class="nav-link"><span class="nav-dot" style="background:#74c0fc"></span>Zero-Shot</a>
+    <a href="#few-shot" class="nav-link"><span class="nav-dot" style="background:#6c63ff"></span>Few-Shot</a>
+    <a href="#chain-of-thought" class="nav-link"><span class="nav-dot" style="background:#ff6b6b"></span>Chain-of-Thought</a>
+    <a href="#role-prompting" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Role Prompting</a>
+    <a href="#structured-icf" class="nav-link"><span class="nav-dot" style="background:#00d4aa"></span>Structured (ICF)</a>
+    <a href="#rag" class="nav-link"><span class="nav-dot" style="background:#74c0fc"></span>RAG</a>
+    <a href="#self-consistency" class="nav-link"><span class="nav-dot" style="background:#ff6b6b"></span>Self-Consistency</a>
+    <a href="#tree-of-thought" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Tree of Thought</a>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-lbl">Reference</div>
+    <a href="#when-to-use" class="nav-link"><span class="nav-dot" style="background:#9898b0"></span>When to Use What</a>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-ey">Complete Reference Guide</div>
+  <h1>Prompting<br><span>LLMs</span></h1>
+  <p>A complete guide to prompt types and patterns — what they are, how they work, when to use them, and real examples for each.</p>
+</div>
+
+<!-- TYPES OVERVIEW -->
+<section id="types-overview">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(108,99,255,.15)">📐</div>
+    <div class="sec-hdr-txt">
+      <h2>Prompt Types</h2>
+      <p>The three structural positions in an LLM conversation where you inject text</p>
+    </div>
+  </div>
+
+  <div class="info-box"><strong>Core principle:</strong> An LLM has no memory, no world model, and no intent of its own. It only has the tokens in front of it. Every prompt type is a different position in that token stream — a different moment where you can shape what the model sees before it generates a response.</div>
+
+  <div class="cards">
+    <div class="card cp">
+      <span class="ctag tp">System</span>
+      <h3>System Prompt</h3>
+      <p>The persistent background context set before any conversation. Defines role, behavior rules, tone, and scope. Every user message is processed through this lens.</p>
+      <div class="card-meta"><strong>Analogy:</strong> The employee handbook handed to a new hire before day one — always in the background, always in effect.</div>
+    </div>
+    <div class="card ct">
+      <span class="ctag tt">User</span>
+      <h3>User Prompt</h3>
+      <p>The actual message in the conversation — your question, task, or instruction. The live request that the model responds to, within the context the system prompt established.</p>
+      <div class="card-meta"><strong>Analogy:</strong> Each individual task slip dropped on the employee's desk during the day.</div>
+    </div>
+    <div class="card ca">
+      <span class="ctag ta">Assistant</span>
+      <h3>Assistant Prefill</h3>
+      <p>Pre-populating the start of the model's response before generation begins. Forces the output to begin in a specific way — locking in format, structure, or tone from word one.</p>
+      <div class="card-meta"><strong>Analogy:</strong> Handing someone a sentence already started and asking them to finish it their way.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM PROMPT -->
+<section id="system-prompt">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(108,99,255,.15)">🧱</div>
+    <div class="sec-hdr-txt">
+      <h2>System Prompt</h2>
+      <p>The persistent behavioral foundation — set once, applies to every turn</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">System prompts are the most powerful lever you have. They establish identity, rules, tone, scope, and output format before a single user message arrives. Think of it less like a command and more like a role brief — the model will interpret everything that follows through this lens.</p>
+
+  <div class="analogy"><strong>Analogy</strong>Imagine onboarding a brilliant contractor. Before they start, you hand them a doc: "You work exclusively on automotive topics. Always respond professionally. Never discuss competitors. When unsure, ask for clarification." Every question they get, they'll filter through that framing.</div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Example — Internal Support Agent</span><span class="badge bsys">System</span></div>
+    <div class="code-body"><span class="cr-role">// SYSTEM PROMPT</span><span style="color:var(--text)">You are a support agent for VinSolutions CRM. Help dealership staff troubleshoot issues and optimize workflows.
+
+</span><span class="cr-key">RULES:</span><span style="color:var(--text2)">
+- Only answer questions about VinSolutions and dealership CRM processes
+- Always ask for the dealer's Account ID before troubleshooting
+- Use clear, jargon-free language
+- If you don't know something, say so — never guess
+
+</span><span class="cr-key">OUTPUT FORMAT:</span><span style="color:var(--text2)">
+1. Direct answer (1–2 sentences)
+2. Step-by-step instructions if applicable
+3. Link to documentation if available</span></div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Example — AI Sales Trainer Persona</span><span class="badge bsys">System</span></div>
+    <div class="code-body"><span class="cr-role">// SYSTEM PROMPT</span><span style="color:var(--text)">You are Alex, a senior automotive sales trainer with 20 years coaching BDC teams. Your style is direct, encouraging, and grounded in real dealership scenarios.
+
+</span><span class="cr-key">CONSTRAINTS:</span><span style="color:var(--text2)">
+- Keep responses under 200 words unless the user asks for more
+- Always frame advice around real scenarios, not theory
+- Never use buzzwords like "synergy" or "leverage" as verbs
+- If asked about competitors, redirect to best practices instead</span></div>
+  </div>
+
+  <table class="use-table">
+    <tr><th>Use Case</th><th>What to Define in System Prompt</th></tr>
+    <tr><td>Customer-facing chatbot</td><td>Persona, tone, scope limits, escalation rules, what NOT to say</td></tr>
+    <tr><td>Internal AI assistant</td><td>Team context, available data sources, preferred output formats</td></tr>
+    <tr><td>Document generator</td><td>Output format spec (JSON, Markdown, HTML), field names, length rules</td></tr>
+    <tr><td>Code assistant</td><td>Language, style guide, commenting conventions, testing requirements</td></tr>
+    <tr><td>Objection handler agent</td><td>Product context, known objection categories, tone, escalation path</td></tr>
+  </table>
+</section>
+
+<!-- USER PROMPT -->
+<section id="user-prompt">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(0,212,170,.15)">💬</div>
+    <div class="sec-hdr-txt">
+      <h2>User Prompt</h2>
+      <p>The live message — your task, question, or instruction in the moment</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">The user prompt is the conversational turn. While the system prompt is the standing brief, the user prompt is the specific task. Strong user prompts are explicit about three things: <strong style="color:var(--text)">what to do</strong>, <strong style="color:var(--text)">what context to use</strong>, and <strong style="color:var(--text)">what to produce</strong>.</p>
+
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-hdr"><span>Vague — low quality output</span><span class="ctag tr" style="font-size:10px;padding:2px 8px;margin:0">❌ Weak</span></div>
+      <div class="panel-body">Write me an email about the deal.</div>
+    </div>
+    <div class="panel">
+      <div class="panel-hdr"><span>Specific — high quality output</span><span class="ctag tt" style="font-size:10px;padding:2px 8px;margin:0">✓ Strong</span></div>
+      <div class="panel-body">Write a 3-sentence follow-up email to a dealership GM who attended our Xtime demo yesterday but hasn't responded. Tone: professional but warm. Goal: schedule a 30-min follow-up call this week. Do not mention pricing.</div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Anatomy of a strong user prompt</span><span class="badge busr">User</span></div>
+    <div class="code-body"><span class="cr-key">[TASK]       </span><span style="color:var(--text2)">Summarize the following sales call transcript.
+
+</span><span class="cr-key">[CONTEXT]    </span><span style="color:var(--text2)">This is a call between our Product Consultant and a Chevy dealer's
+             GSM discussing VinSolutions renewal. The dealer raised
+             concerns about ROI and response time from support.
+
+</span><span class="cr-key">[FORMAT]     </span><span style="color:var(--text2)">Output as:
+             - 1 sentence TL;DR
+             - 3 bullet objections raised
+             - 1 recommended next step
+
+</span><span class="cr-key">[CONSTRAINTS]</span><span style="color:var(--text2)"> Under 150 words. Plain language. No jargon.
+
+</span><span class="cr-hl">[TRANSCRIPT]
+...</span></div>
+  </div>
+
+  <div class="info-box"><strong>Pro tip:</strong> Use positive instructions over negative ones when possible. "Respond in plain language" gets better results than "Don't use jargon." The model steers toward what it's told to do more reliably than away from what it's told to avoid.</div>
+</section>
+
+<!-- ASSISTANT PREFILL -->
+<section id="assistant-prefill">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,169,77,.15)">⚡</div>
+    <div class="sec-hdr-txt">
+      <h2>Assistant Prefill</h2>
+      <p>Seed the start of the model's response to lock in format or structure</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Prefill injects text at the beginning of the assistant's turn before generation starts. The model continues from that point — making it powerful for forcing JSON output, eliminating preamble like "Sure, I'd be happy to help!", or locking in a specific document structure. Available in Anthropic Claude and Mistral APIs.</p>
+
+  <div class="analogy"><strong>Analogy</strong>Like handing someone a form with the first few fields already filled in. They don't reconsider the format — they just pick up where you left off and fill in the rest.</div>
+
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-hdr"><span>Without prefill</span></div>
+      <div class="panel-body"><span style="color:var(--text3)">User:</span> Analyze this objection and respond.
+
+<span style="color:var(--text3)">Assistant:</span> Sure! I'd be happy to help you with that objection. Let me take a look at what you've shared and provide some thoughts...
+
+<span style="color:var(--text3)">// ← 30 words of preamble before useful content</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hdr"><span>With prefill</span></div>
+      <div class="panel-body"><span style="color:var(--text3)">User:</span> Analyze this objection and respond.
+
+<span style="color:var(--text3)">Assistant (prefilled):</span> {
+
+<span style="color:var(--text3)">// ← Model continues directly in JSON structure</span></div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Example — Force JSON output with prefill</span><span class="badge bast">Assistant</span></div>
+    <div class="code-body"><span class="cr-role">// user</span><span style="color:var(--text2)">Analyze this sales objection and return a structured response.</span>
+
+<span class="cr-role">// assistant (prefilled — model continues from here)</span><span class="cr-hl">{
+  "objection_type": "</span><span style="color:var(--text2)">...model fills in from here</span></div>
+  </div>
+
+  <div class="warn-box"><strong>Availability note:</strong> Prefill is an API-level feature. In chat interfaces like Claude.ai, you can simulate it by ending your user message with the text you want the response to start with — asking the model to "start your response with {" and then continue in valid JSON works similarly.</div>
+</section>
+
+<!-- ====== PATTERNS ====== -->
+
+<!-- ZERO-SHOT -->
+<section id="zero-shot">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(116,192,252,.15)">🎯</div>
+    <div class="sec-hdr-txt">
+      <h2>Zero-Shot Prompting</h2>
+      <p>Just ask — no examples, no scaffolding, no demonstrations</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Zero-shot is the default mode. You state the task and the model draws entirely on its training to respond. It works well for capable models on clear, common tasks. When it fails, the fix is usually to add examples (few-shot) or reasoning steps (chain-of-thought) rather than to rephrase the same zero-shot prompt over and over.</p>
+
+  <div class="analogy"><strong>Analogy</strong>Asking a new hire to complete a task by simply describing what you want — trusting that their experience and judgment are enough to get it right without seeing an example first.</div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Zero-Shot Example</span><span class="badge bzs">Zero-Shot</span></div>
+    <div class="code-body"><span class="cr-role">// user</span><span style="color:var(--text2)">Classify the sentiment of this customer review as Positive, Neutral, or Negative.
+
+Review: "The setup took forever and support never called back, but once it was running the reporting was actually pretty useful."</span>
+
+<span class="cr-role">// model response</span><span class="cr-hl">Mixed (leans Negative)</span> <span style="color:var(--text2)">— The review acknowledges a positive outcome (useful reporting) but leads with two clear pain points (slow setup, unresponsive support). Sentiment is mixed with a negative lean.</span></div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Zero-Shot — Automotive Example</span><span class="badge bzs">Zero-Shot</span></div>
+    <div class="code-body"><span class="cr-role">// user</span><span style="color:var(--text2)">Summarize the following dealer objection in one sentence, then suggest the best product feature to address it.
+
+Objection: "We already have a process for this — my team's been doing it the same way for 10 years and they're not going to change."</span>
+
+<span class="cr-role">// model response</span><span style="color:var(--text2)">The dealer is resistant to workflow change driven by long-standing team habits. Best feature to highlight: </span><span class="cr-hl">workflow integration and minimal-disruption onboarding</span><span style="color:var(--text2)"> — emphasize that the tool works alongside existing processes, not against them.</span></div>
+  </div>
+
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-b">Simple classification</span>
+    <span class="pill pill-b">Summarization</span>
+    <span class="pill pill-b">Translation</span>
+    <span class="pill pill-b">General Q&amp;A</span>
+    <span class="pill pill-b">Well-defined tasks</span>
+  </div>
+</section>
+
+<!-- FEW-SHOT -->
+<section id="few-shot">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(108,99,255,.15)">📚</div>
+    <div class="sec-hdr-txt">
+      <h2>Few-Shot Prompting</h2>
+      <p>Show examples of the exact pattern you want, then make the real request</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Few-shot prompting provides 2–5 input/output pairs that demonstrate the pattern before your actual request. The model learns the format, style, and logic from the examples rather than from explicit instruction. It's especially powerful for custom classification schemes, structured outputs, or any task where "doing it right" is hard to describe but easy to show.</p>
+
+  <div class="analogy"><strong>Analogy</strong>Instead of writing a 3-page style guide, you hand a new employee three completed examples of the report and say "produce one that looks like these." The examples carry more information than any description could.</div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Few-Shot — Custom Objection Classifier</span><span class="badge bfs">Few-Shot</span></div>
+    <div class="code-body"><span class="cr-role">// user — 3 examples, then the real request</span>
+<span class="cr-key">EXAMPLE 1</span>
+<span style="color:var(--text2)">Objection: "We're locked into a contract with another vendor until Q4."
+Category: </span><span class="cr-hl">TIMING</span>
+
+<span class="cr-key">EXAMPLE 2</span>
+<span style="color:var(--text2)">Objection: "My sales team won't actually use another tool — adoption always falls off."
+Category: </span><span class="cr-hl">ADOPTION</span>
+
+<span class="cr-key">EXAMPLE 3</span>
+<span style="color:var(--text2)">Objection: "We tried CRM before and it didn't move the needle on sales."
+Category: </span><span class="cr-hl">ROI_SKEPTICISM</span>
+
+<span class="cr-key">NOW CLASSIFY:</span>
+<span style="color:var(--text2)">Objection: "The price is fine but I need to get my GM and Controller to sign off first."
+Category: </span><span class="cr-hl">STAKEHOLDER_APPROVAL</span></div>
+  </div>
+
+  <div class="info-box"><strong>Quality tip:</strong> Few-shot examples should be diverse enough to cover edge cases. If all your examples look the same, the model over-fits to that pattern. Aim for variety in phrasing and scenario while keeping the output format consistent.</div>
+
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-p">Custom classification</span>
+    <span class="pill pill-p">Proprietary output formats</span>
+    <span class="pill pill-p">Style matching</span>
+    <span class="pill pill-p">Data extraction schemas</span>
+    <span class="pill pill-p">Tone calibration</span>
+  </div>
+</section>
+
+<!-- CHAIN OF THOUGHT -->
+<section id="chain-of-thought">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,107,107,.15)">🔗</div>
+    <div class="sec-hdr-txt">
+      <h2>Chain-of-Thought (CoT)</h2>
+      <p>Ask the model to reason step-by-step before reaching a conclusion</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Chain-of-thought prompting instructs the model to walk through its reasoning before producing the final answer. This dramatically improves accuracy on complex problems — math, logic, multi-step analysis, and anything where intermediate steps matter. The model "shows its work" and catches errors in reasoning that would otherwise slip through to a wrong conclusion.</p>
+
+  <div class="analogy"><strong>Analogy</strong>The difference between asking a student "what's the answer?" versus "show your work, then give the answer." The latter catches errors at every step instead of just validating the final number.</div>
+
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-hdr"><span>Without CoT — reasoning hidden</span></div>
+      <div class="panel-body"><span style="color:var(--text3)">User:</span> Our MSS team closed 47 deals this quarter. Each deal averages $1,200 MRR. If churn is 8% annually, what's expected net new MRR after 12 months?
+
+<span style="color:var(--text3)">Assistant:</span> Your expected net new MRR after 12 months is approximately $52,704.
+
+<span style="color:var(--text3)">// ← No reasoning shown. Is this right? Hard to verify.</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hdr"><span>With CoT — reasoning visible</span></div>
+      <div class="panel-body"><span style="color:var(--text3)">User:</span> ...same question. Think step by step.
+
+<span style="color:var(--text3)">Assistant:</span>
+Step 1: Gross MRR from new deals
+47 × $1,200 = $56,400
+
+Step 2: Annual churn rate → monthly
+8% / 12 = 0.667% per month
+
+Step 3: MRR after 12 months of churn
+$56,400 × (1 - 0.00667)^12 ≈ $51,631
+
+Step 4: Net new MRR ≈ <span class="cr-hl">$51,631</span></div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">CoT Trigger Phrases</span><span class="badge bcot">CoT</span></div>
+    <div class="code-body"><span class="cr-cmt">// Drop any of these into your prompt to activate chain-of-thought</span>
+
+<span class="cr-hl">"Think step by step."</span>
+<span class="cr-hl">"Walk me through your reasoning before giving the answer."</span>
+<span class="cr-hl">"Let's think through this carefully."</span>
+<span class="cr-hl">"Before answering, reason through each step."</span>
+<span class="cr-hl">"Show your work."</span></div>
+  </div>
+
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-r">Multi-step math</span>
+    <span class="pill pill-r">Logic puzzles</span>
+    <span class="pill pill-r">Complex analysis</span>
+    <span class="pill pill-r">Debugging decisions</span>
+    <span class="pill pill-r">Risk assessment</span>
+  </div>
+</section>
+
+<!-- ROLE PROMPTING -->
+<section id="role-prompting">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,169,77,.15)">🎭</div>
+    <div class="sec-hdr-txt">
+      <h2>Role Prompting</h2>
+      <p>Assign a persona or expert identity to prime the model's framing and vocabulary</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Role prompting assigns the model an identity or expert persona before it responds. This shapes tone, vocabulary, knowledge emphasis, and even risk tolerance. A "senior engineer" and a "cautious legal reviewer" will approach the same document very differently — and both responses are more useful than a generic one.</p>
+
+  <div class="analogy"><strong>Analogy</strong>Before asking a question, you introduce yourself to the right expert in the room. "I'm going to ask Sarah, our CFO" versus "I'm going to ask Marcus, our sales trainer." Same question — completely different useful answer.</div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Role Prompting Examples</span><span class="badge bast">Role</span></div>
+    <div class="code-body"><span class="cr-cmt">// Shifts framing + vocabulary significantly</span>
+
+<span class="cr-key">ADVERSARIAL REVIEWER:</span>
+<span style="color:var(--text2)">"Act as a skeptical dealership GM who has been burned by software vendors before.
+Review this product pitch and tell me every objection I should expect."</span>
+
+<span class="cr-key">DOMAIN EXPERT:</span>
+<span style="color:var(--text2)">"You are a fixed ops director with 15 years running service departments.
+What are the three biggest workflow bottlenecks in a high-volume service lane?"</span>
+
+<span class="cr-key">EDITOR / CRITIC:</span>
+<span style="color:var(--text2)">"You are a ruthless editor who cuts everything non-essential.
+Review this executive summary and cut it to under 100 words without losing any key insight."</span>
+
+<span class="cr-key">PERSONA FOR EMPATHY:</span>
+<span style="color:var(--text2)">"You are a first-year service advisor at a family-owned dealership.
+Describe how you would feel encountering this new scheduling software on day one."</span></div>
+  </div>
+
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-a">Expert-level analysis</span>
+    <span class="pill pill-a">Adversarial review</span>
+    <span class="pill pill-a">Audience empathy</span>
+    <span class="pill pill-a">Tone calibration</span>
+    <span class="pill pill-a">Red-teaming content</span>
+  </div>
+</section>
+
+<!-- STRUCTURED ICF -->
+<section id="structured-icf">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(0,212,170,.15)">🗂️</div>
+    <div class="sec-hdr-txt">
+      <h2>Structured Prompting (ICF)</h2>
+      <p>Explicit Instruction + Context + Format — the well-written project brief</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Structured prompting separates your request into distinct labeled components: what to do, what background knowledge to use, and how to format the output. It's the difference between a vague Slack message and a well-written project brief. The model doesn't have to infer any of these — you've made all three explicit.</p>
+
+  <div class="analogy"><strong>Analogy</strong>A contractor gets two types of requests. The first: "build something nice in the backyard." The second: "build a 12x16 cedar deck with three steps, railing on two sides, stained in dark walnut, and completed before June 15." The second request produces exactly what you wanted.</div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Structured Prompt — Coaching Email</span><span class="badge busr">ICF</span></div>
+    <div class="code-body"><span class="cr-key">INSTRUCTION:</span>
+<span style="color:var(--text2)">Write a coaching note from me to a Product Consultant on my team who missed their demo-to-close conversion goal this quarter.
+
+</span><span class="cr-key">CONTEXT:</span>
+<span style="color:var(--text2)">- Target was 35% demo-to-close; actual was 24%
+- The rep is high energy and great at rapport, but struggles with discovery questioning
+- This is our first formal conversation about the gap
+- I want to be direct but encouraging — not punitive
+
+</span><span class="cr-key">FORMAT:</span>
+<span style="color:var(--text2)">- Opening: acknowledge strengths (1 sentence)
+- Core observation: the gap and what's driving it (2–3 sentences)
+- Action item: one specific coaching commitment
+- Closing: forward-looking, not punitive
+- Max 150 words total</span></div>
+  </div>
+
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-t">Document generation</span>
+    <span class="pill pill-t">Agent prompts</span>
+    <span class="pill pill-t">Constrained outputs</span>
+    <span class="pill pill-t">Repeatable workflows</span>
+    <span class="pill pill-t">Production prompts</span>
+  </div>
+</section>
+
+<!-- RAG -->
+<section id="rag">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(116,192,252,.15)">🔍</div>
+    <div class="sec-hdr-txt">
+      <h2>Retrieval-Augmented Generation (RAG)</h2>
+      <p>Dynamically inject relevant source material into the prompt before the model responds</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">RAG is a system design pattern, not something you manually write. A retrieval layer fetches relevant documents, knowledge base entries, or data — and injects them into the prompt automatically before the model responds. The model becomes a researcher who's handed a pre-filtered folder of relevant files right before answering your question.</p>
+
+  <div class="analogy"><strong>Analogy</strong>Instead of trusting a consultant to remember everything from memory, you give them a searchable library and a rule: "before answering any question, pull the 3 most relevant documents and use those as your primary source." Their answer is grounded in current, specific information — not just general knowledge.</div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">What a RAG prompt looks like at runtime</span><span class="badge busr">RAG</span></div>
+    <div class="code-body"><span class="cr-role">// system — instructs model how to use injected docs</span>
+<span style="color:var(--text2)">You are a product support assistant. Answer questions using ONLY the
+documentation provided below. If the answer isn't in the documents,
+say "I don't have that information" rather than guessing.
+
+</span><span class="cr-key">--- RETRIEVED DOCUMENTS ---</span>
+<span class="cr-hl">[DOC 1: VinSolutions Lead Response Settings — Last updated 2024-11]
+"Lead response time windows can be configured under Settings > BDC > Lead Routing..."</span>
+
+<span class="cr-hl">[DOC 2: Xtime Scheduler Integration FAQ — Last updated 2025-01]
+"When VinSolutions and Xtime are integrated, appointment creation syncs within 90 seconds..."</span>
+<span class="cr-key">--------------------------</span>
+
+<span class="cr-role">// user</span>
+<span style="color:var(--text2)">How long does it take for an Xtime appointment to show up in VinSolutions?</span></div>
+  </div>
+
+  <table class="use-table">
+    <tr><th>RAG is right when...</th><th>RAG is overkill when...</th></tr>
+    <tr><td>Answers need to be grounded in current docs</td><td>The model's training data is sufficient</td></tr>
+    <tr><td>Knowledge changes frequently (release notes, pricing)</td><td>Questions are general and stable</td></tr>
+    <tr><td>Accuracy and citation matter (support, compliance)</td><td>Creative tasks where grounding isn't required</td></tr>
+    <tr><td>You have a large knowledge base (&gt; model context window)</td><td>Small fixed context can just be pasted in directly</td></tr>
+  </table>
+</section>
+
+<!-- SELF-CONSISTENCY -->
+<section id="self-consistency">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,107,107,.15)">🔄</div>
+    <div class="sec-hdr-txt">
+      <h2>Self-Consistency</h2>
+      <p>Generate multiple independent reasoning paths, then pick the most common answer</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Self-consistency runs the same prompt multiple times with slightly varied reasoning, then aggregates the outputs — typically picking the most common answer. It treats the model like a panel of independent reviewers: if 4 out of 5 reach the same conclusion through different paths, you have much higher confidence in that answer.</p>
+
+  <div class="analogy"><strong>Analogy</strong>You need to estimate a project timeline. Instead of asking one person, you ask five different senior engineers independently. You don't average the numbers — you notice that four of them land in the 6–8 week range and one outlier says 16 weeks. The consensus wins.</div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Self-Consistency — High-Stakes Analysis</span><span class="badge bcot">Self-Consistency</span></div>
+    <div class="code-body"><span class="cr-role">// Prompt run 3x with high temperature, then outputs compared</span>
+
+<span class="cr-key">PROMPT (same for all 3 runs):</span>
+<span style="color:var(--text2)">A dealer has used VinSolutions for 18 months. Their CRM lead response
+time averages 4.2 hours. Industry benchmark is under 1 hour. They're
+asking if they should renew. Reason through whether renewal makes sense
+from the dealer's perspective. Think step by step.
+
+</span><span class="cr-key">RUN 1 CONCLUSION:</span> <span style="color:var(--text2)">Renewal is risky — the tool isn't driving behavioral change.</span>
+<span class="cr-key">RUN 2 CONCLUSION:</span> <span style="color:var(--text2)">Renewal with conditions — needs a structured coaching plan first.</span>
+<span class="cr-key">RUN 3 CONCLUSION:</span> <span style="color:var(--text2)">Renewal with conditions — the gap is process, not product.</span>
+
+<span class="cr-hl">Majority consensus: Renewal with conditions (2/3) → proceed with that framing</span></div>
+  </div>
+
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-r">High-stakes decisions</span>
+    <span class="pill pill-r">Ambiguous analysis</span>
+    <span class="pill pill-r">Complex reasoning</span>
+    <span class="pill pill-r">When errors are costly</span>
+  </div>
+</section>
+
+<!-- TREE OF THOUGHT -->
+<section id="tree-of-thought">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,169,77,.15)">🌳</div>
+    <div class="sec-hdr-txt">
+      <h2>Tree of Thought (ToT)</h2>
+      <p>Explore multiple reasoning branches simultaneously, evaluate each, then converge</p>
+    </div>
+  </div>
+
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Tree of Thought extends chain-of-thought into a branching structure. Instead of one linear reasoning path, the model generates multiple candidate approaches, evaluates each, prunes weak branches, and converges on the most promising one. It's CoT with a deliberate search process layered on top.</p>
+
+  <div class="analogy"><strong>Analogy</strong>A chess player doesn't just calculate one sequence of moves — they mentally branch out multiple lines, evaluate each a few moves deep, discard the weaker ones, and commit to the line that holds up best under scrutiny. ToT makes this explicit in the prompt.</div>
+
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Tree of Thought — Strategy Decision</span><span class="badge bcot">ToT</span></div>
+    <div class="code-body"><span class="cr-role">// user</span>
+<span style="color:var(--text2)">We need to increase demo-to-close conversion for the MSS team.
+Generate 3 distinct strategic approaches. For each: explain the approach,
+identify the key risk, and score it 1–10 on feasibility and impact.
+Then recommend the best one and explain why.
+
+</span><span class="cr-role">// model output</span>
+<span class="cr-key">BRANCH A — Discovery-first coaching:</span>
+<span style="color:var(--text2)">Approach: Retrain PCs on discovery questioning before demos
+Risk: Takes 4–6 weeks before results show
+Feasibility: 8/10 | Impact: 9/10
+
+</span><span class="cr-key">BRANCH B — Demo personalization toolkit:</span>
+<span style="color:var(--text2)">Approach: Build a pre-demo research template tied to dealer profile
+Risk: Adoption depends on PC discipline
+Feasibility: 7/10 | Impact: 7/10
+
+</span><span class="cr-key">BRANCH C — Compressed deal cycles via urgency framing:</span>
+<span style="color:var(--text2)">Risk: Can feel pushy, damages trust
+Feasibility: 6/10 | Impact: 5/10
+
+</span><span class="cr-hl">Recommendation: Branch A — highest impact with manageable timeline.
+Combine with Branch B as a supporting tool.</span></div>
+  </div>
+
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-a">Strategic planning</span>
+    <span class="pill pill-a">Architecture decisions</span>
+    <span class="pill pill-a">Complex problem solving</span>
+    <span class="pill pill-a">Option comparison</span>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section id="when-to-use">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(152,152,176,.12)">📊</div>
+    <div class="sec-hdr-txt">
+      <h2>When to Use What</h2>
+      <p>Quick-reference matrix across all patterns and types</p>
+    </div>
+  </div>
+
+  <div class="compare-wrap">
+    <div class="compare-hdr">
+      <div>Pattern</div>
+      <div>Simple Tasks</div>
+      <div>Complex Reasoning</div>
+      <div>Custom Format</div>
+      <div>High Accuracy</div>
+      <div>Production Ready</div>
+    </div>
+    <div class="compare-row">
+      <div>Zero-Shot</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-n"></span>Risky</div>
+      <div><span class="dot-m"></span>Partial</div>
+      <div><span class="dot-m"></span>Moderate</div>
+      <div><span class="dot-y"></span>Yes</div>
+    </div>
+    <div class="compare-row">
+      <div>Few-Shot</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-m"></span>Partial</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-y"></span>High</div>
+      <div><span class="dot-y"></span>Yes</div>
+    </div>
+    <div class="compare-row">
+      <div>Chain-of-Thought</div>
+      <div><span class="dot-n"></span>Overkill</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-n"></span>No</div>
+      <div><span class="dot-y"></span>High</div>
+      <div><span class="dot-y"></span>Yes</div>
+    </div>
+    <div class="compare-row">
+      <div>Role Prompting</div>
+      <div><span class="dot-m"></span>Partial</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-n"></span>No</div>
+      <div><span class="dot-m"></span>Moderate</div>
+      <div><span class="dot-y"></span>Yes</div>
+    </div>
+    <div class="compare-row">
+      <div>Structured (ICF)</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-y"></span>High</div>
+      <div><span class="dot-y"></span>Yes</div>
+    </div>
+    <div class="compare-row">
+      <div>RAG</div>
+      <div><span class="dot-n"></span>Overkill</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-m"></span>Partial</div>
+      <div><span class="dot-y"></span>High</div>
+      <div><span class="dot-y"></span>Yes</div>
+    </div>
+    <div class="compare-row">
+      <div>Self-Consistency</div>
+      <div><span class="dot-n"></span>Overkill</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-n"></span>No</div>
+      <div><span class="dot-y"></span>Very High</div>
+      <div><span class="dot-m"></span>With tooling</div>
+    </div>
+    <div class="compare-row">
+      <div>Tree of Thought</div>
+      <div><span class="dot-n"></span>Overkill</div>
+      <div><span class="dot-y"></span>Yes</div>
+      <div><span class="dot-n"></span>No</div>
+      <div><span class="dot-y"></span>Very High</div>
+      <div><span class="dot-m"></span>With tooling</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:2rem"><strong>The real-world stack:</strong> Most production AI tools combine multiple patterns. A customer-facing agent typically has a <strong style="color:var(--text)">System Prompt</strong> (role + rules) + <strong style="color:var(--text)">RAG</strong> (live knowledge) + <strong style="color:var(--text)">Structured ICF</strong> user prompts + <strong style="color:var(--text)">Few-Shot examples</strong> embedded in the system prompt. These aren't competing approaches — they layer on top of each other.</div>
+</section>
+
+</main>
+</div>
+
+<script>
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', function() {
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      document.querySelectorAll('.nav-link').forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+document.querySelectorAll('section[id], .hero').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
