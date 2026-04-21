@@ -108,6 +108,23 @@ section{margin-bottom:4.5rem;scroll-margin-top:2rem}
 .dot-y{width:8px;height:8px;border-radius:50%;background:var(--a2);flex-shrink:0}
 .dot-n{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0}
 .dot-m{width:8px;height:8px;border-radius:50%;background:var(--a4);flex-shrink:0}
+.tab-bar{display:flex;gap:4px;margin-bottom:2rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content}
+.tab-btn{padding:.45rem 1.25rem;border-radius:7px;border:none;background:transparent;color:var(--text2);font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.tab-btn:hover{color:var(--text);background:var(--bg3)}
+.tab-btn.active{background:var(--bg4);color:var(--text)}
+.tab-panel{display:block}
+.ww-group-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ww-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:1rem;margin-bottom:.5rem}
+.ww-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:border-color .2s}
+.ww-card:hover{border-color:var(--border2)}
+.ww-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.ww-name{font-family:var(--fh);font-size:1rem;font-weight:700;color:var(--text)}
+.ww-why{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:.9rem;padding-bottom:.9rem;border-bottom:1px solid var(--border)}
+.ww-why strong{color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:600;display:block;margin-bottom:3px}
+.ww-when{display:flex;flex-direction:column;gap:5px}
+.ww-when-row{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--text2);line-height:1.5}
+.ww-tick{font-size:11px;flex-shrink:0;margin-top:1px;font-weight:700}
+.tick-y{color:var(--a2)}.tick-n{color:var(--text3)}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 @media(max-width:1100px){.layout{grid-template-columns:220px 1fr}.main{padding:2rem 2.5rem 4rem}.hero h1{font-size:2.75rem}.two-col{grid-template-columns:1fr}}
 @media(max-width:768px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:1.5rem}}
@@ -129,15 +146,40 @@ section{margin-bottom:4.5rem;scroll-margin-top:2rem}
     <a href="#assistant-prefill" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Assistant Prefill</a>
   </div>
   <div class="nav-sec">
-    <div class="nav-sec-lbl">Prompt Patterns</div>
+    <div class="nav-sec-lbl">Core Patterns</div>
     <a href="#zero-shot" class="nav-link"><span class="nav-dot" style="background:#74c0fc"></span>Zero-Shot</a>
     <a href="#few-shot" class="nav-link"><span class="nav-dot" style="background:#6c63ff"></span>Few-Shot</a>
     <a href="#chain-of-thought" class="nav-link"><span class="nav-dot" style="background:#ff6b6b"></span>Chain-of-Thought</a>
-    <a href="#role-prompting" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Role Prompting</a>
+    <a href="#react" class="nav-link"><span class="nav-dot" style="background:#00d4aa"></span>ReAct</a>
+    <a href="#role-prompting" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Role / Persona</a>
     <a href="#structured-icf" class="nav-link"><span class="nav-dot" style="background:#00d4aa"></span>Structured (ICF)</a>
     <a href="#rag" class="nav-link"><span class="nav-dot" style="background:#74c0fc"></span>RAG</a>
     <a href="#self-consistency" class="nav-link"><span class="nav-dot" style="background:#ff6b6b"></span>Self-Consistency</a>
     <a href="#tree-of-thought" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Tree of Thought</a>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-lbl">Interaction Patterns</div>
+    <a href="#question-refinement" class="nav-link"><span class="nav-dot" style="background:#6c63ff"></span>Question Refinement</a>
+    <a href="#cognitive-verifier" class="nav-link"><span class="nav-dot" style="background:#00d4aa"></span>Cognitive Verifier</a>
+    <a href="#audience-persona" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Audience Persona</a>
+    <a href="#flipped-interaction" class="nav-link"><span class="nav-dot" style="background:#ff6b6b"></span>Flipped Interaction</a>
+    <a href="#ask-for-input" class="nav-link"><span class="nav-dot" style="background:#74c0fc"></span>Ask for Input</a>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-lbl">Output &amp; Format Patterns</div>
+    <a href="#template-pattern" class="nav-link"><span class="nav-dot" style="background:#6c63ff"></span>Template</a>
+    <a href="#recipe-pattern" class="nav-link"><span class="nav-dot" style="background:#00d4aa"></span>Recipe</a>
+    <a href="#outline-expansion" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Outline Expansion</a>
+    <a href="#alternative-approaches" class="nav-link"><span class="nav-dot" style="background:#ff6b6b"></span>Alternative Approaches</a>
+    <a href="#fact-check-list" class="nav-link"><span class="nav-dot" style="background:#74c0fc"></span>Fact Check List</a>
+    <a href="#semantic-filter" class="nav-link"><span class="nav-dot" style="background:#6c63ff"></span>Semantic Filter</a>
+    <a href="#tail-generation" class="nav-link"><span class="nav-dot" style="background:#00d4aa"></span>Tail Generation</a>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-lbl">Advanced Patterns</div>
+    <a href="#game-play" class="nav-link"><span class="nav-dot" style="background:#ffa94d"></span>Game Play</a>
+    <a href="#meta-language" class="nav-link"><span class="nav-dot" style="background:#ff6b6b"></span>Meta Language</a>
+    <a href="#menu-actions" class="nav-link"><span class="nav-dot" style="background:#74c0fc"></span>Menu Actions</a>
   </div>
   <div class="nav-sec">
     <div class="nav-sec-lbl">Reference</div>
@@ -700,98 +742,954 @@ Combine with Branch B as a supporting tool.</span></div>
   </div>
 </section>
 
-<!-- COMPARISON TABLE -->
+<!-- REACT -->
+<section id="react">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(0,212,170,.15)">⚙️</div>
+    <div class="sec-hdr-txt">
+      <h2>ReAct Prompting</h2>
+      <p>Interleave reasoning and action in a loop — the engine behind modern AI agents</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">ReAct (Reasoning + Acting) is the pattern where the model alternates between <strong style="color:var(--text)">Thought</strong> (reasoning about what it knows and needs), <strong style="color:var(--text)">Action</strong> (calling a tool, searching, running code), and <strong style="color:var(--text)">Observation</strong> (reading the result) — looping until it can produce a grounded answer. It's the backbone of virtually every AI agent in production today, including M365 Copilot agents.</p>
+  <div class="analogy"><strong>Analogy</strong>The difference between a consultant who answers from memory versus one who stops mid-conversation, checks a live data source, reads the result, reasons again, and then answers. The second consultant is doing ReAct — and their answer is grounded in reality, not just training.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">ReAct Loop — Live Example</span><span class="badge busr">ReAct</span></div>
+    <div class="code-body"><span class="cr-role">// user</span><span style="color:var(--text2)">What is the current industry benchmark for lead response time in automotive CRM?</span>
+
+<span class="cr-key">Thought:</span>   <span style="color:var(--text2)">I don't have current 2025 data in memory. I should search for it.</span>
+<span class="cr-key">Action:</span>    <span class="cr-hl">search("automotive CRM lead response time benchmark 2025")</span>
+<span class="cr-key">Observation:</span><span style="color:var(--text2)"> Top performers respond under 1 hour; industry average is 3.5 hours.</span>
+
+<span class="cr-key">Thought:</span>   <span style="color:var(--text2)">I have current data now. I can answer with a citation.</span>
+<span class="cr-key">Answer:</span>    <span style="color:var(--text2)">The current benchmark for top-performing dealers is under 1 hour...</span></div>
+  </div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">ReAct System Prompt Template — For Agent Builder</span><span class="badge bsys">System</span></div>
+    <div class="code-body"><span style="color:var(--text2)">You are an objection handling assistant for the MSS team.
+
+When a user submits a dealer objection:
+1. </span><span class="cr-key">THINK</span><span style="color:var(--text2)">: Identify the objection category (pricing, timing, adoption, ROI, competition)
+2. </span><span class="cr-key">ACT</span><span style="color:var(--text2)">: Search the knowledge base for matching objection responses
+3. </span><span class="cr-key">OBSERVE</span><span style="color:var(--text2)">: Review what was returned — is it relevant and current?
+4. </span><span class="cr-key">RESPOND</span><span style="color:var(--text2)">: Synthesize a 3-part response: validate, reframe, evidence
+
+If the knowledge base returns nothing useful, say so and escalate.</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-t">AI agents</span><span class="pill pill-t">Tool-using models</span><span class="pill pill-t">Live data retrieval</span><span class="pill pill-t">Multi-step workflows</span><span class="pill pill-t">Grounded answers</span>
+  </div>
+</section>
+
+<!-- QUESTION REFINEMENT -->
+<section id="question-refinement">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(108,99,255,.15)">🔎</div>
+    <div class="sec-hdr-txt">
+      <h2>Question Refinement Pattern</h2>
+      <p>Ask the model to suggest a better version of your question before answering it</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Instead of answering your question as-is, the model first proposes a sharper, more precise version of it — then either asks you to confirm or answers that improved version automatically. It's a built-in quality check that surfaces assumptions you didn't know you were making.</p>
+  <div class="analogy"><strong>Analogy</strong>You ask a doctor "what's wrong with me?" A good doctor doesn't just answer that — they ask clarifying questions and reframe: "I think what you're really asking is whether these symptoms indicate X. Let me address that." The reframe produces a far more useful answer.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Question Refinement — Format</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// Template</span><span style="color:var(--text2)">Whenever I ask a question, suggest a better version of my question
+and ask me if I'd like you to answer that version instead.
+
+</span><span class="cr-role">// User asks</span><span style="color:var(--text2)">How do I improve my team's performance?
+
+</span><span class="cr-role">// Model responds</span><span style="color:var(--text2)">A more precise version of your question might be:
+</span><span class="cr-hl">"What are 3 high-leverage coaching interventions for a 50-person
+product consultant team that is underperforming on demo-to-close
+conversion by more than 10 points?"</span><span style="color:var(--text2)">
+Would you like me to answer this version instead?</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-p">Exploratory research</span><span class="pill pill-p">Ambiguous tasks</span><span class="pill pill-p">Strategy conversations</span><span class="pill pill-p">Coaching tools</span>
+  </div>
+</section>
+
+<!-- COGNITIVE VERIFIER -->
+<section id="cognitive-verifier">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(0,212,170,.15)">🧠</div>
+    <div class="sec-hdr-txt">
+      <h2>Cognitive Verifier Pattern</h2>
+      <p>Break a complex question into sub-questions, answer each, then synthesize</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">The model generates a set of smaller questions needed to fully answer your original question, answers each one individually, and then combines the answers into a final response. It's a structured way to handle questions that carry hidden complexity — where jumping straight to an answer means skipping critical sub-problems.</p>
+  <div class="analogy"><strong>Analogy</strong>A good consultant doesn't answer "should we expand to this market?" in one breath. They decompose it: What's the TAM? Who's the competition? What's our distribution fit? What's the regulatory landscape? They answer each, then synthesize a recommendation. That's cognitive verification.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Cognitive Verifier — Format</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// Trigger phrase in system or user prompt</span><span style="color:var(--text2)">When answering a question, generate a list of sub-questions that need
+to be answered first. Answer each sub-question, then use those answers
+to construct your final response.
+
+</span><span class="cr-role">// User asks</span><span style="color:var(--text2)">Should we build our objection handler agent in Copilot Agent Builder
+or as a custom Salesforce Agentforce agent?
+
+</span><span class="cr-role">// Model breaks it down</span>
+<span class="cr-key">Sub-Q 1:</span> <span style="color:var(--text2)">Where does the team currently work — M365 or Salesforce?</span>
+<span class="cr-key">Sub-Q 2:</span> <span style="color:var(--text2)">What data sources does the agent need to access?</span>
+<span class="cr-key">Sub-Q 3:</span> <span style="color:var(--text2)">What are the IT governance constraints for each platform?</span>
+<span class="cr-key">Sub-Q 4:</span> <span style="color:var(--text2)">What is the expected maintenance burden for each option?</span>
+<span class="cr-hl">→ Synthesized recommendation based on all four answers...</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-t">Complex decisions</span><span class="pill pill-t">Strategy analysis</span><span class="pill pill-t">Research tasks</span><span class="pill pill-t">Build vs. buy</span>
+  </div>
+</section>
+
+<!-- AUDIENCE PERSONA -->
+<section id="audience-persona">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,169,77,.15)">👥</div>
+    <div class="sec-hdr-txt">
+      <h2>Audience Persona Pattern</h2>
+      <p>Tell the model who it's talking to so it calibrates language and depth appropriately</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Where Role Prompting tells the model <em>who to be</em>, Audience Persona tells the model <em>who it's talking to</em>. The same explanation of a technical concept should land very differently for a first-year BDC rep versus a Chief Technology Officer. This pattern ensures the model calibrates vocabulary, assumed knowledge, and depth to the actual reader.</p>
+  <div class="analogy"><strong>Analogy</strong>A great presenter shifts their material depending on who's in the room. The same product update gets pitched differently to a dealer's GM versus their IT director — same facts, completely different framing, vocabulary, and emphasis.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Audience Persona — Examples</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// In system or user prompt</span><span style="color:var(--text2)">Explain the following as if you are talking to </span><span class="cr-key">[audience]</span><span style="color:var(--text2)">.</span>
+
+<span class="cr-key">EXAMPLE 1 — Non-technical executive:</span>
+<span style="color:var(--text2)">"Explain how RAG works to a dealership GM who has never heard of AI
+and is skeptical of technology vendors. No acronyms, no tech jargon."</span>
+
+<span class="cr-key">EXAMPLE 2 — Technical audience:</span>
+<span style="color:var(--text2)">"Explain the tradeoffs between vector similarity search and BM25
+retrieval to a senior ML engineer evaluating RAG architectures."</span>
+
+<span class="cr-key">EXAMPLE 3 — Sales coaching:</span>
+<span style="color:var(--text2)">"Explain the value of CRM lead routing to a first-year BDC rep
+who thinks their manual process is working fine."</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-a">Training materials</span><span class="pill pill-a">Exec communications</span><span class="pill pill-a">Customer-facing content</span><span class="pill pill-a">Multi-audience docs</span>
+  </div>
+</section>
+
+<!-- FLIPPED INTERACTION -->
+<section id="flipped-interaction">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,107,107,.15)">🔃</div>
+    <div class="sec-hdr-txt">
+      <h2>Flipped Interaction Pattern</h2>
+      <p>Let the model ask you the questions instead of you asking the model</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Instead of you driving the conversation, you tell the model what you're trying to achieve and instruct it to interview you — asking the questions it needs answered in order to help you well. This is especially powerful when you don't know what information is relevant, or when you're exploring a problem space you haven't fully mapped yet.</p>
+  <div class="analogy"><strong>Analogy</strong>Instead of filling out a form yourself, you sit down with an expert who asks you the right questions, knows what follow-ups matter, and builds a complete picture through dialogue. You provide the answers; they provide the structure.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Flipped Interaction — Format</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// Template</span><span style="color:var(--text2)">I want you to help me [goal]. Instead of me telling you everything
+upfront, ask me the questions you need to do this well.
+Ask one question at a time. When you have enough, produce [output].
+
+</span><span class="cr-role">// Example</span><span style="color:var(--text2)">I want to build a coaching plan for an underperforming Product
+Consultant on my team. Ask me the questions you need to create
+a specific, actionable 30-day plan. Ask one at a time.
+
+</span><span class="cr-role">// Model begins interviewing</span><span class="cr-hl">What is their current performance gap — and what metric best
+captures it? (e.g., demo-to-close rate, pipeline coverage, activity volume)</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-r">Discovery sessions</span><span class="pill pill-r">Requirements gathering</span><span class="pill pill-r">Coaching plans</span><span class="pill pill-r">When you don't know what you don't know</span>
+  </div>
+</section>
+
+<!-- ASK FOR INPUT -->
+<section id="ask-for-input">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(116,192,252,.15)">📥</div>
+    <div class="sec-hdr-txt">
+      <h2>Ask for Input Pattern</h2>
+      <p>Instruct the model to prompt the user for information before proceeding</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">A lightweight version of Flipped Interaction. You tell the model to ask for specific inputs before it does anything. This is most useful in agent or tool contexts where you want the model to gatekeep itself — refusing to proceed until it has the data it needs to do the job correctly.</p>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Ask for Input — Format</span><span class="badge bsys">System</span></div>
+    <div class="code-body"><span class="cr-role">// In system prompt of an agent</span><span style="color:var(--text2)">You are a deal review assistant. Before analyzing any deal,
+always ask the user for:
+1. Dealer name and market
+2. Products being proposed
+3. Deal stage and estimated close date
+4. Known objections
+
+Do not proceed until all four are provided.</span>
+
+<span class="cr-role">// Vs. a one-shot user prompt version</span><span style="color:var(--text2)">Before drafting my follow-up email, ask me for:
+the prospect's name, their main objection from last call,
+and my proposed next step. Then write the email.</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-b">Agents &amp; tools</span><span class="pill pill-b">Intake forms</span><span class="pill pill-b">Preventing hallucination</span><span class="pill pill-b">Structured workflows</span>
+  </div>
+</section>
+
+<!-- TEMPLATE PATTERN -->
+<section id="template-pattern">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(108,99,255,.15)">📋</div>
+    <div class="sec-hdr-txt">
+      <h2>Template Pattern</h2>
+      <p>Give the model a fill-in-the-blank output structure and tell it to populate it</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">You define the exact output format — including placeholders — and instruct the model to fill them in. This is the most direct way to guarantee output structure. The model isn't deciding how to organize the response; it's populating a form you designed. Critical for any workflow that feeds model output into downstream systems.</p>
+  <div class="analogy"><strong>Analogy</strong>You hand a contractor a document with fields already labeled and blanks waiting to be filled. They don't invent the structure — they complete yours. The result is always in the shape you need.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Template Pattern — Deal Summary</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// Prompt</span><span style="color:var(--text2)">Analyze the call transcript below and fill in this template exactly.
+Do not change the field names or add extra fields.
+
+</span><span class="cr-key">TEMPLATE:</span>
+<span class="cr-hl">Dealer Name: [DEALER_NAME]
+Products Discussed: [PRODUCT_LIST]
+Primary Objection: [OBJECTION]
+Objection Category: [TIMING | ROI | ADOPTION | PRICING | COMPETITION]
+Recommended Next Step: [NEXT_STEP]
+Deal Health: [RED | YELLOW | GREEN]
+Confidence Score: [1-10]</span>
+
+<span class="cr-role">// Transcript below...</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-p">CRM data extraction</span><span class="pill pill-p">Report generation</span><span class="pill pill-p">Downstream integrations</span><span class="pill pill-p">Consistent outputs</span>
+  </div>
+</section>
+
+<!-- RECIPE PATTERN -->
+<section id="recipe-pattern">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(0,212,170,.15)">📜</div>
+    <div class="sec-hdr-txt">
+      <h2>Recipe Pattern</h2>
+      <p>Provide the goal and known constraints — ask the model to fill in the missing steps</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">You tell the model the desired end state, the ingredients you have (known steps or constraints), and any steps you want to lock in. It fills in the gaps to produce a complete, ordered sequence. It's CoT in reverse — you provide the destination and some waypoints, the model builds the full route.</p>
+  <div class="analogy"><strong>Analogy</strong>You tell a chef: "I want a three-course meal, the main has to be salmon, and we start with soup. What goes between and how do I make it?" They fill in the missing steps around your constraints to produce a complete plan.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Recipe Pattern — Agent Rollout Plan</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// Prompt</span><span style="color:var(--text2)">I want to roll out our Email Triage Agent to the full MSS team of 50 PCs.
+I know the rollout must start with a pilot of 5 users and end with
+full adoption measurement at 90 days.
+Fill in a complete step-by-step rollout plan between those two points.
+Include any steps I may have missed.</span>
+
+<span class="cr-role">// Model produces</span>
+<span class="cr-key">Step 1:</span> <span style="color:var(--text2)">Select 5 pilot users (criteria: mix of tenure, product line, region)</span>
+<span class="cr-key">Step 2:</span> <span style="color:var(--text2)">Run 2-week pilot with structured feedback collection</span>
+<span class="cr-key">Step 3:</span> <span style="color:var(--text2)">Iterate on agent prompt based on pilot findings</span>
+<span class="cr-key">Step 4:</span> <span style="color:var(--text2)">Train next cohort of 15; document FAQs from pilot</span>
+<span class="cr-key">Step 5:</span> <span style="color:var(--text2)">Full rollout to remaining 30 with async training materials</span>
+<span class="cr-key">Step 6:</span> <span class="cr-hl">90-day adoption audit — usage rate, time saved, quality scores</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-t">Project planning</span><span class="pill pill-t">Process design</span><span class="pill pill-t">Rollout plans</span><span class="pill pill-t">Gap-filling workflows</span>
+  </div>
+</section>
+
+<!-- OUTLINE EXPANSION -->
+<section id="outline-expansion">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,169,77,.15)">📂</div>
+    <div class="sec-hdr-txt">
+      <h2>Outline Expansion Pattern</h2>
+      <p>Build large outputs incrementally — structure first, then expand section by section</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Instead of asking the model to produce a long document in one shot (which degrades in quality), you first generate a high-level outline, then ask it to expand each section individually. The model stays focused, output quality stays high, and you can redirect at any outline node before investing in full generation.</p>
+  <div class="analogy"><strong>Analogy</strong>An architect draws the floorplan before anyone starts framing walls. You review and approve the layout before a single nail goes in. Outline Expansion is the prompting equivalent — structure first, substance second.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Outline Expansion — Two-Step</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// Step 1 — Generate outline</span><span style="color:var(--text2)">Create a high-level outline for a business case document proposing
+that Cox Automotive adopt an AI objection handler agent for the MSS team.
+Include 6–8 sections. Just the outline — no content yet.</span>
+
+<span class="cr-role">// Step 2 — Expand a specific section</span><span style="color:var(--text2)">Now expand Section 3: "Current State Problem Analysis" into 3–4
+paragraphs with specific data points and pain points from a 50-person
+product consultant team context.</span>
+
+<span class="cr-role">// Repeat for each section → complete document</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-a">Long documents</span><span class="pill pill-a">Business cases</span><span class="pill pill-a">Playbooks</span><span class="pill pill-a">Training content</span>
+  </div>
+</section>
+
+<!-- ALTERNATIVE APPROACHES -->
+<section id="alternative-approaches">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,107,107,.15)">🔀</div>
+    <div class="sec-hdr-txt">
+      <h2>Alternative Approaches Pattern</h2>
+      <p>Ask the model to show you different ways to solve a problem, not just one answer</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">By default, a model will pick the most probable approach and run with it. The Alternative Approaches pattern instructs it to generate multiple distinct solutions — each with different tradeoffs — before you commit to one. This is essentially Tree of Thought made explicit as a user-facing instruction.</p>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Alternative Approaches — Format</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// Template</span><span style="color:var(--text2)">Whenever I ask you how to do something, give me at least 3
+alternative approaches. For each, explain the tradeoffs and
+which context it fits best. Then give your recommendation.
+
+</span><span class="cr-role">// Applied</span><span style="color:var(--text2)">How should I handle a dealer who says our pricing is too high?
+
+</span><span class="cr-key">Approach A — Value anchor:</span> <span style="color:var(--text2)">Reframe around ROI, not cost. Best when dealer is data-driven.</span>
+<span class="cr-key">Approach B — Competitive compare:</span> <span style="color:var(--text2)">Compare TCO vs. alternatives. Best when competition is named.</span>
+<span class="cr-key">Approach C — Trial close:</span> <span style="color:var(--text2)">Ask "if price weren't the issue, would you move forward?" Best to isolate whether price is the real objection.</span>
+
+<span class="cr-hl">Recommendation: Start with C to qualify, then use A or B.</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-r">Decision support</span><span class="pill pill-r">Avoiding tunnel vision</span><span class="pill pill-r">Sales strategy</span><span class="pill pill-r">Architecture choices</span>
+  </div>
+</section>
+
+<!-- FACT CHECK LIST -->
+<section id="fact-check-list">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(116,192,252,.15)">✅</div>
+    <div class="sec-hdr-txt">
+      <h2>Fact Check List Pattern</h2>
+      <p>Ask the model to flag its own uncertain claims after generating a response</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">After the model produces output, you instruct it to generate a list of every claim it made that might be inaccurate, outdated, or unverifiable — along with what you should check to confirm. It's a self-audit that surfaces the model's own uncertainty instead of hiding it behind confident prose.</p>
+  <div class="analogy"><strong>Analogy</strong>A good analyst doesn't just hand you a report — they attach a risk section that says "these three data points are based on 2023 estimates and should be verified before this goes to leadership." The Fact Check List pattern extracts that transparency automatically.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Fact Check List — Format</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// Appended to any prompt</span><span style="color:var(--text2)">After your response, add a section called "Claims to Verify" that
+lists every statement I should independently confirm — including
+anything time-sensitive, product-specific, or based on assumptions
+you made about my context.</span>
+
+<span class="cr-role">// Model appends</span>
+<span class="cr-key">CLAIMS TO VERIFY:</span>
+<span style="color:var(--text2)">• "Industry average lead response time is 3.5 hours" — verify against</span><span class="cr-hl"> current IHS Markit or CDK Global benchmark reports</span>
+<span style="color:var(--text2)">• "Xtime integration syncs in 90 seconds" — confirm with current</span><span class="cr-hl"> release notes; this may have changed in recent updates</span>
+<span style="color:var(--text2)">• Assumed your team uses Salesforce CRM — confirm this is accurate</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-b">Research outputs</span><span class="pill pill-b">Customer-facing content</span><span class="pill pill-b">Compliance-sensitive docs</span><span class="pill pill-b">Exec presentations</span>
+  </div>
+</section>
+
+<!-- SEMANTIC FILTER -->
+<section id="semantic-filter">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(108,99,255,.15)">🧹</div>
+    <div class="sec-hdr-txt">
+      <h2>Semantic Filter Pattern</h2>
+      <p>Instruct the model to remove, transform, or redact content based on meaning — not just keywords</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">A semantic filter uses the model's language understanding to clean, redact, or transform content in ways a keyword search never could. You define what to remove or change by meaning, not by matching specific words. This is powerful for PII removal, tone normalization, audience-appropriate editing, and content moderation.</p>
+  <div class="analogy"><strong>Analogy</strong>A keyword filter strips "phone number" — but misses "reach me at 913-555-0100." A semantic filter understands that both are contact information and removes both. The difference is comprehension versus pattern matching.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Semantic Filter — Examples</span><span class="badge busr">Pattern</span></div>
+    <div class="code-body"><span class="cr-role">// PII Removal</span><span style="color:var(--text2)">Remove all personally identifiable information from the text below,
+including names, phone numbers, email addresses, company names, and
+any details that could identify a specific individual or organization.
+Replace each with [REDACTED].
+
+</span><span class="cr-role">// Tone Filter</span><span style="color:var(--text2)">Rewrite the following sales email to remove any language that could
+be perceived as high-pressure, manipulative, or creating false urgency.
+Keep the structure and facts — only change the emotional register.
+
+</span><span class="cr-role">// Audience Filter</span><span style="color:var(--text2)">Rewrite the following technical documentation so that all jargon
+is either removed or explained in plain language suitable for a
+non-technical dealership manager.</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-p">PII/data redaction</span><span class="pill pill-p">Tone normalization</span><span class="pill pill-p">Content moderation</span><span class="pill pill-p">Audience editing</span>
+  </div>
+</section>
+
+<!-- TAIL GENERATION -->
+<section id="tail-generation">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(0,212,170,.15)">🔁</div>
+    <div class="sec-hdr-txt">
+      <h2>Tail Generation Pattern</h2>
+      <p>End every response with a prompt that keeps the conversation productively moving forward</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">Tail generation instructs the model to append a follow-up prompt, question, or call-to-action at the end of every response — maintaining conversational momentum. Instead of the model going silent after an answer, it actively suggests the next useful step. Especially valuable in interactive tools, coaching agents, and guided workflows.</p>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Tail Generation — System Prompt Config</span><span class="badge bsys">System</span></div>
+    <div class="code-body"><span class="cr-role">// In system prompt</span><span style="color:var(--text2)">At the end of every response, include one of the following:
+- A clarifying question if you need more information
+- A suggested next prompt the user might want to run
+- A recommended action step
+
+Label it clearly as </span><span class="cr-key">"Next step:"</span><span style="color:var(--text2)"> or </span><span class="cr-key">"You might also ask:"</span>
+
+<span class="cr-role">// Example tail appended to any response</span>
+<span class="cr-hl">You might also ask: "Now generate a 30-day coaching plan based on
+the gap analysis above, focused specifically on discovery questioning."</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-t">Coaching agents</span><span class="pill pill-t">Interactive tools</span><span class="pill pill-t">Guided workflows</span><span class="pill pill-t">Reducing blank-page friction</span>
+  </div>
+</section>
+
+<!-- GAME PLAY -->
+<section id="game-play">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,169,77,.15)">🎮</div>
+    <div class="sec-hdr-txt">
+      <h2>Game Play Pattern</h2>
+      <p>Frame an interaction as a game with explicit rules to drive structured, engaging outputs</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">You define a game with rules, win conditions, and turns — and the model plays it. This isn't just for entertainment. Games are a powerful framing device for training scenarios, objection handling practice, decision simulations, and any situation where repeated structured engagement beats a one-shot answer.</p>
+  <div class="analogy"><strong>Analogy</strong>A flight simulator isn't a real plane — but the constraints of the simulation create genuine learning. Game Play prompting gives your AI interactions that same structured practice environment.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Game Play — Objection Handling Trainer</span><span class="badge bsys">System</span></div>
+    <div class="code-body"><span class="cr-role">// System prompt defining the game</span><span style="color:var(--text2)">We are going to play an objection handling training game.
+
+</span><span class="cr-key">RULES:</span>
+<span style="color:var(--text2)">1. You play a skeptical dealership GM. I play the Product Consultant.
+2. You will raise one objection per turn from this list:
+   [pricing | timing | adoption | ROI | competitor]
+3. After I respond, you score my answer 1–5 and explain why.
+4. If I score below 3, you escalate the objection harder.
+5. If I score 4–5 twice in a row, move to the next objection type.
+6. After all 5 types, give me a final performance summary.
+
+</span><span class="cr-key">START:</span> <span class="cr-hl">Begin with a pricing objection. Set the scene first.</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-a">Sales training</span><span class="pill pill-a">Roleplay scenarios</span><span class="pill pill-a">Decision simulations</span><span class="pill pill-a">Onboarding tools</span>
+  </div>
+</section>
+
+<!-- META LANGUAGE -->
+<section id="meta-language">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(255,107,107,.15)">🔠</div>
+    <div class="sec-hdr-txt">
+      <h2>Meta Language Creation Pattern</h2>
+      <p>Define a custom shorthand language the model interprets in a consistent, structured way</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">You teach the model a custom syntax — a personal shorthand or notation system — and it interprets it consistently throughout the conversation. This is how power users dramatically compress their prompts: instead of writing 40-word instructions every time, they write a 5-character command that the model already knows how to expand.</p>
+  <div class="analogy"><strong>Analogy</strong>A surgeon doesn't explain every instrument by its full name every time — the team knows that "10-blade" means a specific scalpel and acts immediately. Meta Language Creation is building that shared vocabulary with your AI.</div>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Meta Language — Custom Prompt Shorthand</span><span class="badge bsys">System</span></div>
+    <div class="code-body"><span class="cr-role">// Define the meta language once in system prompt</span><span style="color:var(--text2)">I am going to define a shorthand language for our conversations.
+When I use these codes, interpret them exactly as defined:
+
+</span><span class="cr-key">!OBJ [text]</span>  <span style="color:var(--text2)">= Classify this objection and give a 3-part response</span>
+<span class="cr-key">!BRIEF [text]</span><span style="color:var(--text2)">= Summarize in 3 bullets, max 15 words each</span>
+<span class="cr-key">!EXEC [text]</span> <span style="color:var(--text2)">= Rewrite for a C-suite audience, no jargon, under 100 words</span>
+<span class="cr-key">!COACH [text]</span><span style="color:var(--text2)">= Give me direct coaching feedback on this as if you're my mentor</span>
+<span class="cr-key">!ALT [text]</span>  <span style="color:var(--text2)">= Give me 3 alternative approaches to this</span>
+
+<span class="cr-role">// Now I can just type:</span>
+<span class="cr-hl">!OBJ "We already use a competitor and my team won't switch."</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-r">Power users</span><span class="pill pill-r">Repeated workflows</span><span class="pill pill-r">Long sessions</span><span class="pill pill-r">Custom agent interfaces</span>
+  </div>
+</section>
+
+<!-- MENU ACTIONS -->
+<section id="menu-actions">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:rgba(116,192,252,.15)">📌</div>
+    <div class="sec-hdr-txt">
+      <h2>Menu Actions Pattern</h2>
+      <p>Give the model a persistent menu of commands it executes on demand</p>
+    </div>
+  </div>
+  <p style="color:var(--text2);margin-bottom:1.5rem;font-size:14px">You define a named set of actions in the system prompt — a menu — and the model executes whichever one you invoke by name. Unlike Meta Language (which is a syntax system), Menu Actions is a simple named-command interface. It's how you turn a general-purpose model into a specialized tool with consistent, repeatable behaviors your whole team can use.</p>
+  <div class="code-block">
+    <div class="code-hdr"><span class="code-lbl">Menu Actions — MSS Team Agent</span><span class="badge bsys">System</span></div>
+    <div class="code-body"><span class="cr-role">// Define the menu in system prompt</span><span style="color:var(--text2)">You are the MSS Team AI Assistant. You support Product Consultants
+with deal prep, coaching, and communication.
+
+Available commands — execute exactly when invoked:
+
+</span><span class="cr-key">DEAL REVIEW</span>   <span style="color:var(--text2)">— Analyze a deal summary and give next-step recommendations</span>
+<span class="cr-key">OBJECTION PREP</span><span style="color:var(--text2)">— Given a dealer profile, predict top 3 objections + responses</span>
+<span class="cr-key">EMAIL DRAFT</span>   <span style="color:var(--text2)">— Draft a follow-up email from call notes I provide</span>
+<span class="cr-key">COACH ME</span>      <span style="color:var(--text2)">— Give direct performance feedback on text I submit</span>
+<span class="cr-key">QUICK SUMMARY</span> <span style="color:var(--text2)">— Compress any input into 3 bullets under 15 words each</span>
+<span class="cr-key">HELP</span>          <span style="color:var(--text2)">— List all available commands with descriptions</span>
+
+<span style="color:var(--text2)">To use, type the command name followed by your input.</span></div>
+  </div>
+  <div class="pills">
+    <span style="font-size:12px;color:var(--text3);margin-right:4px;line-height:26px">Best for:</span>
+    <span class="pill pill-b">Team-shared agents</span><span class="pill pill-b">Consistent tooling</span><span class="pill pill-b">Non-technical users</span><span class="pill pill-b">Copilot agents</span>
+  </div>
+</section>
+
+<!-- WHEN TO USE -->
 <section id="when-to-use">
   <div class="sec-hdr">
     <div class="sec-icon" style="background:rgba(152,152,176,.12)">📊</div>
     <div class="sec-hdr-txt">
       <h2>When to Use What</h2>
-      <p>Quick-reference matrix across all patterns and types</p>
+      <p>Why each pattern exists, when it earns its place, and when to skip it</p>
     </div>
   </div>
 
-  <div class="compare-wrap">
-    <div class="compare-hdr">
-      <div>Pattern</div>
-      <div>Simple Tasks</div>
-      <div>Complex Reasoning</div>
-      <div>Custom Format</div>
-      <div>High Accuracy</div>
-      <div>Production Ready</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('why')">Why &amp; When Cards</button>
+    <button class="tab-btn" onclick="switchTab('matrix')">Capability Matrix</button>
+  </div>
+
+  <!-- WHY/WHEN CARDS -->
+  <div id="tab-why" class="tab-panel">
+
+    <div class="ww-group-label">Core Patterns</div>
+    <div class="ww-grid">
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Zero-Shot</span>
+          <span class="ctag tb">Default</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Most tasks don't need scaffolding. Zero-shot is the baseline — fast, simple, and sufficient for the majority of well-defined requests. It trusts that the model's training is enough.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The task is clear, common, and well-defined — summarize, translate, classify, explain</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You're working with a capable frontier model (Claude, GPT-4, Gemini)</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Speed matters more than perfection</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The task requires a custom output format the model won't infer</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Multi-step reasoning is involved — results will be unreliable</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Few-Shot</span>
+          <span class="ctag tp">Show Don't Tell</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Some patterns are easier to demonstrate than describe. Showing the model 3 examples of what "right" looks like is worth more than 300 words of instructions — especially for custom formats, classification schemes, or tones that are hard to articulate.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You have a custom output format, taxonomy, or style you can't easily describe</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Zero-shot keeps getting the format wrong despite rephrasing</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You're building a classification system with proprietary categories</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>You don't have good representative examples yet — bad examples hurt worse than none</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The task is too variable for a fixed pattern to generalize</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Chain-of-Thought</span>
+          <span class="ctag tr">Show Your Work</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> LLMs are next-token predictors — they don't naturally "pause to think." CoT forces intermediate reasoning steps into the token stream, which dramatically improves accuracy on problems where the path to the answer matters as much as the answer itself.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Multi-step math, logic, or analysis where errors compound</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Decisions with dependencies — each step informs the next</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You need to audit the reasoning, not just trust the conclusion</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Simple factual lookups or one-step tasks — CoT adds tokens with no benefit</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Output format is tightly constrained — verbose reasoning won't fit</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">ReAct</span>
+          <span class="ctag tt">Agent Engine</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Static prompts can only work with what's already in the context window. ReAct breaks that ceiling — the model loops through Thought → Action → Observation, calling tools and updating its reasoning with real results. It's the only pattern that lets the model go get information rather than just recall it.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The answer requires live data — search, APIs, databases, knowledge bases</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You're building an AI agent with tool access (Copilot Agent Builder, Agentforce)</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Multi-step workflows where each step's output feeds the next decision</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>No tools are available — without actions, ReAct collapses into plain CoT</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Latency is critical — each tool call adds round-trip time</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Role / Persona</span>
+          <span class="ctag ta">Frame the Expert</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> The same question gets a very different answer depending on who you're asking. Role prompting activates domain-specific vocabulary, reasoning style, and risk tolerance without needing to specify every parameter explicitly. It's a cognitive shortcut that primes the model's entire response posture.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You need domain-specific framing — legal, financial, technical, sales, clinical</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Adversarial review — "act as a skeptic and tear this apart"</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Tone calibration — the persona carries the style implicitly</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The task is purely mechanical — format extraction, data transformation</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>You need a fixed output schema — role affects tone, not structure</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Structured (ICF)</span>
+          <span class="ctag tt">Production Workhorse</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Ambiguity is the enemy of consistent output. Explicitly separating Instruction, Context, and Format removes every assumption the model would otherwise make. It's the most universally applicable pattern — and the foundation of any prompt that runs more than once.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Any prompt that will be reused, productized, or shared across a team</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Output consistency matters — every run should produce the same shape</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The context is rich and you want the model to use all of it correctly</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Quick one-off questions — the structure adds overhead not worth paying</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">RAG</span>
+          <span class="ctag tb">Ground in Reality</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> LLM training data has a cutoff and no access to your proprietary knowledge. RAG bridges that gap by injecting relevant, current documents into the prompt at runtime. The model stops hallucinating details it doesn't know because the answer is right there in the context.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Answers must be grounded in your specific docs — product knowledge, policies, release notes</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The knowledge base changes frequently — retraining isn't feasible</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Accuracy and citation matter — support, compliance, customer-facing answers</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Your knowledge base is small and stable — just paste the content directly</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The question is general knowledge the model already knows well</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Self-Consistency</span>
+          <span class="ctag tr">Trust the Consensus</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> A single reasoning path can contain silent errors. Running the same problem multiple times with varied reasoning and aggregating the results gives you a confidence signal — if most paths converge on the same answer, that answer is far more trustworthy than any single run.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The stakes of being wrong are high — a recommendation going to leadership</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The problem is genuinely ambiguous and you want a confidence signal</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You're comparing model judgments to human judgments for calibration</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Cost and latency matter — you're paying for 3–5x the tokens</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The task has a single correct answer — consensus doesn't improve factual recall</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Tree of Thought</span>
+          <span class="ctag ta">Branch and Prune</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> For some problems, the first approach you think of isn't the best one. ToT forces deliberate exploration of multiple solution paths before committing — catching the "obvious but wrong" answer that a linear reasoning chain would have run with.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Strategic decisions with meaningfully different approaches worth comparing</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Architecture or build decisions where early commitment is expensive to reverse</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You suspect the obvious answer is wrong and want structured alternatives</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>One clear approach exists — branching creates noise, not insight</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Speed is the priority — ToT is inherently verbose and slow</span></div>
+        </div>
+      </div>
+
     </div>
-    <div class="compare-row">
-      <div>Zero-Shot</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-n"></span>Risky</div>
-      <div><span class="dot-m"></span>Partial</div>
-      <div><span class="dot-m"></span>Moderate</div>
-      <div><span class="dot-y"></span>Yes</div>
+
+    <div class="ww-group-label" style="margin-top:2.5rem">Interaction Patterns</div>
+    <div class="ww-grid">
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Question Refinement</span>
+          <span class="ctag tp">Sharpen First</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> The question you ask is often not the question you need answered. Question Refinement surfaces that gap before the model wastes effort on the wrong target — especially valuable when you're exploring unfamiliar territory and don't know what you don't know.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You're in exploration mode — the problem space isn't fully defined yet</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Previous answers felt off even when technically correct — your question was the problem</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Building a coaching or strategy tool where question quality directly affects outcome</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The question is already precise and operational — refinement adds friction</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Cognitive Verifier</span>
+          <span class="ctag tt">Decompose First</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Complex questions carry hidden sub-questions that need independent answers before a synthesis is possible. Jumping straight to a conclusion skips those sub-problems — producing confident answers built on shaky foundations. Cognitive Verifier makes the hidden structure visible.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The question sounds simple but actually contains 3–4 independent sub-problems</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Build vs. buy, platform selection, strategic go/no-go decisions</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You want to stress-test a recommendation before presenting it</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The question is genuinely simple — decomposition creates false complexity</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Audience Persona</span>
+          <span class="ctag ta">Calibrate the Reader</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> The same information lands differently depending on who's reading it. Without an audience signal, the model defaults to a generic technical-ish tone that fits no one perfectly. Audience Persona ensures the vocabulary, assumed knowledge, and framing match the actual reader — not an imaginary average.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Creating content for a specific role — GM, BDC rep, CFO, IT director</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The same content needs multiple versions for different stakeholders</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Training materials, onboarding docs, customer-facing explanations</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Internal technical notes where audience is already implicit and consistent</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Flipped Interaction</span>
+          <span class="ctag tr">Let It Ask You</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> You often don't know which information the model actually needs to help you well. Flipped Interaction inverts the burden — the model asks the right questions in the right order, gathering exactly what it needs. The result is far more tailored than anything you'd produce by front-loading everything upfront.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You know the desired output but not what inputs are required to get there</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Discovery sessions, requirements gathering, coaching plans, intake flows</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>High-stakes personalized outputs — the more tailored, the more valuable</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>You're in a hurry — the dialogue loop takes time and patience</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The task is well-specified — back-and-forth adds no value</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Ask for Input</span>
+          <span class="ctag tb">Gate Before Acting</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Agents and automated tools that proceed without sufficient context produce confidently wrong results. Ask for Input is the guardrail — it tells the model to stop and collect what it needs before doing anything. It prevents the model from filling gaps with assumptions.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Agent system prompts where missing context leads to hallucinated specifics</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Intake flows — deal review, coaching requests, ticket triage</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Any workflow where the user typically forgets to include key details</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Contexts where the user has already provided complete information</span></div>
+        </div>
+      </div>
+
     </div>
-    <div class="compare-row">
-      <div>Few-Shot</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-m"></span>Partial</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-y"></span>High</div>
-      <div><span class="dot-y"></span>Yes</div>
+
+    <div class="ww-group-label" style="margin-top:2.5rem">Output &amp; Format Patterns</div>
+    <div class="ww-grid">
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Template Pattern</span>
+          <span class="ctag tp">Lock the Shape</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> When output feeds a downstream system — a CRM field, a report generator, a dashboard — format variability is a breaking failure, not just an aesthetic preference. Template Pattern eliminates that variability entirely by giving the model a literal form to fill in rather than a description of what to produce.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Output feeds a CRM, database, API, or structured workflow</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Multiple people need to produce consistently formatted outputs</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You're extracting structured data from unstructured input (call transcripts, emails)</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>The output is inherently narrative — forcing it into a template loses meaning</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Recipe Pattern</span>
+          <span class="ctag tt">Fill the Gaps</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> You often know where you need to start and where you need to end up, but not every step in between. Recipe Pattern lets you lock down the non-negotiables and ask the model to complete the path — while flagging steps you may have missed. It's collaborative planning rather than delegation.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Project plans where you have hard constraints at both ends but gaps in the middle</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Rollout plans, implementation sequences, change management workflows</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Process design where you know the inputs and outputs but not the full procedure</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Tasks with no meaningful constraints — the model needs some anchor points to work from</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Outline Expansion</span>
+          <span class="ctag ta">Structure Then Fill</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Long-form generation degrades in quality as length increases — the model loses coherence, repeats itself, or drifts from the original intent. Outline Expansion solves this by separating structure decisions from content decisions. You review and approve the architecture before any content is committed.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Any document over ~500 words — business cases, playbooks, training guides</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You want creative control over structure before investing in generation</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Multiple stakeholders need to review and redirect before content is written</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Short outputs — the two-step adds overhead that isn't worth it</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Alternative Approaches</span>
+          <span class="ctag tr">Escape the Default</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Models have strong priors — they'll default to the most common or obvious solution unless you explicitly ask for alternatives. This is fine when the obvious answer is correct. It's a problem when the obvious answer is what everyone else is already doing. Alternative Approaches forces the model out of its default.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Strategic decisions where the first answer is probably conventional wisdom</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You want tradeoff visibility before committing to an approach</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Brainstorming sessions, option analysis, competitive positioning</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>There is genuinely only one right approach — alternatives create false equivalence</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Fact Check List</span>
+          <span class="ctag tb">Surface the Risk</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> LLMs present uncertain information with the same confident tone as verified facts. The Fact Check List pattern breaks that illusion — asking the model to explicitly flag which of its own claims you should verify before trusting. It converts invisible risk into a visible checklist.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Output is going to a customer, executive, or external stakeholder</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>The topic involves statistics, product specs, pricing, or compliance details</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>You're doing research synthesis and need to know what to verify</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Internal brainstorming where perfect accuracy isn't the goal</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Semantic Filter</span>
+          <span class="ctag tp">Clean by Meaning</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Keyword-based filtering is brittle — it misses synonyms, context-dependent phrasing, and implied meaning. Semantic Filter uses the model's actual language understanding to remove or transform content based on what it means, not what words it uses. That's a capability no regex or rule engine can match.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>PII redaction where contact info appears in many unpredictable forms</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Tone normalization — remove aggressive, passive-aggressive, or high-pressure language</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Audience-appropriate editing — strip jargon, simplify for a specific reader</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Simple word replacement where a find-and-replace is faster and more reliable</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Tail Generation</span>
+          <span class="ctag tt">Keep Moving</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Most users stall after receiving an answer — not because they're done, but because they don't know what to ask next. Tail Generation removes that friction by surfacing the next logical step automatically. In agent and tool contexts it's the difference between a dead-end and a guided experience.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Interactive tools, coaching agents, and guided workflows where momentum matters</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Users who are non-technical and unlikely to know what to ask next</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Onboarding experiences where you want users to discover more capabilities</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Power users who find the suggestions patronizing or in the way</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>One-shot tasks where no follow-up is expected or needed</span></div>
+        </div>
+      </div>
+
     </div>
-    <div class="compare-row">
-      <div>Chain-of-Thought</div>
-      <div><span class="dot-n"></span>Overkill</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-n"></span>No</div>
-      <div><span class="dot-y"></span>High</div>
-      <div><span class="dot-y"></span>Yes</div>
+
+    <div class="ww-group-label" style="margin-top:2.5rem">Advanced Patterns</div>
+    <div class="ww-grid">
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Game Play</span>
+          <span class="ctag ta">Practice Arena</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Structured constraints drive better learning and engagement than open-ended interaction. A game provides rules, turns, scoring, and stakes — which activate a different cognitive mode than a standard Q&amp;A. For training scenarios especially, the game framing turns passive reading into active practice.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Sales training — objection handling, discovery questioning, closing practice</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Decision simulations where you want to practice judgment, not just read about it</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Onboarding scenarios that benefit from interactive challenge over static content</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Analytical tasks — game framing adds noise without benefit</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Time-sensitive work environments where the game structure feels frivolous</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Meta Language</span>
+          <span class="ctag tr">Build Your DSL</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Repeated prompting creates repeated overhead — the same 40-word instruction written dozens of times per session. Meta Language creation lets you define a compact shorthand once and reuse it indefinitely. It's the difference between typing a full SQL query every time and having stored procedures.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Power users who run the same types of prompts repeatedly across long sessions</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Building internal tools where your team needs consistent commands</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Agent interfaces where users interact via structured inputs rather than freeform text</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Occasional users who won't remember the syntax — it creates more confusion than efficiency</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Single-session tasks — the setup cost exceeds the benefit</span></div>
+        </div>
+      </div>
+
+      <div class="ww-card">
+        <div class="ww-card-top">
+          <span class="ww-name">Menu Actions</span>
+          <span class="ctag tb">Named Commands</span>
+        </div>
+        <div class="ww-why"><strong>Why it exists:</strong> Not everyone using an AI tool knows how to prompt well. Menu Actions gives them a curated set of named commands that always produce consistent, well-designed outputs — without requiring prompting knowledge. It's the UX layer that makes an LLM approachable for a whole team, not just the people who built it.</div>
+        <div class="ww-when">
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Team-shared agents where users have varying AI experience</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Copilot Agent Builder or any interface where you control the system prompt</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-y">✓</span><span>Workflows with a defined, repeatable set of actions — not open exploration</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Open-ended research or creative tasks that don't fit into predefined buckets</span></div>
+          <div class="ww-when-row"><span class="ww-tick tick-n">✗</span><span>Expert users who benefit more from freeform access than a constrained menu</span></div>
+        </div>
+      </div>
+
     </div>
-    <div class="compare-row">
-      <div>Role Prompting</div>
-      <div><span class="dot-m"></span>Partial</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-n"></span>No</div>
-      <div><span class="dot-m"></span>Moderate</div>
-      <div><span class="dot-y"></span>Yes</div>
-    </div>
-    <div class="compare-row">
-      <div>Structured (ICF)</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-y"></span>High</div>
-      <div><span class="dot-y"></span>Yes</div>
-    </div>
-    <div class="compare-row">
-      <div>RAG</div>
-      <div><span class="dot-n"></span>Overkill</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-m"></span>Partial</div>
-      <div><span class="dot-y"></span>High</div>
-      <div><span class="dot-y"></span>Yes</div>
-    </div>
-    <div class="compare-row">
-      <div>Self-Consistency</div>
-      <div><span class="dot-n"></span>Overkill</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-n"></span>No</div>
-      <div><span class="dot-y"></span>Very High</div>
-      <div><span class="dot-m"></span>With tooling</div>
-    </div>
-    <div class="compare-row">
-      <div>Tree of Thought</div>
-      <div><span class="dot-n"></span>Overkill</div>
-      <div><span class="dot-y"></span>Yes</div>
-      <div><span class="dot-n"></span>No</div>
-      <div><span class="dot-y"></span>Very High</div>
-      <div><span class="dot-m"></span>With tooling</div>
+
+    <div class="info-box" style="margin-top:2.5rem"><strong>The layering principle:</strong> These patterns aren't mutually exclusive — the best production prompts stack several at once. A customer-facing agent might combine a <strong style="color:var(--text)">System Prompt</strong> (identity + rules) + <strong style="color:var(--text)">Menu Actions</strong> (user interface) + <strong style="color:var(--text)">RAG</strong> (live knowledge) + <strong style="color:var(--text)">Template</strong> (output shape) + <strong style="color:var(--text)">Tail Generation</strong> (momentum). Each pattern solves a different failure mode — together they close almost every gap.</div>
+  </div>
+
+  <!-- MATRIX TAB -->
+  <div id="tab-matrix" class="tab-panel" style="display:none">
+    <div class="compare-wrap">
+      <div class="compare-hdr">
+        <div>Pattern</div>
+        <div>Simple Tasks</div>
+        <div>Complex Reasoning</div>
+        <div>Custom Format</div>
+        <div>High Accuracy</div>
+        <div>Production Ready</div>
+      </div>
+      <div class="compare-row"><div>Zero-Shot</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>Risky</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Few-Shot</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Chain-of-Thought</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>ReAct</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Agents</div></div>
+      <div class="compare-row"><div>Role / Persona</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Structured (ICF)</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>RAG</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Self-Consistency</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>Very High</div><div><span class="dot-m"></span>With tooling</div></div>
+      <div class="compare-row"><div>Tree of Thought</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>Very High</div><div><span class="dot-m"></span>With tooling</div></div>
+      <div class="compare-row"><div>Question Refinement</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-m"></span>Interactive</div></div>
+      <div class="compare-row"><div>Cognitive Verifier</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Audience Persona</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-n"></span>No</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Flipped Interaction</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>High</div><div><span class="dot-m"></span>Interactive</div></div>
+      <div class="compare-row"><div>Ask for Input</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Template</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Recipe</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Outline Expansion</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Alternative Approaches</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Fact Check List</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Semantic Filter</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>High</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Tail Generation</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-n"></span>No</div><div><span class="dot-n"></span>No</div><div><span class="dot-n"></span>N/A</div><div><span class="dot-y"></span>Yes</div></div>
+      <div class="compare-row"><div>Game Play</div><div><span class="dot-n"></span>Overkill</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-m"></span>Interactive</div></div>
+      <div class="compare-row"><div>Meta Language</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-m"></span>Power users</div></div>
+      <div class="compare-row"><div>Menu Actions</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Partial</div><div><span class="dot-y"></span>Yes</div><div><span class="dot-m"></span>Moderate</div><div><span class="dot-y"></span>Yes</div></div>
     </div>
   </div>
 
-  <div class="info-box" style="margin-top:2rem"><strong>The real-world stack:</strong> Most production AI tools combine multiple patterns. A customer-facing agent typically has a <strong style="color:var(--text)">System Prompt</strong> (role + rules) + <strong style="color:var(--text)">RAG</strong> (live knowledge) + <strong style="color:var(--text)">Structured ICF</strong> user prompts + <strong style="color:var(--text)">Few-Shot examples</strong> embedded in the system prompt. These aren't competing approaches — they layer on top of each other.</div>
 </section>
 
 </main>
 </div>
 
 <script>
+function switchTab(tab) {
+  document.getElementById('tab-why').style.display = tab === 'why' ? 'block' : 'none';
+  document.getElementById('tab-matrix').style.display = tab === 'matrix' ? 'block' : 'none';
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0 && tab==='why') || (i===1 && tab==='matrix')));
+}
+
 document.querySelectorAll('.nav-link').forEach(link => {
   link.addEventListener('click', function() {
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
