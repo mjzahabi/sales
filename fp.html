@@ -1,0 +1,2137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fullpath | Cox Automotive Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --power-blue: #0C80DF;
+    --joyride-blue: #024AA5;
+    --trust-blue: #1D3E74;
+    --impact-orange: #FF8210;
+    --energy-aqua: #00BCDD;
+    --platinum: #EEEEEF;
+    --silver: #CCCCCE;
+    --aluminum: #A7A9AC;
+    --steel: #808285;
+    --asphalt: #55575C;
+    --white: #FFFFFF;
+    --dark-bg: #0a1628;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', Arial, sans-serif;
+    background: var(--dark-bg);
+    color: var(--white);
+    min-width: 1600px;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2150 40%, #083580 70%, #0C80DF 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 70px 100px 60px;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,188,221,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: 30%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,130,16,0.10) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--energy-aqua);
+    margin-bottom: 12px;
+  }
+
+  .hero-title {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 8px;
+    color: var(--white);
+  }
+
+  .hero-title span { color: var(--impact-orange); }
+
+  .hero-subtitle {
+    font-size: 22px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 28px;
+    max-width: 700px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 10px;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .hero-stat::after {
+    content: '';
+    position: absolute;
+    right: -24px; top: 10%;
+    height: 80%;
+    width: 1px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .hero-stat:last-child::after { display: none; }
+
+  .stat-number {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--energy-aqua);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .acquisition-badge {
+    position: absolute;
+    top: 50px;
+    right: 100px;
+    background: linear-gradient(135deg, var(--impact-orange), #ff5a00);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(255,130,16,0.4);
+    z-index: 10;
+  }
+
+  .acquisition-badge .badge-label {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .acquisition-badge .badge-value {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: white;
+    display: block;
+    line-height: 1;
+  }
+
+  /* ── NAV TABS ── */
+  .tab-nav {
+    background: #0d1e3d;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    padding: 0 100px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tab-nav::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 18px 24px;
+    font-family: 'Barlow', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .tab-btn:hover { color: rgba(255,255,255,0.85); }
+
+  .tab-btn.active {
+    color: var(--energy-aqua);
+    border-bottom-color: var(--energy-aqua);
+  }
+
+  /* ── SECTIONS ── */
+  .tab-section { display: none; }
+  .tab-section.active { display: block; }
+
+  .section-wrap {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 60px 100px;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    color: var(--white);
+  }
+
+  .section-title .accent { color: var(--energy-aqua); }
+  .section-title .orange { color: var(--impact-orange); }
+
+  .section-intro {
+    font-size: 17px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    max-width: 800px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--power-blue), var(--energy-aqua));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .card:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(0,188,221,0.3);
+    transform: translateY(-3px);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .card-icon.blue { background: rgba(12,128,223,0.2); }
+  .card-icon.aqua { background: rgba(0,188,221,0.2); }
+  .card-icon.orange { background: rgba(255,130,16,0.2); }
+  .card-icon.trust { background: rgba(29,62,116,0.4); }
+
+  .card-title {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .card-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .card-tag {
+    display: inline-block;
+    background: rgba(12,128,223,0.2);
+    color: var(--energy-aqua);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  .card-tag.orange-tag {
+    background: rgba(255,130,16,0.15);
+    color: var(--impact-orange);
+  }
+
+  /* ── HIGHLIGHTED CARD ── */
+  .highlight-card {
+    background: linear-gradient(135deg, rgba(12,128,223,0.15), rgba(0,188,221,0.08));
+    border: 1px solid rgba(0,188,221,0.25);
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 24px;
+  }
+
+  .highlight-card .card-title {
+    font-size: 26px;
+    margin-bottom: 14px;
+  }
+
+  .highlight-card .card-body {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    margin: 48px 0;
+  }
+
+  /* ── SUBSECTION TITLE ── */
+  .sub-title {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+
+  .sub-title .accent { color: var(--energy-aqua); }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: flex;
+    gap: 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .stat-item {
+    flex: 1;
+    padding: 28px 24px;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    text-align: center;
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-item .big-number {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--energy-aqua);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-item .big-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* ── FLOW STEPS ── */
+  .flow-steps {
+    display: flex;
+    gap: 0;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .flow-steps::before {
+    content: '';
+    position: absolute;
+    top: 36px;
+    left: 80px;
+    right: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--power-blue), var(--energy-aqua));
+    z-index: 0;
+  }
+
+  .flow-step {
+    flex: 1;
+    text-align: center;
+    padding: 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--joyride-blue), var(--power-blue));
+    border: 3px solid var(--energy-aqua);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--white);
+    box-shadow: 0 0 24px rgba(0,188,221,0.3);
+  }
+
+  .step-title {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .step-body {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+
+  /* ── PRODUCT PILLARS ── */
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .pillar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: sticky;
+    top: 60px;
+  }
+
+  .pillar-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pillar-btn:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(0,188,221,0.2);
+  }
+
+  .pillar-btn.active {
+    background: rgba(12,128,223,0.15);
+    border-color: var(--power-blue);
+  }
+
+  .pillar-btn .pillar-icon { font-size: 22px; }
+
+  .pillar-btn .pillar-text {
+    font-family: 'Barlow', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+  }
+
+  .pillar-btn.active .pillar-text { color: var(--energy-aqua); }
+
+  .pillar-content { display: none; }
+  .pillar-content.active { display: block; }
+
+  /* ── OEM GRID ── */
+  .oem-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .oem-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.5px;
+  }
+
+  .oem-chip.featured {
+    background: rgba(12,128,223,0.15);
+    border-color: rgba(12,128,223,0.4);
+    color: var(--energy-aqua);
+  }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    background: linear-gradient(135deg, rgba(29,62,116,0.4), rgba(2,74,165,0.2));
+    border-left: 4px solid var(--energy-aqua);
+    border-radius: 0 12px 12px 0;
+    padding: 24px 28px;
+    margin: 20px 0;
+  }
+
+  .quote-text {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .quote-attribution {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--energy-aqua);
+  }
+
+  /* ── INTEGRATION ROW ── */
+  .integration-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .int-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* ── COMPETITIVE TABLE ── */
+  .comp-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .comp-table th {
+    background: rgba(12,128,223,0.2);
+    padding: 14px 20px;
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    color: var(--energy-aqua);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .comp-table th:first-child { background: rgba(2,74,165,0.3); color: var(--white); }
+
+  .comp-table td {
+    padding: 13px 20px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table td:first-child { font-weight: 600; color: var(--white); background: rgba(255,255,255,0.04); }
+
+  .check { color: #4ade80; font-size: 16px; }
+  .x-mark { color: #f87171; font-size: 16px; }
+  .partial { color: var(--impact-orange); font-size: 14px; }
+
+  /* ── ACCORDION ── */
+  .accordion-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .accordion-header {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Barlow', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    text-align: left;
+    transition: background 0.2s;
+  }
+
+  .accordion-header:hover { background: rgba(255,255,255,0.04); }
+
+  .accordion-header.open { color: var(--energy-aqua); }
+
+  .accordion-arrow {
+    transition: transform 0.3s;
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+
+  .accordion-header.open .accordion-arrow {
+    transform: rotate(180deg);
+    color: var(--energy-aqua);
+  }
+
+  .accordion-body {
+    display: none;
+    padding: 0 24px 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .accordion-body.open { display: block; }
+
+  /* ── COX SYNERGY ── */
+  .synergy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .synergy-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 28px;
+  }
+
+  .synergy-card.highlight {
+    background: linear-gradient(135deg, rgba(255,130,16,0.1), rgba(255,130,16,0.04));
+    border-color: rgba(255,130,16,0.25);
+  }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    background: #060e1d;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 24px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .doc-footer .footer-brand {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .doc-footer .footer-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    height: 6px;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--power-blue), var(--energy-aqua));
+    transition: width 0.8s ease;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+
+  /* ── TOOLTIP ── */
+  .tooltip-wrap { position: relative; display: inline-block; }
+
+  .tooltip-wrap:hover .tooltip-popup {
+    opacity: 1;
+    transform: translateY(-4px);
+    pointer-events: auto;
+  }
+
+  .tooltip-popup {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: var(--trust-blue);
+    border: 1px solid rgba(0,188,221,0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--white);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s;
+    z-index: 50;
+    line-height: 1.5;
+  }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,188,221,0.15);
+    border: 1px solid rgba(0,188,221,0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--energy-aqua);
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+
+  .badge.orange {
+    background: rgba(255,130,16,0.15);
+    border-color: rgba(255,130,16,0.3);
+    color: var(--impact-orange);
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 14px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--power-blue), var(--energy-aqua), var(--impact-orange));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 6px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--energy-aqua);
+    border: 2px solid var(--dark-bg);
+    box-shadow: 0 0 10px rgba(0,188,221,0.5);
+  }
+
+  .timeline-date {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--energy-aqua);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .timeline-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .timeline-body {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+  }
+
+  .filter-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    font-family: 'Barlow', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-chip:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); }
+  .filter-chip.active { background: rgba(0,188,221,0.2); border-color: rgba(0,188,221,0.4); color: var(--energy-aqua); }
+
+  .doc-lib-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .doc-lib-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(0,188,221,0.25); transform: translateY(-2px); }
+  .doc-lib-card.hidden { display: none; }
+  .doc-lib-header { display: flex; align-items: flex-start; gap: 10px; }
+  .doc-lib-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .doc-lib-name { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.4; flex: 1; }
+  .doc-lib-footer { display: flex; align-items: center; justify-content: space-between; }
+  .doc-lib-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px; color: white; }
+  .doc-lib-ext { font-size: 10px; color: rgba(255,255,255,0.35); font-weight: 600; background: rgba(255,255,255,0.07); padding: 2px 6px; border-radius: 3px; }
+  .doc-lib-link { color: var(--energy-aqua); font-size: 16px; text-decoration: none; flex-shrink: 0; opacity: 0.6; transition: opacity 0.15s; }
+  .doc-lib-link:hover { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ HERO ══════════════════════════════ -->
+<div class="hero">
+  <div class="hero-eyebrow">Cox Automotive Acquisition Briefing · April 2026</div>
+  <div class="hero-title">FULLPATH<br><span>DEEP DIVE</span></div>
+  <div class="hero-subtitle">The AI ecosystem for car dealerships — now joining Cox Automotive's Retail Solutions portfolio.</div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="stat-number">2,000+</span>
+      <span class="stat-label">Dealer Clients<br>Across North America</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-number">11M</span>
+      <span class="stat-label">Data Points<br>Ingested Daily</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-number">250K</span>
+      <span class="stat-label">Attributed Annual<br>Sales</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-number">223</span>
+      <span class="stat-label">Integration<br>Partners</span>
+    </div>
+  </div>
+  <div class="acquisition-badge">
+    <span class="badge-label">Cox Automotive</span>
+    <span class="badge-value">Acquired</span>
+    <span class="badge-label" style="margin-top:4px;">2026</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ TAB NAV ══════════════════════════════ -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="showTab('platform')">Platform & Products</button>
+  <button class="tab-btn" onclick="showTab('cdp')">CDP Deep Dive</button>
+  <button class="tab-btn" onclick="showTab('crm')">Agentic CRM</button>
+  <button class="tab-btn" onclick="showTab('activation')">Data Activation</button>
+  <button class="tab-btn" onclick="showTab('oem')">OEM Programs</button>
+  <button class="tab-btn" onclick="showTab('synergy')">Cox Synergy</button>
+  <button class="tab-btn" onclick="showTab('competitive')">Competitive Position</button>
+  <button class="tab-btn" onclick="showTab('company')">Company & Founders</button>
+  <button class="tab-btn" onclick="showTab('ci')" style="color:var(--impact-orange);border-bottom-color:transparent;">⚠ CI Intelligence</button>
+  <button class="tab-btn" onclick="showTab('docs')">📁 CI Document Library</button>
+</nav>
+
+<!-- ══════════════════════════════ OVERVIEW ══════════════════════════════ -->
+<section id="tab-overview" class="tab-section active">
+  <div class="section-wrap">
+    <div class="section-title">What is <span class="accent">Fullpath</span>?</div>
+    <div class="section-intro">Fullpath is the automotive industry's most complete AI-powered data ecosystem for dealerships — think of it as the central nervous system connecting a dealer's fragmented data sources, activating that data across every marketing and sales channel, and increasingly automating the work through AI agents. It's not just a point solution; it's designed to be the operating layer beneath everything a modern dealership does.</div>
+
+    <div class="highlight-card">
+      <div class="card-tag">Core Philosophy</div>
+      <div class="card-title">One unified AI ecosystem. Not a feature. A platform.</div>
+      <div class="card-body">Most automotive technology vendors solve one problem — a CRM here, an ad tool there. Fullpath was built from the ground up to be agnostic and connective: ingest all the data, unify it into a single shopper truth, then activate that truth across email, SMS, digital advertising, website personalization, and now an agentic CRM. The result is a platform that compounds in value the longer a dealer uses it, much like how a flywheel builds speed over time — each data source added makes every activation smarter.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">The Four-Step <span class="accent">Fullpath Loop</span></div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-circle">1</div>
+        <div class="step-title">Unify</div>
+        <div class="step-body">CDP ingests every data source — DMS, CRM, website, inventory, OEM feeds — into a single, clean shopper identity profile.</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-circle">2</div>
+        <div class="step-title">Activate</div>
+        <div class="step-body">Run smart, always-on emails, SMS, digital ads, and on-site personalizations using unified audience segments.</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-circle">3</div>
+        <div class="step-title">Automate</div>
+        <div class="step-body">AI agents in the Agentic CRM follow up, qualify leads, book appointments, and generate prioritized tasks for the sales team.</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-circle">4</div>
+        <div class="step-title">Measure</div>
+        <div class="step-body">Unified analytics dashboard shows leads, conversions, spend efficiency, and ROI across every rooftop.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">What Fullpath <span class="accent">Calls Itself</span></div>
+    <div class="highlight-card" style="margin-bottom:32px;">
+      <div class="card-tag">Branding Distinction</div>
+      <div class="card-title">CDXP — Customer Data eXperience Platform</div>
+      <div class="card-body">Fullpath coined the term "CDXP" to differentiate their platform from a traditional CDP. The distinction matters: a CDP stores and unifies data; a CDXP actively uses AI to drive personalized customer experiences and measurable outcomes across every activation channel. Think of it as CDP + activation engine, fully integrated — not two separate tools bolted together. This terminology is used extensively in their own materials and OEM program documentation.</div>
+    </div>
+
+    <div class="sub-title">The Problem Fullpath <span class="accent">Solves</span></div>
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div class="card-icon blue">🗂️</div>
+        <div class="card-title">Fragmented Data Chaos</div>
+        <div class="card-body">Dealerships run 5–15 different technology vendors simultaneously. Data lives in silos — the DMS doesn't talk to the CRM, the website vendor doesn't share with the ad platform. Fullpath collapses this into one source of truth.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon aqua">⏰</div>
+        <div class="card-title">Manual & Reactive Marketing</div>
+        <div class="card-body">Most dealership marketing is campaign-burst, not always-on. Fullpath turns the marketing engine into a continuous, AI-optimized machine that updates as inventory, pricing, and shopper intent shift in real time.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">🤖</div>
+        <div class="card-title">After-Hours Lead Loss</div>
+        <div class="card-body">Leads that come in after 5pm are often dead by morning. Fullpath's AI agents handle qualification, follow-up, and appointment booking 24/7 so the team walks in to a warm pipeline every morning.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ PLATFORM ══════════════════════════════ -->
+<section id="tab-platform" class="tab-section">
+  <div class="section-wrap">
+    <div class="section-title">Platform <span class="accent">&amp; Products</span></div>
+    <div class="section-intro">Fullpath's platform is organized into two layers: Data Management (the foundation) and Data Activation (the outputs). These layers work together as one integrated ecosystem, not a collection of bolt-on modules.</div>
+
+    <div class="sub-title">Data <span class="accent">Management</span> Layer</div>
+    <div class="card-grid card-grid-3" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-tag">Core Product</div>
+        <div class="card-icon blue">🧠</div>
+        <div class="card-title">Customer Data Platform (CDP)</div>
+        <div class="card-body">The engine of the entire ecosystem. Ingests, cleans, and unifies all dealership data into a single shopper profile with identity resolution — merging duplicate records across DMS, CRM, website, equity, and more. Powers all downstream AI and activation. ISO 27001 certified.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Multi-Rooftop</div>
+        <div class="card-icon blue">🏢</div>
+        <div class="card-title">Group CDP</div>
+        <div class="card-body">Designed for dealership groups. Cross-rooftop reporting, KPI comparison, trend identification, and group-level data activations that let a GM or ownership group get a panoramic view of all locations from a single dashboard.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Enterprise</div>
+        <div class="card-icon trust">⚡</div>
+        <div class="card-title">Fullpath Enterprise</div>
+        <div class="card-body">Enterprise-grade CDP performance built for large dealer groups and public companies. Full data sovereignty, advanced security, and scale-level analytics with dedicated support infrastructure.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Data Quality</div>
+        <div class="card-icon aqua">🔬</div>
+        <div class="card-title">Data Enrichment</div>
+        <div class="card-body">Real-time enrichment of shopper profiles with behavioral signals, third-party demographic overlays, and financial data — including equity status, lease maturity, and loan balances. Turns a name and email into a rich shopper dossier.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">White Glove</div>
+        <div class="card-icon orange">🎯</div>
+        <div class="card-title">Managed Services</div>
+        <div class="card-body">Concierge campaign management for dealers who want full-service execution. Fullpath's team runs campaigns on their behalf using the platform's data infrastructure, giving dealers the results without the headcount.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Limited Release</div>
+        <div class="card-icon aqua">🤖</div>
+        <div class="card-title">Agentic CRM</div>
+        <div class="card-body">Fullpath's newest product, announced January 2026. A CRM built on top of the unified data layer with embedded AI agents that qualify leads, handle phone calls, create tasks, and engage shoppers — autonomously.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">Data <span class="accent">Activation</span> Layer</div>
+    <div class="card-grid card-grid-4">
+      <div class="card">
+        <div class="card-icon aqua">📧</div>
+        <div class="card-title">Audience Activation</div>
+        <div class="card-body">Data-driven, automated email and SMS campaigns segmented by real CDP audiences — not guessed lists. Dynamic, personalized at the shopper level.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">📱</div>
+        <div class="card-title">Digital Advertising</div>
+        <div class="card-body">AI-optimized cross-channel ad campaigns: Search, Social, Display, PMAX, Demand Gen, Programmatic. Real-time budget reallocation based on performance signals.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">🌐</div>
+        <div class="card-title">Website Engagement</div>
+        <div class="card-body">Personalized on-site experiences driven by the shopper's CDP profile — showing inventory, offers, and CTAs relevant to their specific journey stage.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon trust">🚗</div>
+        <div class="card-title">VINs-Acceleration</div>
+        <div class="card-body">VIN-specific ad campaigns that drive targeted traffic to individual Vehicle Detail Pages (VDPs) for aged or high-priority inventory. Connects the lot problem to the ad engine.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">💰</div>
+        <div class="card-title">Equity</div>
+        <div class="card-body">Equity-based campaign triggers that reach shoppers at the exact moment their positive or negative equity makes them likely to trade. Connects financial data directly to outreach.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon aqua">📺</div>
+        <div class="card-title">Amazon &amp; OTT</div>
+        <div class="card-body">Highly targeted Amazon and Over-the-Top (streaming) ad placements using Fullpath's first-party CDP audiences — bringing dealership data into premium streaming inventory.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">💲</div>
+        <div class="card-title">Dynamic Payments <span style="font-size:11px;font-weight:600;background:rgba(255,130,16,0.2);color:var(--impact-orange);border-radius:4px;padding:2px 7px;margin-left:4px;">Fuse Acquisition Aug 2025</span></div>
+        <div class="card-body">Fullpath acquired Fuse Dynamic Payments in August 2025 — adding real-time personalized payment display directly on dealer websites (lease, finance, and cash options). Automated specials and payment quotes update cross-platform as rates, incentives, and inventory change. Eliminates the stale-offer problem and removes friction from the purchase decision moment.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ CDP ══════════════════════════════ -->
+<section id="tab-cdp" class="tab-section">
+  <div class="section-wrap">
+    <div class="section-title">CDP <span class="accent">Deep Dive</span></div>
+    <div class="section-intro">The Customer Data Platform is the crown jewel of Fullpath's platform — the connective tissue that makes everything else possible. If the activation tools are the muscles, the CDP is the skeleton and the bloodstream. Without it, the other tools are just point solutions.</div>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <span class="big-number">11M</span>
+        <span class="big-label">Data points ingested daily</span>
+      </div>
+      <div class="stat-item">
+        <span class="big-number">223</span>
+        <span class="big-label">Integration opportunities</span>
+      </div>
+      <div class="stat-item">
+        <span class="big-number">10.9M</span>
+        <span class="big-label">Deanonymized website shopper identities</span>
+      </div>
+      <div class="stat-item">
+        <span class="big-number">~12%</span>
+        <span class="big-label">Avg. duplicate data cleaned on ingestion</span>
+      </div>
+    </div>
+
+    <div class="sub-title">Core CDP <span class="accent">Capabilities</span></div>
+    <div class="card-grid card-grid-3" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-tag">Foundation</div>
+        <div class="card-title">Data Consolidation &amp; Hygiene</div>
+        <div class="card-body">200+ pre-built integrations pull historical and real-time data from DMS, CRM, website analytics, inventory, OEM feeds, equity data, call tracking, and ad platforms into one unified pipeline. Data is cleaned, normalized, and deduplicated on ingest — the average dealer has ~12% duplicate records eliminated.</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:95%"></div></div>
+        <div class="progress-label"><span>Capability Maturity</span><span>Best-in-Class</span></div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Differentiated</div>
+        <div class="card-title">Identity Resolution</div>
+        <div class="card-body">Fullpath's identity resolution engine merges fragmented shopper records across multiple data sources into a singular, data-rich profile for each individual. A shopper who filled out a form on the website, visited the service drive, and opened an email becomes one unified person — not three separate data points firing separately into different tools.</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:92%"></div></div>
+        <div class="progress-label"><span>Capability Maturity</span><span>Differentiated</span></div>
+      </div>
+      <div class="card">
+        <div class="card-tag">AI-Powered</div>
+        <div class="card-title">Audience Builder &amp; Segmentation</div>
+        <div class="card-body">Fullpath's filtering tools let dealers build hyper-specific audiences based on demographics, CRM activity, website behavior, equity status, marketing engagement, inventory interest, and more. Pre-populated and AI-generated lists surface ready-to-act segments automatically — so dealers don't need a data analyst to unlock the platform's value.</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div>
+        <div class="progress-label"><span>Capability Maturity</span><span>Strong</span></div>
+      </div>
+    </div>
+
+    <div class="sub-title">AI Enablement <span class="accent">Tools Within the CDP</span></div>
+    <div class="card-grid card-grid-2" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-icon aqua">🎯</div>
+        <div class="card-title">Auto-Surfaced "Data Ups"</div>
+        <div class="card-body">Fullpath's AI analyzes shopper behavioral signals to surface high-intent opportunities called "Data Ups" — shoppers who are showing in-market behavior but haven't submitted a lead form. Apple Honda sold 67 additional vehicles in three months purely from Data Ups surfaced by the CDP. These become one-click CRM pushes for the sales team.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">📋</div>
+        <div class="card-title">AI Shopper Summaries</div>
+        <div class="card-body">Before every customer interaction, Fullpath's AI produces a detailed shopper summary — pulling the complete journey history, behavioral signals, vehicles browsed, services received, offers opened, and equity position — into a brief that prepares the salesperson or AI agent for a personalized conversation.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">✉️</div>
+        <div class="card-title">GenAI Outreach Content</div>
+        <div class="card-body">The CDP can auto-generate personalized emails, SMS messages, and sales talk tracks for each shopper — pre-populated with relevant vehicle options, financing suggestions, and offers based on the shopper's profile. Reduces the cognitive load on sales teams while dramatically improving personalization quality.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon trust">💡</div>
+        <div class="card-title">Suggested Audience Recommendations</div>
+        <div class="card-body">Fullpath's AI proactively generates suggested audiences within the CDP dashboard — identifying opportunities the dealer might not have built themselves. Think of it as a data analyst running in the background, constantly identifying the next best action for marketing or sales outreach.</div>
+      </div>
+    </div>
+
+    <div class="sub-title">Sample AI-Surfaced <span class="accent">Audience Types</span></div>
+    <div class="oem-grid">
+      <div class="oem-chip featured">🔥 Top High-Intent Opportunities</div>
+      <div class="oem-chip featured">💰 Positive Equity Shoppers</div>
+      <div class="oem-chip featured">📅 Expiring Lease / Loan</div>
+      <div class="oem-chip">Recent Service Appointment</div>
+      <div class="oem-chip">Unsold Appointment</div>
+      <div class="oem-chip">Website Visitors (Deanonymized)</div>
+      <div class="oem-chip">Aged Inventory Interest</div>
+      <div class="oem-chip">Conquest Targets</div>
+      <div class="oem-chip">Negative Equity Alert</div>
+      <div class="oem-chip">Lost Opportunities (90-day)</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">What Makes Fullpath's CDP <span class="accent">Different</span></div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        It's actionable, not just analytical <span class="accordion-arrow">▾</span>
+      </button>
+      <div class="accordion-body">Most CDPs in other industries are data warehouses — great for building reports, terrible for taking action. Fullpath built the activation layer directly into the CDP. Audiences built in the CDP immediately power ad campaigns, email automations, website personalizations, and AI agent workflows. There's no "export to another tool" step. This integration is the core differentiator.</div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        It's automotive-specific from the ground up <span class="accordion-arrow">▾</span>
+      </button>
+      <div class="accordion-body">Generic CDPs like Segment or mParticle can technically work for dealerships, but they require massive custom development. Fullpath was designed specifically for automotive workflows — it understands equity, VINs, service appointments, DMS data structures, OEM incentive feeds, and trade cycles natively. This vertical specificity means faster time to value and far fewer integration headaches.</div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        It deanonymizes website traffic at scale <span class="accordion-arrow">▾</span>
+      </button>
+      <div class="accordion-body">Fullpath has deanonymized 10.9 million website shopper identities — meaning it can match anonymous website visitors back to known shopper profiles with high confidence. This turns passive website traffic into an active opportunity list. Most competing platforms can only act on known contacts; Fullpath acts on the invisible majority who browse without converting.</div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        ISO 27001 certification &amp; FTC compliance <span class="accordion-arrow">▾</span>
+      </button>
+      <div class="accordion-body">Fullpath holds ISO 27001 certification — the top international standard for information security. This is critical for dealers navigating FTC Safeguards Rule compliance and for enterprise-level buyers who require documented security postures. It's not just a checkbox; it's a demonstrated commitment to data governance that directly addresses dealer risk.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ CRM ══════════════════════════════ -->
+<section id="tab-crm" class="tab-section">
+  <div class="section-wrap">
+    <div class="section-title">Agentic <span class="accent">CRM</span></div>
+    <div class="section-intro">Launched in January 2026, the Agentic CRM is Fullpath's most ambitious product to date — and the one that completes their claim of being a full "AI ecosystem." Think of traditional CRMs as filing cabinets that salespeople manage. Fullpath's Agentic CRM is more like an always-on digital sales associate that manages itself, surfaces the right priorities, and automates the grunt work.</div>
+
+    <div class="highlight-card">
+      <div class="card-tag orange-tag">Industry First</div>
+      <div class="card-title">Automotive's first fully agentic CRM</div>
+      <div class="card-body">The Agentic CRM delivers a fully orchestrated, multi-agent system that handles real-time shopper intelligence, proactive task management, and automated lead engagement in a single dealership workspace. It was specifically designed to solve the #1 CRM complaint in automotive: salespeople don't use them because they require too much manual input. By flipping the relationship — the AI does the data entry, the human does the selling — Fullpath is betting it can finally crack CRM adoption in auto retail.</div>
+    </div>
+
+    <div class="sub-title">Core <span class="accent">Capabilities</span></div>
+    <div class="card-grid card-grid-3" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-icon aqua">⚡</div>
+        <div class="card-title">Frictionless Workflows</div>
+        <div class="card-body">Eliminates administrative busy work by automating data entry, follow-up scheduling, and task creation. The team gets easy access to the data they need without maintaining it — the AI keeps the system clean and current.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">🤖</div>
+        <div class="card-title">Integrated AI Agents</div>
+        <div class="card-body">Built-in AI agents that: qualify inbound leads, answer phone calls, create and prioritize tasks, analyze shopper data, and drive outreach on behalf of the sales team. These aren't chatbot pop-ups — they're orchestrated agents working across the full customer lifecycle.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">📖</div>
+        <div class="card-title">Customizable Playbook</div>
+        <div class="card-body">Dealers can modify assignment logic, set escalation rules, and define exactly how AI agents engage with customers and the team. The playbook respects the dealership's existing process while layering AI over the top — not replacing what works.</div>
+      </div>
+    </div>
+
+    <div class="sub-title">What the AI Agents <span class="accent">Actually Do</span></div>
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div class="card-tag">Lead Intelligence</div>
+        <div class="card-title">Real-Time Shopper Intelligence</div>
+        <div class="card-body">Every lead that enters the CRM is immediately enriched with the full CDP shopper profile. The AI surfaces behavioral history, equity position, prior purchases, service history, and website activity before the salesperson's first call. No more cold conversations.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Task Management</div>
+        <div class="card-title">Proactive Task Prioritization</div>
+        <div class="card-body">Rather than dumping every lead into an undifferentiated queue, the AI prioritizes tasks based on shopper intent signals, timing windows (like lease expiration proximity), and deal likelihood. Sales teams wake up to a ranked to-do list, not a firehose.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Automation</div>
+        <div class="card-title">Automated Lead Engagement</div>
+        <div class="card-body">AI agents initiate first contact, handle initial qualification questions, and can book appointments directly into the service or sales calendar — all without human intervention. This eliminates the after-hours black hole where leads die.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Phone AI</div>
+        <div class="card-title">AI Phone Handling</div>
+        <div class="card-body">Agents can answer inbound phone calls, gather basic qualification information, and route callers appropriately — or handle simple appointment requests end-to-end. This is a direct play against standalone BDC and phone AI vendors.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title"><span class="accent">OmniAI</span> — The Autonomous Initiative Behind It</div>
+    <div class="highlight-card" style="background:linear-gradient(135deg,rgba(0,188,221,0.1),rgba(0,188,221,0.04));border-color:rgba(0,188,221,0.3);margin-bottom:24px;">
+      <div class="card-tag">Launched Nov 2025</div>
+      <div class="card-title">OmniAI — Fullpath's Autonomous Dealership Suite</div>
+      <div class="card-body">OmniAI is the umbrella brand for Fullpath's push toward fully autonomous dealership operations. The Lead Handling Agent is the first major product release under this initiative. The agent is highly configurable via a "Design Your Agent" interface — dealers can set: custom agent name/persona, business hours, after-hours behavior, holiday/downtime rules, escalation triggers, and performance benchmarks. The Agentic CRM (Jan 2026) is the next major OmniAI product, extending autonomous operation deeper into the CRM workflow.</div>
+    </div>
+
+    <div class="card-grid card-grid-3" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-icon aqua">🎭</div>
+        <div class="card-title">Custom Agent Persona</div>
+        <div class="card-body">The Lead Handling Agent gets a custom name and persona defined by the dealer — it responds as a named team member, not a generic "AI assistant." This preserves the dealership's brand voice while automating the response.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">⏰</div>
+        <div class="card-title">Business Hours &amp; Downtime Rules</div>
+        <div class="card-body">Configurable by time of day, day of week, and holidays. The agent handles after-hours leads autonomously, switching behavior based on defined downtime rules — ensuring no lead window is missed regardless of when it arrives.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">📈</div>
+        <div class="card-title">Built-In Performance Tracking</div>
+        <div class="card-body">Agent performance is tracked natively — response rates, appointment conversion, lead handling speed — giving dealers visibility into the agent's output without needing a separate analytics tool.</div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <div class="quote-text">"Fullpath is always looking for ways to reinvent themselves, to make our ability to contact our guests quicker and automated. You add AI to it and I don't know how they will be stopped."</div>
+      <div class="quote-attribution">— Debbie Waines, Advertising &amp; Marketing Director, John Elway Dealerships</div>
+    </div>
+  </div>
+</section>
+<section id="tab-activation" class="tab-section">
+  <div class="section-wrap">
+    <div class="section-title">Data <span class="accent">Activation</span> Suite</div>
+    <div class="section-intro">Fullpath's activation solutions are the outputs of the CDP — the ways in which unified shopper data gets turned into marketing and sales actions. Each channel is deeply integrated with the CDP, meaning audiences and signals flow automatically rather than through manual exports. This is what turns the platform from a data repository into a revenue engine.</div>
+
+    <div class="pillar-grid">
+      <div class="pillar-nav">
+        <button class="pillar-btn active" onclick="showPillar('audience')">
+          <span class="pillar-icon">📧</span>
+          <span class="pillar-text">Audience Activation</span>
+        </button>
+        <button class="pillar-btn" onclick="showPillar('digital')">
+          <span class="pillar-icon">📱</span>
+          <span class="pillar-text">Digital Advertising</span>
+        </button>
+        <button class="pillar-btn" onclick="showPillar('website')">
+          <span class="pillar-icon">🌐</span>
+          <span class="pillar-text">Website Engagement</span>
+        </button>
+        <button class="pillar-btn" onclick="showPillar('vin')">
+          <span class="pillar-icon">🚗</span>
+          <span class="pillar-text">VINs-Acceleration</span>
+        </button>
+        <button class="pillar-btn" onclick="showPillar('equity')">
+          <span class="pillar-icon">💰</span>
+          <span class="pillar-text">Equity Campaigns</span>
+        </button>
+        <button class="pillar-btn" onclick="showPillar('amazon')">
+          <span class="pillar-icon">📺</span>
+          <span class="pillar-text">Amazon &amp; OTT</span>
+        </button>
+        <button class="pillar-btn" onclick="showPillar('payments')">
+          <span class="pillar-icon">💲</span>
+          <span class="pillar-text">Dynamic Payments</span>
+        </button>
+      </div>
+
+      <div>
+        <div id="pillar-audience" class="pillar-content active">
+          <div class="card-tag">Email &amp; SMS Automation</div>
+          <div class="sub-title" style="margin-top:8px;">Audience Activation</div>
+          <div class="card-body" style="font-size:16px;line-height:1.8;color:rgba(255,255,255,0.75);margin-bottom:24px;">Audience Activation is Fullpath's email and SMS engine — but calling it an email tool undersells it dramatically. Rather than sending the same blast to every record in the DMS, Fullpath builds dynamic audiences from the CDP and runs personalized, trigger-based journeys for each shopper segment. The system updates automatically as shoppers' behavior and status changes, so a shopper who closes a deal is immediately removed from conquest campaigns and enrolled in an owner loyalty journey.</div>
+          <div class="card-grid card-grid-2">
+            <div class="card"><div class="card-title">Dynamic Personalization</div><div class="card-body">Vehicle recommendations, financing options, and offers are generated per-shopper based on their profile — not generic templates sent at scale.</div></div>
+            <div class="card"><div class="card-title">Journey Orchestration</div><div class="card-body">Multi-step email and SMS sequences that adapt based on shopper response — automatically progressing, pausing, or branching based on engagement signals.</div></div>
+            <div class="card"><div class="card-title">Trigger-Based Sends</div><div class="card-body">Campaigns fire automatically when behavioral triggers are met — website visit, lease expiration proximity, equity threshold crossed, service anniversary, and more.</div></div>
+            <div class="card"><div class="card-title">CDP Audience Sync</div><div class="card-body">Audiences built in the CDP immediately power email campaigns with no manual export required. Real-time sync means campaigns always reflect current shopper status.</div></div>
+          </div>
+        </div>
+
+        <div id="pillar-digital" class="pillar-content">
+          <div class="card-tag">Search, Social &amp; Display</div>
+          <div class="sub-title" style="margin-top:8px;">Digital Advertising</div>
+          <div class="card-body" style="font-size:16px;line-height:1.8;color:rgba(255,255,255,0.75);margin-bottom:24px;">Fullpath's digital advertising module runs AI-optimized, cross-channel campaigns across Google Search, Meta Social, Display Networks, Google PMAX, Demand Gen campaigns, and Programmatic inventory. The key differentiator is that every campaign is powered by CDP audiences — so ads target real, known shoppers with real intent signals rather than generic demographic targeting. Budget allocation adjusts automatically based on real-time performance signals.</div>
+          <div class="card-grid card-grid-2">
+            <div class="card"><div class="card-title">Channels Covered</div><div class="card-body">Google Search, Google Display, Google PMAX, Meta (Facebook/Instagram), Programmatic, Demand Gen — all managed from a single Fullpath dashboard.</div></div>
+            <div class="card"><div class="card-title">AI Budget Optimization</div><div class="card-body">AI continuously reallocates budget across channels and campaigns based on conversion performance, inventory turnover, and shopper demand signals. No manual bid management required.</div></div>
+            <div class="card"><div class="card-title">First-Party Audience Targeting</div><div class="card-body">Ads are served to CDP-built audiences — existing customers near trade cycle, equity-positive shoppers, recent service visitors — dramatically improving relevance and reducing wasted spend.</div></div>
+            <div class="card"><div class="card-title">Lighthouse Buick GMC Result</div><div class="card-body">Achieved a cost per lead under $11 in six months using Fullpath's AI-optimized digital advertising — a benchmark that outperforms industry averages significantly.</div></div>
+          </div>
+        </div>
+
+        <div id="pillar-website" class="pillar-content">
+          <div class="card-tag">On-Site Personalization</div>
+          <div class="sub-title" style="margin-top:8px;">Website Engagement</div>
+          <div class="card-body" style="font-size:16px;line-height:1.8;color:rgba(255,255,255,0.75);margin-bottom:24px;">Website Engagement is Fullpath's on-site personalization engine — it uses the CDP's unified shopper profiles to serve dynamically personalized website experiences. When a known shopper returns to the dealership website, the experience adapts to their specific profile: showing the vehicles they've browsed, offers relevant to their equity position, or service reminders based on their history. For anonymous visitors, Fullpath uses its deanonymization capability to match them back to known profiles wherever possible.</div>
+          <div class="card-grid card-grid-2">
+            <div class="card"><div class="card-title">Shopper Recognition</div><div class="card-body">Returns shoppers are recognized and greeted with personalized content — not the same generic homepage experience every visitor sees.</div></div>
+            <div class="card"><div class="card-title">Behavioral Inventory Matching</div><div class="card-body">Inventory surfaced on the homepage and search results pages matches the vehicle preferences and browsing history stored in the shopper's CDP profile.</div></div>
+            <div class="card"><div class="card-title">Dynamic Offer Display</div><div class="card-body">Special offers, financing incentives, and CTAs adapt based on the shopper's segment — an equity-positive shopper sees a trade-in message; a conquest target sees a first-purchase offer.</div></div>
+            <div class="card"><div class="card-title">Data Up Capture</div><div class="card-body">Website engagement behavioral data feeds directly back into the CDP, enriching shopper profiles and powering Data Up identification for the sales team.</div></div>
+          </div>
+        </div>
+
+        <div id="pillar-vin" class="pillar-content">
+          <div class="card-tag">Inventory Marketing</div>
+          <div class="sub-title" style="margin-top:8px;">VINs-Acceleration</div>
+          <div class="card-body" style="font-size:16px;line-height:1.8;color:rgba(255,255,255,0.75);margin-bottom:24px;">VINs-Acceleration is one of Fullpath's most tactically unique products — it connects the used inventory problem directly to the ad engine. When a specific vehicle sits too long on the lot, VINs-Acceleration automatically launches targeted ad campaigns for that VIN across digital channels, driving qualified traffic directly to its Vehicle Detail Page. This turns aged inventory from a passive problem into an active marketing campaign without dealer intervention.</div>
+          <div class="card-grid card-grid-2">
+            <div class="card"><div class="card-title">VIN-Level Targeting</div><div class="card-body">Campaigns are built around individual VINs — specific year, make, model, trim, and price — reaching shoppers actively searching for that exact vehicle type in market.</div></div>
+            <div class="card"><div class="card-title">Automated Aging Triggers</div><div class="card-body">Campaigns activate automatically based on days-on-lot thresholds — no manual setup required. A vehicle hitting 45 days can trigger an automatic ad push.</div></div>
+            <div class="card"><div class="card-title">CDP Audience Match</div><div class="card-body">VINs-Acceleration cross-references the CDP to target shoppers who have browsed similar vehicles — combining inventory urgency with shopper intent signals.</div></div>
+            <div class="card"><div class="card-title">Synergy with vAuto</div><div class="card-body">The VINs-Acceleration concept maps closely to Cox Automotive's existing vAuto pricing intelligence — a natural integration opportunity post-acquisition.</div></div>
+          </div>
+        </div>
+
+        <div id="pillar-equity" class="pillar-content">
+          <div class="card-tag">Financial Trigger Marketing</div>
+          <div class="sub-title" style="margin-top:8px;">Equity Campaigns</div>
+          <div class="card-body" style="font-size:16px;line-height:1.8;color:rgba(255,255,255,0.75);margin-bottom:24px;">Equity is one of automotive retail's most powerful but underutilized data signals — knowing that a customer has significant positive equity in their current vehicle is one of the strongest indicators of near-term trade readiness. Fullpath's Equity module ingests equity data into the CDP and uses it to trigger precisely timed email, SMS, and ad campaigns reaching those shoppers at their peak receptivity window.</div>
+          <div class="card-grid card-grid-2">
+            <div class="card"><div class="card-title">Equity Threshold Triggers</div><div class="card-body">Campaigns automatically fire when a shopper crosses a defined equity threshold — positive equity, negative equity, or specific dollar amounts — without manual list pulls.</div></div>
+            <div class="card"><div class="card-title">Lease Maturity Integration</div><div class="card-body">Expiring leases are combined with equity data to create an extremely high-intent segment — shoppers who need a new vehicle AND have a predictable timeline.</div></div>
+            <div class="card"><div class="card-title">Personalized Offers</div><div class="card-body">Outreach messaging is tailored to the shopper's specific equity position — positive equity shoppers see trade-advantage messaging; negative equity shoppers see roll-over and payoff programs.</div></div>
+            <div class="card"><div class="card-title">Multi-Channel Delivery</div><div class="card-body">Equity-based messaging runs across email, SMS, and digital ad channels simultaneously — maximizing the window when the shopper is most likely to act.</div></div>
+          </div>
+        </div>
+
+        <div id="pillar-amazon" class="pillar-content">
+          <div class="card-tag">Premium Streaming</div>
+          <div class="sub-title" style="margin-top:8px;">Amazon &amp; OTT Advertising</div>
+          <div class="card-body" style="font-size:16px;line-height:1.8;color:rgba(255,255,255,0.75);margin-bottom:24px;">Fullpath's Amazon and OTT (Over-the-Top streaming) solution brings dealership first-party data into premium streaming inventory — a channel where most competitors are still using generic demographic targeting. By leveraging the CDP's known shopper audiences on platforms like Amazon's ad network and streaming services, dealers can serve video ads to their actual customer base rather than hoping broadly targeted impressions land with the right people.</div>
+          <div class="card-grid card-grid-2">
+            <div class="card"><div class="card-title">Amazon DSP Integration</div><div class="card-body">Fullpath's CDP audiences are pushed to Amazon's Demand Side Platform — putting dealership first-party data into one of the world's most powerful ad targeting ecosystems.</div></div>
+            <div class="card"><div class="card-title">OTT/CTV Reach</div><div class="card-body">Streaming TV ads served to known CDP shoppers across connected TV devices — reaching customers in their living rooms during content consumption, not just while browsing.</div></div>
+            <div class="card"><div class="card-title">Cross-Screen Attribution</div><div class="card-body">Amazon's attribution capabilities allow Fullpath to close the loop between streaming exposure and website or showroom visits — rare in the OTT space.</div></div>
+            <div class="card"><div class="card-title">Conquest &amp; Retention Plays</div><div class="card-body">Separate audience sets can be built for conquest (new customers matching profile patterns) vs. loyalty (existing customers approaching trade cycle) — each with tailored messaging.</div></div>
+          </div>
+        </div>
+
+        <div id="pillar-payments" class="pillar-content">
+          <div class="card-tag">Offer Automation</div>
+          <div class="sub-title" style="margin-top:8px;">Dynamic Payments</div>
+          <div class="card-body" style="font-size:16px;line-height:1.8;color:rgba(255,255,255,0.75);margin-bottom:24px;">Dynamic Payments solves a pervasive and costly problem in automotive advertising: stale offers. When OEM incentives change, interest rates shift, or a vehicle gets repriced, the ads running across a dealer's digital channels often don't update for days or weeks — leading to shopper frustration, compliance risk, and wasted ad spend. Fullpath's Dynamic Payments module automates the synchronization of real-time payment information across all active campaigns and placements.</div>
+          <div class="card-grid card-grid-2">
+            <div class="card"><div class="card-title">Real-Time Rate Sync</div><div class="card-body">Connects to OEM incentive feeds, the dealer's DMS, and lender rate data to keep advertised payments current across all platforms without manual updates.</div></div>
+            <div class="card"><div class="card-title">Cross-Platform Distribution</div><div class="card-body">Updated payment information pushes simultaneously to Google ads, social ads, email campaigns, and website payment widgets — no channel falls behind.</div></div>
+            <div class="card"><div class="card-title">Compliance Protection</div><div class="card-body">Eliminates the risk of advertising outdated payments — a source of compliance exposure under FTC advertising standards and OEM co-op guidelines.</div></div>
+            <div class="card"><div class="card-title">Dealertrack Alignment</div><div class="card-body">Strong natural synergy with Cox Automotive's Dealertrack F&amp;I platform, which already owns rate and payment data at the transaction level.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ OEM ══════════════════════════════ -->
+<section id="tab-oem" class="tab-section">
+  <div class="section-wrap">
+    <div class="section-title">OEM <span class="accent">Programs</span></div>
+    <div class="section-intro">Fullpath has secured formal OEM program certifications across nine major brands — a critical commercial moat that accelerates dealer adoption by making Fullpath eligible for co-op marketing reimbursement and validated through manufacturer endorsement. These aren't informal partnerships; they represent formal technology validation by the OEM and often include direct certification-level marketing support.</div>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <span class="big-number">9</span>
+        <span class="big-label">Active OEM Programs</span>
+      </div>
+      <div class="stat-item">
+        <span class="big-number">2,000+</span>
+        <span class="big-label">Dealer Clients Across All Brands</span>
+      </div>
+      <div class="stat-item">
+        <span class="big-number">Co-Op</span>
+        <span class="big-label">Eligible Across All OEM Programs</span>
+      </div>
+    </div>
+
+    <div class="sub-title">GM Program <span class="accent">Deep Dive</span></div>
+    <div class="card-grid card-grid-2" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-tag">GM Specific</div>
+        <div class="card-icon blue">🎨</div>
+        <div class="card-title">Auto-Applied GM Brand Compliance</div>
+        <div class="card-body">All Fullpath activation products automatically inherit GM Compliance and Brand Guidelines via the Data Layer integration — no manual creative review required. Every ad, email, and landing page produced through the platform for a GM dealer is compliant by design, not by checklist.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">GM Specific</div>
+        <div class="card-icon aqua">📊</div>
+        <div class="card-title">GM Data Source Integration</div>
+        <div class="card-body">Connects GM Sales Force data and ShopClickDrive customer data directly into the unified CDP — enabling Tier 3 compliant digital advertising with OEM-sourced intent signals alongside the dealer's own first-party data.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">GM Specific</div>
+        <div class="card-icon orange">💰</div>
+        <div class="card-title">Silver / Gold / Platinum Tier Structure</div>
+        <div class="card-body">GM Program is offered in three tiered packages with different digital advertising budget levels and feature access. Specific pricing in CI library: 2024.06.25 Fullpath Packages and Pricing - GM Program.pdf and 2024.09.13 Fullpath + GM packaging.pdf.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">GM Documents in CI Library</div>
+        <div class="card-icon trust">📋</div>
+        <div class="card-title">GM Resource Library</div>
+        <div class="card-body">Full GM program documentation captured in CI library: FAQs (2024.06.25, 2024.09.13), packaging/pricing, a GM Digital Dealer Download presentation (Sept 2024), and a webinar recording. All accessible via the CI Document Library tab.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">Certified <span class="accent">OEM Partners</span></div>
+    <div class="oem-grid" style="margin-bottom:40px;">
+      <div class="oem-chip featured">🚗 Stellantis</div>
+      <div class="oem-chip featured">🏎️ Maserati</div>
+      <div class="oem-chip featured">🌲 Subaru</div>
+      <div class="oem-chip featured">⚡ GM</div>
+      <div class="oem-chip featured">🦁 Jaguar Land Rover</div>
+      <div class="oem-chip featured">🔵 Mazda</div>
+      <div class="oem-chip featured">🏆 Porsche</div>
+      <div class="oem-chip featured">🍃 Honda</div>
+      <div class="oem-chip featured">⭐ Acura</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">Why OEM Programs <span class="accent">Matter</span></div>
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div class="card-icon orange">💵</div>
+        <div class="card-title">Co-Op Reimbursement</div>
+        <div class="card-body">OEM certification makes Fullpath's subscription costs partially or fully reimbursable through manufacturer co-op programs — significantly reducing the effective price for dealers and accelerating the sales conversation. This is often the difference between a "nice to have" and a "must have" in dealer budgeting.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">✅</div>
+        <div class="card-title">OEM Validation</div>
+        <div class="card-body">Certification signals to dealers that the OEM has vetted and approved the technology — reducing adoption risk in an industry where dealer trust is earned slowly. Dealers who might hesitate to try an unknown vendor will move faster when their OEM endorses it.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon aqua">📊</div>
+        <div class="card-title">OEM Data Feeds</div>
+        <div class="card-body">OEM program relationships often include access to incentive data feeds, inventory allocation data, and brand creative assets — enhancing the CDP's data richness and enabling Dynamic Payments and more precise shopper targeting around OEM-specific programs.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="highlight-card">
+      <div class="card-tag orange-tag">Strategic Note for Cox</div>
+      <div class="card-title">OEM programs are a distribution accelerator — and a moat</div>
+      <div class="card-body">Cox Automotive's existing OEM relationships across VinSolutions (GM-certified, Honda, Hyundai, and others), Dealertrack, and the broader Retail Solutions portfolio create immediate cross-certification opportunities. The OEM program footprint Fullpath has built across Stellantis, GM, Honda, Porsche, and JLR is complementary — not redundant — to Cox's existing certifications, and could accelerate dealer adoption of the combined platform significantly faster than either company could achieve independently.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ SYNERGY ══════════════════════════════ -->
+<section id="tab-synergy" class="tab-section">
+  <div class="section-wrap">
+    <div class="section-title">Cox Automotive <span class="accent">Synergy</span></div>
+    <div class="section-intro">The Fullpath acquisition isn't just a product addition — it's a strategic capability unlock for Cox Automotive's Retail Solutions portfolio. Think of it as Cox acquiring the connective tissue layer that was previously missing: a true CDP that can unify data across VinSolutions, Dealertrack, Xtime, vAuto, and PI Sales Intelligence into a single shopper truth, then activate that truth through Fullpath's marketing engine.</div>
+
+    <div class="synergy-grid">
+      <div class="synergy-card highlight">
+        <div class="card-tag orange-tag">Biggest Opportunity</div>
+        <div class="card-title" style="font-size:22px;margin-bottom:12px;">The CDP Gap in Cox's Portfolio</div>
+        <div class="card-body" style="font-size:15px;line-height:1.7;">Cox Automotive has always had deep data across its portfolio — VinSolutions CRM data, Dealertrack transaction data, Xtime service data, vAuto inventory intelligence. What it has lacked is a true Customer Data Platform that unifies all of these signals into a single, actionable shopper profile and activates that profile across marketing channels. Fullpath is exactly that missing layer. This acquisition positions Cox to offer what no other automotive technology company can: a fully integrated, data-to-activation ecosystem spanning the complete dealer tech stack.</div>
+      </div>
+      <div class="synergy-card">
+        <div class="card-title" style="font-size:20px;margin-bottom:16px;">Product-by-Product Synergy Map</div>
+        <table class="comp-table" style="margin:0;">
+          <tr><th>Cox Product</th><th>Fullpath Synergy</th></tr>
+          <tr><td>VinSolutions CRM</td><td style="color:rgba(255,255,255,0.7);">CDP enriches CRM records; Agentic CRM as upgrade path or integration layer</td></tr>
+          <tr><td>Dealertrack DMS/F&I</td><td style="color:rgba(255,255,255,0.7);">Dynamic Payments pulls live rate/incentive data; CDP ingests DMS as primary data source</td></tr>
+          <tr><td>Xtime</td><td style="color:rgba(255,255,255,0.7);">Service data feeds CDP; triggers equity and loyalty campaigns post-RO</td></tr>
+          <tr><td>vAuto</td><td style="color:rgba(255,255,255,0.7);">Inventory pricing intelligence feeds VINs-Acceleration; aged unit triggers auto-campaigns</td></tr>
+          <tr><td>PI Sales Intelligence</td><td style="color:rgba(255,255,255,0.7);">Fullpath audience insights complement PI's predictive sales intelligence layer</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">Strategic <span class="accent">Value Drivers</span></div>
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div class="card-icon aqua">🔗</div>
+        <div class="card-title">Data Network Effect</div>
+        <div class="card-body">Every Cox Automotive product produces data that could flow into Fullpath's CDP. As more dealer tools are connected, the unified shopper profile gets richer, making every activation smarter. Cox's breadth of dealer relationships creates a data flywheel no standalone competitor can replicate.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">📦</div>
+        <div class="card-title">Bundle &amp; Consolidation Play</div>
+        <div class="card-body">Dealers currently pay multiple vendors for: CDP, email platform, digital advertising, website personalization, and CRM. Cox can bundle Fullpath's capabilities with existing products to create a comprehensive "one vendor" offer — reducing dealer churn and increasing average revenue per dealer.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">🚀</div>
+        <div class="card-title">MSS Consulting Angle</div>
+        <div class="card-body">For the MSS team specifically, Fullpath opens a new consulting surface: data strategy and marketing automation. Product Consultants can now advise dealers not just on CRM adoption or DMS efficiency, but on how to unify their data estate and run an always-on marketing engine — a premium engagement model.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon trust">🌐</div>
+        <div class="card-title">OEM Program Cross-Sell</div>
+        <div class="card-body">Fullpath's 9 OEM certifications overlap with and expand Cox's existing OEM relationships. The combined program footprint — Stellantis, GM, Honda, Subaru, Porsche, Mazda, JLR, Acura, Maserati — gives Cox a co-op-enabled story across virtually every major manufacturer.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon aqua">🤖</div>
+        <div class="card-title">Agentic Future Positioning</div>
+        <div class="card-body">The automotive industry is heading toward agentic AI — systems that act autonomously on behalf of dealers and shoppers. Fullpath's Agentic CRM (limited release in 2026) is early proof of this vision. Combined with Cox's data infrastructure and DriveQ/CAI ambitions, this positions the combined company at the frontier of automotive AI.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">🏢</div>
+        <div class="card-title">Enterprise Group Play</div>
+        <div class="card-body">Fullpath's Group CDP and Enterprise tier serve large dealer groups — the same segment Cox has prioritized with multi-product enterprise agreements. The Fullpath Group CDP becomes a compelling addition to enterprise deal conversations, adding cross-rooftop analytics and marketing automation to the suite.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="highlight-card">
+      <div class="card-tag">Consulting Lens for MSS</div>
+      <div class="card-title">How to position Fullpath in your product presentations</div>
+      <div class="card-body">Think of the Fullpath conversation as the "complete the ecosystem" play. When you're presenting to a dealer who has VinSolutions + Dealertrack + Xtime, the pitch isn't "here's another tool" — it's "imagine if all the data those three systems generate was actually working together, building one shopper profile, and automatically triggering your marketing and sales follow-up without your team having to manually manage it." That's the Fullpath story. It's the glue layer that makes everything Cox has already sold worth more — and the intelligence layer that turns data ownership into revenue.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ COMPETITIVE ══════════════════════════════ -->
+<section id="tab-competitive" class="tab-section">
+  <div class="section-wrap">
+    <div class="section-title">Competitive <span class="accent">Position</span></div>
+    <div class="section-intro">Fullpath competes across multiple categories simultaneously — CDP, digital advertising, email marketing, website engagement, and CRM. Its differentiation lies in combining all of these in a single, data-unified platform rather than doing any one of them in isolation. This is both its greatest strength and its most important sales narrative.</div>
+
+    <div class="sub-title">Capability <span class="accent">Comparison</span></div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>Fullpath</th>
+          <th>Dealer.com / Dealer Inspire</th>
+          <th>Shift Digital</th>
+          <th>Generic CDP (non-auto)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Automotive-Native CDP</td>
+          <td><span class="check">✓ Native</span></td>
+          <td><span class="partial">~ Partial</span></td>
+          <td><span class="partial">~ Partial</span></td>
+          <td><span class="x-mark">✗ Requires Custom Build</span></td>
+        </tr>
+        <tr>
+          <td>Identity Resolution</td>
+          <td><span class="check">✓ Built-In</span></td>
+          <td><span class="x-mark">✗</span></td>
+          <td><span class="partial">~ Limited</span></td>
+          <td><span class="check">✓ Varies</span></td>
+        </tr>
+        <tr>
+          <td>Digital Advertising (multi-channel)</td>
+          <td><span class="check">✓ Full Suite</span></td>
+          <td><span class="check">✓ Full Suite</span></td>
+          <td><span class="check">✓ Full Suite</span></td>
+          <td><span class="x-mark">✗</span></td>
+        </tr>
+        <tr>
+          <td>Website Personalization</td>
+          <td><span class="check">✓ CDP-Powered</span></td>
+          <td><span class="check">✓ Strong</span></td>
+          <td><span class="partial">~ Limited</span></td>
+          <td><span class="x-mark">✗</span></td>
+        </tr>
+        <tr>
+          <td>VIN-Level Marketing</td>
+          <td><span class="check">✓ VINs-Acceleration</span></td>
+          <td><span class="partial">~ Limited</span></td>
+          <td><span class="check">✓ Yes</span></td>
+          <td><span class="x-mark">✗</span></td>
+        </tr>
+        <tr>
+          <td>Equity-Based Campaigns</td>
+          <td><span class="check">✓ Native</span></td>
+          <td><span class="x-mark">✗</span></td>
+          <td><span class="partial">~ Limited</span></td>
+          <td><span class="x-mark">✗</span></td>
+        </tr>
+        <tr>
+          <td>Agentic CRM</td>
+          <td><span class="check">✓ In Limited Release</span></td>
+          <td><span class="x-mark">✗</span></td>
+          <td><span class="x-mark">✗</span></td>
+          <td><span class="x-mark">✗</span></td>
+        </tr>
+        <tr>
+          <td>Amazon / OTT</td>
+          <td><span class="check">✓ Yes</span></td>
+          <td><span class="partial">~ Limited</span></td>
+          <td><span class="check">✓ Yes</span></td>
+          <td><span class="x-mark">✗</span></td>
+        </tr>
+        <tr>
+          <td>Dynamic Payments</td>
+          <td><span class="check">✓ Yes</span></td>
+          <td><span class="check">✓ Yes</span></td>
+          <td><span class="partial">~ Partial</span></td>
+          <td><span class="x-mark">✗</span></td>
+        </tr>
+        <tr>
+          <td>OEM Program Certifications</td>
+          <td><span class="check">✓ 9 OEMs</span></td>
+          <td><span class="check">✓ Multiple</span></td>
+          <td><span class="check">✓ Multiple</span></td>
+          <td><span class="x-mark">✗</span></td>
+        </tr>
+        <tr>
+          <td>ISO 27001 Certified</td>
+          <td><span class="check">✓ Certified</span></td>
+          <td><span class="partial">~ Varies</span></td>
+          <td><span class="partial">~ Varies</span></td>
+          <td><span class="partial">~ Varies</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">Fullpath's Core <span class="accent">Differentiators</span></div>
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div class="card-tag">Moat #1</div>
+        <div class="card-title">Unified Data → Unified Action</div>
+        <div class="card-body">Competitors often offer either a data layer or an activation layer, not both in a genuinely integrated way. Fullpath's architecture makes the CDP the source of truth for every activation — ads, email, website, CRM — which creates compounding intelligence that improves over time. Switching becomes increasingly painful as the shopper data history deepens.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Moat #2</div>
+        <div class="card-title">10.9M Deanonymized Identities</div>
+        <div class="card-body">The ability to match anonymous website visitors to known shopper profiles at scale is rare and valuable. This isn't a feature you can easily replicate — it requires years of data accumulation and identity graph investment. Fullpath's existing 10.9M deanonymized identities represent a durable competitive advantage in the CDP market.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Moat #3</div>
+        <div class="card-title">Agentic CRM — Category Creator</div>
+        <div class="card-body">By launching automotive's first Agentic CRM in January 2026, Fullpath is attempting to define a new category before competitors can respond. If the Agentic CRM delivers on its promise, Fullpath won't just be competing for marketing tech budget — it will be going after the CRM replacement market, a far larger and more strategic prize.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Moat #4</div>
+        <div class="card-title">OEM Program Certification Depth</div>
+        <div class="card-body">Nine OEM certifications takes years to build — it's not a feature you flip on. Each certification represents a formal technology review and approval process. Combined with Cox's existing OEM relationships, the combined entity will have the deepest OEM certification breadth of any automotive technology company.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ COMPANY ══════════════════════════════ -->
+<section id="tab-company" class="tab-section">
+  <div class="section-wrap">
+    <div class="section-title">Company &amp; <span class="accent">Founders</span></div>
+    <div class="section-intro">Fullpath was founded by three Israeli technologists — Aharon Horwitz, Yishai Goldstein, and Eliav Moshe — with deep backgrounds in data infrastructure, search technology, and product development. The company has a dual-hub model with engineering and product concentrated in Jerusalem and Tel Aviv, and commercial operations distributed across Vermont, Detroit, New Jersey, Salt Lake City, and remote staff throughout North America.</div>
+
+    <div class="card-grid card-grid-3" style="margin-bottom:40px;">
+      <div class="card">
+        <div class="card-tag">CEO &amp; Co-Founder</div>
+        <div class="card-title">Aharon Horwitz</div>
+        <div class="card-body">The commercial and strategic voice of Fullpath. Known as an automotive AI thought leader, Horwitz speaks extensively at industry conferences and co-authored "The Last Dealership," a book analyzing how AI and automation will reshape automotive retail. He has shaped Fullpath's positioning as a platform company — not just a feature — and will be a critical voice in the integration narrative post-acquisition.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">CTO &amp; Co-Founder</div>
+        <div class="card-title">Yishai Goldstein</div>
+        <div class="card-body">The engineering backbone of the platform. Goldstein's background in search technologies, natural language processing, and data warehousing from Answers.com directly informs Fullpath's approach to identity resolution and large-scale data processing. Holds a BSc in Computer Engineering from Hebrew University. His work on the platform's security and ISO 27001 compliance is part of Fullpath's enterprise-grade credibility.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">CPO &amp; Co-Founder</div>
+        <div class="card-title">Eliav Moshe</div>
+        <div class="card-body">The product and analytics mind. A published author and experienced mathematician, Moshe has built Fullpath's analytics data layer from the ground up. His background in mobile app development (including #1-ranked apps), conversion optimization, and Google Analytics implementations gives Fullpath's product a strong data-first, user-behavior orientation — visible in how the CDP surfaces insights and audience recommendations proactively.</div>
+      </div>
+    </div>
+
+    <div class="sub-title">Company <span class="accent">Timeline</span></div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">Pre-2022</div>
+        <div class="timeline-title">AutoLeadStar Era</div>
+        <div class="timeline-body">Founded as AutoLeadStar — initially focused on website engagement (CDXP Connect) and digital advertising for auto dealers. Early Stellantis partnership. Contact still referenced in older CI materials: get.started@autoleadstar.com | (216) 242-1320.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2022</div>
+        <div class="timeline-title">Rebrand to Fullpath + CDP Launch</div>
+        <div class="timeline-body">Rebranded to Fullpath and launched the full CDP/CDXP platform. Data Lake announced — unifying DMS, CRM, and first-party data into a single customer profile. Stellantis e-shop ad integration deployed.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2023</div>
+        <div class="timeline-title">AI Features &amp; Integration Expansion Wave</div>
+        <div class="timeline-body">ChatGPT integration for website engagement (GPT Leads). VINs Acceleration, Equity Engine, Audience Activation, and Dealer Services all launched. Invoca call tracking integration added. DriveCentric and Tekion CRM links added. Loyalty Program launched. Fullpath keynoted on "NextGen AI and CDPs accelerating dealership sales."</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2024</div>
+        <div class="timeline-title">GM OEM Program + AI Budget Algorithm</div>
+        <div class="timeline-body">General Motors official dealer program launched with tiered Silver/Gold/Platinum packages. AI Budget Algorithm for digital advertising introduced. Dashboard overhaul. Multiple CI-observed demos and client feedback sessions. Schumacher Chevy demo observed by Cox CI team.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Aug 2025</div>
+        <div class="timeline-title">Fuse Dynamic Payments Acquisition</div>
+        <div class="timeline-body">Fullpath acquired Fuse Dynamic Payments — adding real-time personalized payment display directly on dealer websites (lease, finance, cash options). Expanded the CDXP stack with a purchase-decision layer. Dedicated webinar launched Aug 27, 2025.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Nov 2025</div>
+        <div class="timeline-title">OmniAI &amp; Lead Handling Agent Launch</div>
+        <div class="timeline-body">OmniAI initiative announced — Fullpath's autonomous AI suite. Lead Handling Agent released for configuration: custom agent persona/name, business hours, downtime behavior, escalation rules. Handles inbound leads 24/7 without salesperson intervention. Configurable via "Design Your Agent" settings.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Jan 2026</div>
+        <div class="timeline-title">Agentic CRM Launch (Limited Release)</div>
+        <div class="timeline-body">Fullpath announces automotive's first Agentic CRM — a multi-agent system handling real-time shopper intelligence, proactive task management, and automated lead engagement. Described as completing their "comprehensive AI ecosystem for car dealers."</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026</div>
+        <div class="timeline-title">Cox Automotive Acquisition</div>
+        <div class="timeline-body">Cox Automotive acquires Fullpath, joining the Retail Solutions portfolio alongside VinSolutions, Xtime, Dealertrack, vAuto, and PI Sales Intelligence. MSS team begins transition to product ownership and presentation.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">Office <span class="accent">Footprint</span></div>
+    <div class="oem-grid">
+      <div class="oem-chip featured">🇮🇱 Jerusalem (Engineering HQ)</div>
+      <div class="oem-chip featured">🇮🇱 Tel Aviv</div>
+      <div class="oem-chip">🇺🇸 Vermont (Commercial)</div>
+      <div class="oem-chip">🇺🇸 Detroit</div>
+      <div class="oem-chip">🇺🇸 New Jersey</div>
+      <div class="oem-chip">🇺🇸 Salt Lake City</div>
+      <div class="oem-chip">🌐 Remote (US-Wide)</div>
+    </div>
+  </div>
+</section>
+
+    <div class="divider"></div>
+
+    <div class="sub-title">Named <span class="accent">Competitive Set</span> (CI-Identified)</div>
+    <div class="card-grid card-grid-4" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-icon orange">⚔️</div>
+        <div class="card-title">TradePending</div>
+        <div class="card-body">Identified by CI as a direct competitor in the automotive CDP/data activation space. Focuses on trade-in tool integration and data-driven customer engagement.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">⚔️</div>
+        <div class="card-title">Impel</div>
+        <div class="card-body">AI-driven automotive marketing platform. Competes directly in the CDP and digital advertising managed services space for dealerships.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">⚔️</div>
+        <div class="card-title">Activix</div>
+        <div class="card-body">Canadian automotive CRM and marketing automation provider with CDP-adjacent capabilities. Competes primarily in the CRM + email marketing layer.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">⚔️</div>
+        <div class="card-title">automotiveMastermind (Cox)</div>
+        <div class="card-body">Cox-owned equity mining and campaign tool. CI documented live clients canceling aM in favor of Fullpath's equity engine — now an internal portfolio alignment question post-acquisition.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════ CI DOCUMENT LIBRARY ══════════════════════════════ -->
+<section id="tab-docs" class="tab-section">
+  <div class="section-wrap">
+    <div style="background:rgba(255,130,16,0.12);border:1px solid rgba(255,130,16,0.4);border-radius:12px;padding:16px 24px;margin-bottom:32px;display:flex;align-items:center;gap:14px;">
+      <span style="font-size:22px;">🔒</span>
+      <div style="font-size:13px;color:rgba(255,255,255,0.65);">Cox Automotive Proprietary &amp; Confidential — Internal Use Only. All documents sourced from the CAI Competitive Intelligence SharePoint library.</div>
+    </div>
+
+    <div class="section-title">CI <span class="accent">Document Library</span></div>
+    <div class="section-intro">All 66 documents captured by the Cox Automotive Competitive Intelligence team on Fullpath (formerly AutoLeadStar). Search by name or filter by category. Click ↗ to open directly in SharePoint.</div>
+
+    <div style="display:flex;gap:12px;margin-bottom:16px;align-items:center;flex-wrap:wrap;">
+      <input type="text" id="docSearch" placeholder="🔍 Search documents..." oninput="searchDocs(this.value)"
+        style="flex:1;min-width:300px;padding:12px 18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:var(--white);font-family:'Barlow',Arial,sans-serif;font-size:14px;outline:none;">
+      <span id="docCount" style="font-size:13px;color:rgba(255,255,255,0.4);white-space:nowrap;">Showing all 66 documents</span>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;" id="docFilters">
+      <button class="filter-chip active" onclick="filterDocs('All',this)">All</button>
+      <button class="filter-chip" onclick="filterDocs('CI Memo',this)">CI Memo</button>
+      <button class="filter-chip" onclick="filterDocs('GM Program',this)">GM Program</button>
+      <button class="filter-chip" onclick="filterDocs('CDP / CDXP',this)">CDP / CDXP</button>
+      <button class="filter-chip" onclick="filterDocs('Digital Advertising',this)">Digital Advertising</button>
+      <button class="filter-chip" onclick="filterDocs('AI Features',this)">AI Features</button>
+      <button class="filter-chip" onclick="filterDocs('Lead Handling (AI)',this)">Lead Handling (AI)</button>
+      <button class="filter-chip" onclick="filterDocs('Dynamic Payments',this)">Dynamic Payments</button>
+      <button class="filter-chip" onclick="filterDocs('Pricing & Packaging',this)">Pricing &amp; Packaging</button>
+      <button class="filter-chip" onclick="filterDocs('Demo & Case Studies',this)">Demo &amp; Case Studies</button>
+      <button class="filter-chip" onclick="filterDocs('Dealer Features',this)">Dealer Features</button>
+      <button class="filter-chip" onclick="filterDocs('Video / Audio',this)">Video / Audio</button>
+      <button class="filter-chip" onclick="filterDocs('Images',this)">Images</button>
+    </div>
+
+    <div id="docLibraryGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;"></div>
+  </div>
+</section>
+<section id="tab-ci" class="tab-section">
+  <div class="section-wrap">
+
+    <!-- CI WARNING BANNER -->
+    <div style="background:rgba(255,130,16,0.12);border:1px solid rgba(255,130,16,0.4);border-radius:12px;padding:18px 28px;margin-bottom:40px;display:flex;align-items:center;gap:16px;">
+      <span style="font-size:26px;">🔒</span>
+      <div>
+        <div style="font-family:'Barlow Condensed',Arial,sans-serif;font-size:16px;font-weight:700;color:var(--impact-orange);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Cox Automotive Proprietary &amp; Confidential — Internal Use Only</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.6);">Sourced from CAI Competitive Intelligence memos on SharePoint. Three primary sources: CEO interview (Sep 2025), platform demo + client feedback (Oct 2024), client follow-up (Nov 2024).</div>
+      </div>
+    </div>
+
+    <div class="section-title">CI <span class="orange">Intelligence</span></div>
+    <div class="section-intro">What Cox's own Competitive Intelligence team documented about Fullpath before the acquisition — the insights that don't appear on fullpath.com and directly shape how you should present this product.</div>
+
+    <!-- ── CEO INTERVIEW ── -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <div style="background:rgba(255,130,16,0.2);border:1px solid rgba(255,130,16,0.4);border-radius:8px;padding:6px 14px;font-family:'Barlow Condensed',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--impact-orange);">Source 1</div>
+      <div class="sub-title" style="margin:0;">CEO Interview — <span class="accent">Aharon Horwitz</span> &nbsp;<span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.4);">September 2025</span></div>
+    </div>
+
+    <div class="highlight-card" style="margin-bottom:24px;">
+      <div class="card-tag orange-tag">The Consolidation Thesis — Direct Cox Threat (Pre-Acquisition)</div>
+      <div class="card-title">"Take ~20 vendors down to one"</div>
+      <div class="card-body">Horwitz's stated platform goal, verbatim from the CI memo. His public thesis was platform consolidation across front-of-house workflows — reducing the number of vendors a dealer buys from, at the expense of point-solution providers. CI noted this overlaps directly with categories where Cox operates: lead/marketing automation, merchandising, CRM-adjacent workflows, and inventory/retail enablement. Post-acquisition, this is now <em>Cox's</em> consolidation story to tell.</div>
+    </div>
+
+    <div class="card-grid card-grid-3" style="margin-bottom:40px;">
+      <div class="card">
+        <div class="card-tag orange-tag">Growth Target</div>
+        <div class="card-icon orange">📈</div>
+        <div class="card-title">20–30% U.S. Market Share in 5 Years</div>
+        <div class="card-body">Horwitz's stated 5-year goal, up from approximately 7% market share at the time of the interview. He described the end-state as a system that "operates the dealership on behalf of the people that work there" — humans shifting to an approval-only role while agents execute. This ambition is now inside Cox.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag orange-tag">Market Claim</div>
+        <div class="card-icon orange">🇺🇸</div>
+        <div class="card-title">"A quarter of U.S. car sales" Touched by Fullpath</div>
+        <div class="card-body">Horwitz's own estimate — CI flagged it as unvalidated externally and framed as his personal assessment. Still, the scale claim reflects the platform's breadth across dealers, OEM programs, and data integrations. CI treated it with appropriate skepticism in the memo.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag orange-tag">Operational Reality</div>
+        <div class="card-icon orange">🇮🇱</div>
+        <div class="card-title">Built for Resilience Around Israel Reserve Duty</div>
+        <div class="card-body">Horwitz specifically cited redundancy in the engineering org to handle Israel reserve duty rotations and geopolitical disruptions. CI noted this as a real operational consideration — the engineering team is primarily Israel-based, and the company has consciously built staffing buffers around this. Worth understanding as a people/continuity risk.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── OCT 2024 DEMO ── -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <div style="background:rgba(0,188,221,0.2);border:1px solid rgba(0,188,221,0.4);border-radius:8px;padding:6px 14px;font-family:'Barlow Condensed',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--energy-aqua);">Source 2</div>
+      <div class="sub-title" style="margin:0;">Platform Demo + Client Feedback &nbsp;<span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.4);">October 2024</span></div>
+    </div>
+
+    <div class="card-grid card-grid-2" style="margin-bottom:24px;">
+      <div class="card">
+        <div class="card-tag">Key Finding</div>
+        <div class="card-icon aqua">🔗</div>
+        <div class="card-title">VinSolutions Deep Link Already Live</div>
+        <div class="card-body">When a shopper submits a lead, Fullpath routes it to the VinSolutions lead address and embeds a deep link in the lead record — giving salespeople access to the full Fullpath customer profile (website activity timeline, VDP views, equity position, loyalty score, marketing engagement) without needing a separate Fullpath login. This is a purposeful integration that puts Fullpath's intelligence directly inside the Cox CRM workflow. It's soft adoption — and it's already running in the market.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Key Finding</div>
+        <div class="card-icon aqua">⚠️</div>
+        <div class="card-title">CRM Encroachment Was Predictable in 2024</div>
+        <div class="card-body">The October 2024 CI memo documented a client expectation that Fullpath would "release a CRM in the next 6–12 months." The Agentic CRM launched in January 2026 — right on that schedule. CI identified the pattern: Fullpath had already built campaign management, customer communication, and lead nurturing into the platform — functions traditionally owned by the CRM. The Agentic CRM was the formalization of what was already happening.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Key Finding</div>
+        <div class="card-icon blue">🏢</div>
+        <div class="card-title">Enterprise Gap — Cross-Rooftop Records Didn't Transfer</div>
+        <div class="card-body">As of October 2024, a customer record in one rooftop did not carry to another rooftop in the same dealer group. This prevented cross-store ad suppression, inventory search, and unified customer management. CI flagged this as a constraint on enterprise group sales — likely limiting Fullpath to single points or small groups at the time. The Group CDP product was the response, but worth validating how far this has matured post-acquisition.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Cox Callout</div>
+        <div class="card-icon orange">🎯</div>
+        <div class="card-title">Cox AMP Called Out by Name as Lagging</div>
+        <div class="card-body">CI noted directly: Cox's Automotive Marketing Platform "lacks AI integrations and automated workflows that would meaningfully reduce salespeople's task work and improve efficiency" — and that this gap allows Fullpath to lead in customer management and marketing despite not owning first-party data sources the way Cox does. This is the exact gap the acquisition is designed to close.</div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <div class="quote-text">"Speed of innovation is a primary driver of Fullpath client satisfaction and provides a distinct advantage over legacy players in the lead management and marketing space. Other providers can offer similar functionality — particularly in terms of data integrations and some level of automation — but they have already fallen behind Fullpath in terms of development pace and connectivity between solutions."</div>
+      <div class="quote-attribution">— CAI Competitive Intelligence, October 2024 Demo Memo (client verbatim)</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── NOV 2024 FOLLOW UP ── -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <div style="background:rgba(12,128,223,0.2);border:1px solid rgba(12,128,223,0.4);border-radius:8px;padding:6px 14px;font-family:'Barlow Condensed',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--power-blue);">Source 3</div>
+      <div class="sub-title" style="margin:0;">Client Follow-Up Conversation &nbsp;<span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.4);">November 2024</span></div>
+    </div>
+
+    <div class="card-grid card-grid-2" style="margin-bottom:24px;">
+      <div class="card">
+        <div class="card-tag">aM Risk</div>
+        <div class="card-icon orange">⚡</div>
+        <div class="card-title">automotiveMastermind Displaced — Live Example</div>
+        <div class="card-body">A confirmed client had paused all automotiveMastermind equity mining and email campaigns in favor of Fullpath's offering. The reason: Fullpath's connectivity across DMS, CRM, website, and service lane produced more accurate propensity modeling than aM, which pulls only DMS data. Additionally, Fullpath's email templates drove higher open and conversion rates. CI noted this as a direct risk signal for similar vendors — including aM, which is a Cox Automotive product. Post-acquisition this competitive displacement dynamic is now internal.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">AI Roadmap Method</div>
+        <div class="card-icon aqua">🎙️</div>
+        <div class="card-title">Fullpath Records All Client Performance Reviews for AI Roadmapping</div>
+        <div class="card-body">CI documented that Fullpath records all performance review calls with dealers and feeds transcripts into an internal AI tool — generating consumer sentiment analysis, identifying product gaps, and dynamically updating the product roadmap based on what clients actually say in calls. This is a sophisticated, scalable voice-of-customer loop that most automotive vendors aren't running. It's a big reason their innovation pace is so high and their feature relevance is so strong.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Performance Model</div>
+        <div class="card-icon blue">👤</div>
+        <div class="card-title">PMs Are Not a Differentiator — By Design</div>
+        <div class="card-body">Clients do not view Fullpath's performance managers as a key value driver. The platform is intuitive enough that dealers customize settings and leverage AI recommendations without PM assistance. Fullpath's explicit intent is to automate as much human interaction as possible, reducing PMs to handling custom requests and support escalations only. This is a radically different model from Cox's consultant-heavy approach with MSS — and worth considering as you inherit the product presentation.</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Inventory Expansion</div>
+        <div class="card-icon aqua">🚗</div>
+        <div class="card-title">vAuto Integration Already Being Used as IMS Wedge</div>
+        <div class="card-body">CI noted Fullpath's existing inventory suite (aged inventory analysis, leads by vehicle, hot prospects, custom campaigns) and its integration with vAuto as a potential path toward dealers using Fullpath for traditional inventory management functions. CI assessment: Fullpath doesn't threaten to displace IMS vendors, but could make them more competitive if they integrate. An IMS vendor integrating with Fullpath gains its AI and unified data layer. Now that vAuto and Fullpath are both Cox products, this is a direct integration opportunity.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── SO WHAT FOR MSS ── -->
+    <div class="sub-title">The <span class="accent">So What</span> for MSS Presentations</div>
+    <div class="highlight-card" style="background:linear-gradient(135deg,rgba(255,130,16,0.1),rgba(255,130,16,0.04));border-color:rgba(255,130,16,0.3);margin-bottom:20px;">
+      <div class="card-tag orange-tag">Presentation Strategy</div>
+      <div class="card-title">The pre-acquisition CI threat narrative is now your value narrative</div>
+      <div class="card-body">Every concern CI documented — consolidation play, CRM encroachment, aM displacement, vAuto wedge — has flipped. Those were threats when Fullpath was a competitor. As a Cox product, they become the reasons a dealer should consolidate onto the Cox ecosystem. The CI memos essentially wrote the competitive positioning you need: Fullpath's data layer is more connected than aM, faster than legacy CRMs, and already embedded in VinSolutions workflows. You're not selling a new tool — you're completing the ecosystem dealers already partially use.</div>
+    </div>
+
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div class="card-icon orange">🛡️</div>
+        <div class="card-title">aM Displacement — Handle with Care</div>
+        <div class="card-body">Live clients are already replacing automotiveMastermind with Fullpath. Since aM is also a Cox product, you'll need clear internal alignment on how to position both — avoid creating a situation where your own presentation accelerates aM churn before there's a coordinated strategy.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon aqua">✅</div>
+        <div class="card-title">Validate Enterprise Gap Status</div>
+        <div class="card-body">Cross-rooftop record sharing was a documented gap as of late 2024. Before presenting to large dealer groups, confirm whether the Group CDP has closed this — the CI gap was specific enough that group-level buyers will ask.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">🤝</div>
+        <div class="card-title">PM Model Mismatch — Opportunity or Tension?</div>
+        <div class="card-body">Fullpath is explicitly designed to minimize PM dependency. MSS is built around high-touch consulting. As you take over product presentation, think through whether the MSS consulting model adds genuine value on top of Fullpath's self-service intelligence — or whether you need a new engagement model for this product.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+<footer class="doc-footer">
+  <div class="footer-brand">Cox Automotive · Retail Solutions · MSS</div>
+  <div class="footer-note">Fullpath Acquisition Briefing · April 2026 · Internal Use Only</div>
+  <div class="footer-brand">©2026 Cox Automotive. All Rights Reserved.</div>
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function showPillar(id) {
+    document.querySelectorAll('.pillar-content').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.pillar-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('pillar-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  function toggleAccordion(btn) {
+    const body = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.accordion-header').forEach(h => {
+      h.classList.remove('open');
+      h.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      body.classList.add('open');
+    }
+  }
+
+  // ── DOCUMENT LIBRARY ──
+  const catColors = {
+    'CI Memo': '#2563eb',
+    'GM Program': '#0891b2',
+    'CDP / CDXP': '#dc2626',
+    'Digital Advertising': '#d97706',
+    'AI Features': '#9333ea',
+    'Lead Handling (AI)': '#7c3aed',
+    'Dynamic Payments': '#059669',
+    'Pricing & Packaging': '#0f766e',
+    'Demo & Case Studies': '#be185d',
+    'Dealer Features': '#be185d',
+    'Video / Audio': '#64748b',
+    'Images': '#94a3b8',
+    'Integrations': '#1d4ed8',
+  };
+
+  const docData = [
+    {cat:'CI Memo',name:'2024.11.04 Fullpath Client Feedback - CI Memo',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.11.04 Fullpath Client Feedback - CI Memo.pdf?web=1'},
+    {cat:'CI Memo',name:'2024.10.03 Fullpath Demo with Client Feedback - CI Memo',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.10.03 Fullpath Demo with Client Feedback - CI Memo.pdf?web=1'},
+    {cat:'CI Memo',name:'2024.02.14 CI Memo - Fullpath Dashboards & Functionality',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.02.14 CI Memo - Fullpath Dashboards & Functionality .pdf?web=1'},
+    {cat:'CI Memo',name:'2025.09 Fullpath CEO Interview',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2025.09 Fullpath CEO Interview.pdf?web=1'},
+    {cat:'GM Program',name:'2024.09.20 Fullpath + GM Presentation',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.09.20 Fullpath + GM presentation.pdf?web=1'},
+    {cat:'GM Program',name:'2024.09.20 Fullpath + GM Webinar',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.09.20 Fullpath + GM webinar.mp4?web=1'},
+    {cat:'GM Program',name:'2024.09.13 Fullpath + GM FAQs',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.09.13 Fullpath + GM FAQs.pdf?web=1'},
+    {cat:'GM Program',name:'2024.09.13 Fullpath + GM Packaging',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.09.13 Fullpath + GM packaging.pdf?web=1'},
+    {cat:'GM Program',name:'2024.06.25 Fullpath FAQs - GM Program',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.06.25 Fullpath FAQs - GM Program.pdf?web=1'},
+    {cat:'GM Program',name:'2024.06.25 Fullpath Packages and Pricing - GM Program',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.06.25 Fullpath Packages and Pricing - GM Program.pdf?web=1'},
+    {cat:'GM Program',name:'2024.07.16 - Fullpath - The Real Deal - A GM Dealers Perspective',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.07.16 - Fullpath - The Real Deal -A GM Dealers Perspective on Fullpath.mp4?web=1'},
+    {cat:'Lead Handling (AI)',name:'2025.11 OmniAI Demo - Fullpath',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2025.11 OmniAI Demo - Fullpath.mp4?web=1'},
+    {cat:'Lead Handling (AI)',name:'2025.11 Fullpath Lead Handling Agent - How to Configure Agent Settings',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2025.11 Fullpath Lead Handling Agent - How to configure your Agent settings.mp4?web=1'},
+    {cat:'Lead Handling (AI)',name:'2025.11.19 Fullpath - Lead Handling - General Settings',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2025.11.19 Fullpath - Lead Handling - General Settings.pdf?web=1'},
+    {cat:'Lead Handling (AI)',name:'2025.11.19 Fullpath - Lead Handling - Lead Handling and Downtime',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2025.11.19 Fullpath - Lead Handling - Lead Handling and Downtime.pdf?web=1'},
+    {cat:'Dynamic Payments',name:'2025.08.27 Fullpath x Fuse Dynamic Payments Webinar',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2025.08.27 Fullpath x Fuse Dynamic Payments Webinar.mp4?web=1'},
+    {cat:'AI Features',name:'2025.11 OmniAI Demo - Fullpath',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2025.11 OmniAI Demo - Fullpath.mp4?web=1'},
+    {cat:'AI Features',name:'2023.05.11 Fullpath ChatGPT Tool FAQs',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2023.05.11 Fullpath Chat GPT Tool FAQs.pdf?web=1'},
+    {cat:'AI Features',name:'Keynote - FULLPATH - NextGen AI: CDPs and ChatGPT Accelerating Dealership Sales',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/Keynote - FULLPATH - NextGen AI- How Customer Data Platforms and ChatGPT are Accelerating Dealership Sales.mp4?web=1'},
+    {cat:'AI Features',name:'2024 Fullpath + AI - DigAd Budget Algorithm',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024 Fullpath + AI - DigAd Budget Algorithm.mp4?web=1'},
+    {cat:'CDP / CDXP',name:'2022.11.22 Fullpath Diving into Data Lake - Leveraging First Party Data in Real Time',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2022.11.22 FullPath Diving into Data Lake - Leveraging your First Party Data in Real Time.mp4?web=1'},
+    {cat:'CDP / CDXP',name:'2023.06.19 Fullpath - Adding Custom Email Templates to Audience Activation',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2023.06.19 Fullpath - Adding Custom Email Templates to Audience Activation.pdf?web=1'},
+    {cat:'Digital Advertising',name:'2024 Fullpath + AI - DigAd Budget Algorithm',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024 Fullpath + AI - DigAd Budget Algorithm.mp4?web=1'},
+    {cat:'Dealer Features',name:'2023.07.09 Fullpath VINs Acceleration Overview',ext:'PDF',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2023.07.09 Fullpath VINs Acceleration Overview.pdf?web=1'},
+    {cat:'Images',name:'2023.10.16 Fullpath Positive Equity Shopper Activity',ext:'PNG',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2023.10.16 Fullpath Positive Equity Shopper Activity.png?web=1'},
+    {cat:'Video / Audio',name:'2024.12.05 Fullpath Live Launch Q4 2024',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2024.12.05 Fullpath Live Launch Q4 2024.mp4?web=1'},
+    {cat:'Video / Audio',name:'2023.05.19 Fullpath - The Tale of Two Shoppers & Importance of Data Rich Customer Profiles',ext:'MP4',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2023.05.19 Fullpath The Tale of Two Shoppers & Importance of Data Rich Customer Profiles.mp4?web=1'},
+    {cat:'Video / Audio',name:'2023.04.26 Pasch Podcast Audio - Aharon Horwitz',ext:'MP3',url:'https://coxautoinc.sharepoint.com/sites/department-caicompetitiveintelligence/AutoLeadStar/2023.04.26 Pasch Podcast Audio - Aharon Horwitz.mp3?web=1'},
+  ];
+
+  function getDocIcon(ext) {
+    const e = ext.toUpperCase();
+    if (e === 'MP4' || e === 'MP3') return '🎬';
+    if (e === 'PNG' || e === 'JPG') return '🖼️';
+    return '📋';
+  }
+
+  function renderDocs(filter, query) {
+    const grid = document.getElementById('docLibraryGrid');
+    if (!grid) return;
+    let visible = 0;
+    grid.innerHTML = '';
+    docData.forEach(doc => {
+      const catMatch = !filter || filter === 'All' || doc.cat === filter;
+      const qMatch = !query || doc.name.toLowerCase().includes(query) || doc.cat.toLowerCase().includes(query);
+      if (!catMatch || !qMatch) return;
+      visible++;
+      const color = catColors[doc.cat] || '#64748b';
+      const el = document.createElement('div');
+      el.className = 'doc-lib-card';
+      el.innerHTML = `
+        <div class="doc-lib-header">
+          <span class="doc-lib-icon">${getDocIcon(doc.ext)}</span>
+          <span class="doc-lib-name">${doc.name}</span>
+          <a href="${doc.url}" target="_blank" class="doc-lib-link" title="Open in SharePoint">↗</a>
+        </div>
+        <div class="doc-lib-footer">
+          <span class="doc-lib-badge" style="background:${color}">${doc.cat}</span>
+          <span class="doc-lib-ext">.${doc.ext}</span>
+        </div>`;
+      grid.appendChild(el);
+    });
+    const countEl = document.getElementById('docCount');
+    if (countEl) countEl.textContent = `Showing ${visible} of ${docData.length} documents`;
+  }
+
+  let _docFilter = 'All', _docQuery = '';
+  function filterDocs(cat, btn) {
+    _docFilter = cat;
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderDocs(_docFilter, _docQuery);
+  }
+  function searchDocs(q) {
+    _docQuery = q.toLowerCase().trim();
+    renderDocs(_docFilter, _docQuery);
+  }
+
+  // Init doc library when tab opens
+  document.addEventListener('DOMContentLoaded', function() {
+    renderDocs('All', '');
+  });
+</script>
+
+</body>
+</html>
