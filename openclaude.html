@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude in Chrome — Team Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #faf9f6;
+    --cream: #f0ede6;
+    --coral: #e85d3a;
+    --coral-light: #fdf1ee;
+    --blue: #1d4ed8;
+    --blue-mid: #3b6ff5;
+    --blue-light: #eff4ff;
+    --gold: #c9933a;
+    --gold-light: #fdf6e9;
+    --muted: #6b7280;
+    --border: #e2ddd5;
+    --tag-bg: #e8f5e9;
+    --tag-text: #2e7d32;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(250,249,246,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-brand .dot {
+    width: 8px; height: 8px;
+    background: var(--coral);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 6vw 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%; right: -10%;
+    width: 60vw; height: 80vh;
+    background: radial-gradient(ellipse at center, #dbeafe 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -10%; left: -5%;
+    width: 40vw; height: 50vh;
+    background: radial-gradient(ellipse at center, #fde8e0 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-kicker {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-kicker::before {
+    content: '';
+    display: block;
+    width: 32px; height: 1px;
+    background: var(--coral);
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 800px;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--coral);
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 540px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: background 0.2s, transform 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-cta:hover { background: var(--coral); transform: translateY(-1px); }
+
+  .hero-cta svg { transition: transform 0.2s; }
+  .hero-cta:hover svg { transform: translateX(3px); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 6vw;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-scroll::after {
+    content: '';
+    display: block;
+    width: 1px; height: 48px;
+    background: var(--muted);
+    opacity: 0.4;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 100px 6vw;
+  }
+
+  .section-kicker {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-kicker::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── WHAT IS IT ── */
+  #what {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5vw;
+    align-items: start;
+    margin-top: 3rem;
+  }
+
+  .what-desc {
+    font-size: 1.05rem;
+    color: #374151;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  .what-points {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .what-point {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .what-point-icon {
+    width: 36px; height: 36px;
+    border-radius: 2px;
+    background: var(--ink);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .what-point-text strong {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .what-point-text span {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .privacy-note {
+    grid-column: 1 / -1;
+    background: var(--blue-light);
+    border-left: 3px solid var(--blue-mid);
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 2px 2px 0;
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+
+  .privacy-note strong { color: var(--blue); }
+
+  /* ── GETTING STARTED ── */
+  #start {
+    background: var(--paper);
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 3rem;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .step-card {
+    background: var(--paper);
+    padding: 2.5rem 2rem;
+    position: relative;
+  }
+
+  .step-num {
+    font-family: 'Fraunces', serif;
+    font-size: 4rem;
+    font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .step-card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-card p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── USE CASES ── */
+  #usecases {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  #usecases .section-kicker { color: rgba(255,255,255,0.4); }
+  #usecases .section-kicker::before { background: rgba(255,255,255,0.4); }
+  #usecases .section-title { color: var(--paper); }
+
+  .uc-intro {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 560px;
+    font-weight: 300;
+    margin-bottom: 4rem;
+  }
+
+  /* Tab Nav */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    margin-bottom: 3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab-btn:hover { color: rgba(255,255,255,0.7); }
+  .tab-btn.active {
+    color: var(--coral);
+    border-bottom-color: var(--coral);
+  }
+
+  /* Tab Content */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .uc-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4vw;
+    align-items: start;
+  }
+
+  .uc-left {}
+
+  .uc-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 1px;
+    margin-bottom: 1.25rem;
+  }
+
+  .uc-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.75rem;
+    color: var(--paper);
+  }
+
+  .uc-subtitle {
+    font-size: 0.95rem;
+    color: var(--coral);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+  }
+
+  .uc-desc {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .uc-steps-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 1rem;
+  }
+
+  .uc-step-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .uc-step-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+  }
+
+  .uc-step-list li::before {
+    content: '→';
+    color: var(--coral);
+    flex-shrink: 0;
+    margin-top: 0px;
+  }
+
+  /* Example card */
+  .uc-example {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2rem;
+    border-radius: 2px;
+  }
+
+  .uc-example-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .uc-example-label::before {
+    content: '';
+    display: block;
+    width: 16px; height: 1px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .uc-example-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--paper);
+    margin-bottom: 1.25rem;
+  }
+
+  .uc-example-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .uc-example-steps li {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(255,255,255,0.12);
+  }
+
+  /* Prompt pill */
+  .prompt-pill {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.8);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .prompt-pill::before {
+    content: '"';
+    color: var(--coral);
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .pro-tip {
+    background: linear-gradient(135deg, rgba(201,147,58,0.12), rgba(201,147,58,0.05));
+    border: 1px solid rgba(201,147,58,0.25);
+    padding: 1rem 1.25rem;
+    border-radius: 2px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    margin-top: 1.5rem;
+  }
+
+  .pro-tip strong { color: var(--gold); }
+
+  /* ── QUICK REF ── */
+  #reference {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+  }
+
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 3rem;
+    font-size: 0.875rem;
+  }
+
+  .ref-table thead th {
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 1.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ref-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    cursor: default;
+  }
+
+  .ref-table tbody tr:hover { background: rgba(0,0,0,0.02); }
+
+  .ref-table tbody td {
+    padding: 1.25rem 1.5rem;
+    color: var(--ink);
+    vertical-align: top;
+  }
+
+  .ref-table tbody td:first-child { font-weight: 500; }
+  .ref-table tbody td:nth-child(2) { color: var(--muted); }
+
+  .time-badge {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 1px;
+  }
+
+  /* ── TIPS ── */
+  #tips {
+    background: var(--paper);
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    margin-top: 3rem;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .tip-card {
+    background: var(--paper);
+    padding: 2.5rem 2rem;
+    transition: background 0.2s;
+  }
+
+  .tip-card:hover { background: var(--cream); }
+
+  .tip-number {
+    font-family: 'Fraunces', serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--coral);
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .tip-card h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .tip-card p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    padding: 3rem 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+
+  footer a {
+    color: var(--coral);
+    text-decoration: none;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  .footer-brand {
+    font-family: 'Fraunces', serif;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .stagger-1 { transition-delay: 0.05s; }
+  .stagger-2 { transition-delay: 0.15s; }
+  .stagger-3 { transition-delay: 0.25s; }
+  .stagger-4 { transition-delay: 0.35s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .what-grid, .uc-layout, .tips-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#top"><span class="dot"></span> Claude in Chrome</a>
+  <ul class="nav-links">
+    <li><a href="#what">Overview</a></li>
+    <li><a href="#start">Setup</a></li>
+    <li><a href="#usecases">Use Cases</a></li>
+    <li><a href="#reference">Reference</a></li>
+    <li><a href="#tips">Tips</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-kicker">Team Guide · Claude Chrome Extension</div>
+  <h1>AI assistance,<br><em>right where</em><br>you already work.</h1>
+  <p class="hero-sub">No tab-switching. No copy-pasting. Claude lives in your browser sidebar, ready to read, write, and reason alongside whatever you're doing.</p>
+  <a class="hero-cta" href="https://chromewebstore.google.com/detail/claude/fcoeoabgfenejglbffodgkkbkcdhcgfn" target="_blank">
+    Install the Extension
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="2" y1="8" x2="14" y2="8"/><polyline points="8,2 14,8 8,14"/>
+    </svg>
+  </a>
+  <div class="hero-scroll">Scroll to explore</div>
+</section>
+
+<!-- WHAT IS IT -->
+<section id="what">
+  <div class="section-kicker">Overview</div>
+  <h2 class="section-title">What is it, exactly?</h2>
+
+  <div class="what-grid">
+    <div>
+      <p class="what-desc">Think of it as a knowledgeable colleague sitting beside you who can read whatever's on your screen. The extension brings Claude into a persistent sidebar in Chrome — aware of the page you're on, ready to help you think, write, summarize, or act on it instantly.</p>
+      <br>
+      <p class="what-desc">It integrates with your Claude.ai account, so your conversations, Projects, and memory carry over seamlessly.</p>
+    </div>
+
+    <div class="what-points">
+      <div class="what-point fade-in stagger-1">
+        <div class="what-point-icon">⊞</div>
+        <div class="what-point-text">
+          <strong>Persistent sidebar</strong>
+          <span>Opens alongside any webpage without replacing what you're reading</span>
+        </div>
+      </div>
+      <div class="what-point fade-in stagger-2">
+        <div class="what-point-icon">◎</div>
+        <div class="what-point-text">
+          <strong>Page-aware context</strong>
+          <span>Claude can read the current page when you choose to share it</span>
+        </div>
+      </div>
+      <div class="what-point fade-in stagger-3">
+        <div class="what-point-icon">⟳</div>
+        <div class="what-point-text">
+          <strong>Connected to Claude.ai</strong>
+          <span>Your Projects, history, and preferences come with you</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="privacy-note fade-in">
+      <strong>🔒 Privacy:</strong> Claude only processes page content when you actively share it. It does not monitor your browsing history or read pages in the background.
+    </div>
+  </div>
+</section>
+
+<!-- GETTING STARTED -->
+<section id="start">
+  <div class="section-kicker">Setup</div>
+  <h2 class="section-title">Getting started in three steps.</h2>
+
+  <div class="steps-grid">
+    <div class="step-card fade-in stagger-1">
+      <div class="step-num">01</div>
+      <h3>Install the Extension</h3>
+      <p>Visit the Chrome Web Store and click <em>Add to Chrome</em>. Takes under 30 seconds. The Claude icon will appear in your toolbar.</p>
+      <br>
+      <a href="https://chromewebstore.google.com/detail/claude/fcoeoabgfenejglbffodgkkbkcdhcgfn" target="_blank" style="font-size:0.8rem; color: var(--coral); text-decoration:none; font-weight:600;">→ Open Chrome Web Store</a>
+    </div>
+    <div class="step-card fade-in stagger-2">
+      <div class="step-num">02</div>
+      <h3>Open the Sidebar</h3>
+      <p>Click the Claude icon in your toolbar to open the sidebar. It stays open as you move between tabs. You can also set a keyboard shortcut in Chrome's extension settings for even faster access.</p>
+    </div>
+    <div class="step-card fade-in stagger-3">
+      <div class="step-num">03</div>
+      <h3>Share a Page & Start</h3>
+      <p>Navigate to any webpage you want help with, then use the option in the sidebar to share the current page with Claude. From there, just ask — it already has context.</p>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecases">
+  <div class="section-kicker">Use Cases</div>
+  <h2 class="section-title">Six ways your team can use it.</h2>
+  <p class="uc-intro">Each scenario below represents a real workflow where the extension saves time and reduces the mental load of switching tools.</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">Summarize</button>
+    <button class="tab-btn" onclick="switchTab(1)">Draft</button>
+    <button class="tab-btn" onclick="switchTab(2)">Research</button>
+    <button class="tab-btn" onclick="switchTab(3)">Edit</button>
+    <button class="tab-btn" onclick="switchTab(4)">Meeting Prep</button>
+    <button class="tab-btn" onclick="switchTab(5)">Translate</button>
+  </div>
+
+  <!-- Panel 1 -->
+  <div class="tab-panel active" id="panel-0">
+    <div class="uc-layout">
+      <div class="uc-left">
+        <div class="uc-tag">Use Case 01</div>
+        <h3 class="uc-title">Summarizing Long Web Pages</h3>
+        <p class="uc-subtitle">Turn walls of text into clear takeaways in seconds.</p>
+        <p class="uc-desc">Whether it's a lengthy industry report, a dense product changelog, or a competitor's blog post, reading everything in full is rarely efficient. The extension lets you pull out what matters — like having a research assistant who's already done the skimming for you.</p>
+        <div class="uc-steps-label">How to use it</div>
+        <ul class="uc-step-list">
+          <li>Open the article or report in your browser</li>
+          <li>Open the Claude sidebar</li>
+          <li>Share the current page with Claude</li>
+          <li>Ask Claude to summarize the key points or pull specific information</li>
+        </ul>
+      </div>
+      <div class="uc-right">
+        <div class="uc-example">
+          <div class="uc-example-label">Example scenario</div>
+          <div class="uc-example-title">Reviewing a vendor's "What's New" page</div>
+          <ul class="uc-example-steps">
+            <li>You're on a vendor's release notes page with dozens of feature updates</li>
+            <li>You share the page and ask Claude a targeted question</li>
+            <li>Claude returns a focused, relevant summary — not a full recap</li>
+            <li>You paste it into your Slack update in 2 minutes instead of 20</li>
+          </ul>
+          <div class="prompt-pill">Summarize the top 5 changes most relevant to our CRM workflow</div>
+          <div class="pro-tip"><strong>💡 Pro Tip:</strong> Pair with a follow-up like "What questions should I be asking this vendor about these changes?" to get even more value from the same content.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 2 -->
+  <div class="tab-panel" id="panel-1">
+    <div class="uc-layout">
+      <div class="uc-left">
+        <div class="uc-tag">Use Case 02</div>
+        <h3 class="uc-title">Drafting Emails from Web Context</h3>
+        <p class="uc-subtitle">Write professional responses without leaving the page that prompted them.</p>
+        <p class="uc-desc">You're reading a customer complaint, a stakeholder's feedback form, or a competitor's announcement and you need to respond. Instead of switching to email, writing blind, and switching back — keep it all in one place. The extension is like having a draft already waiting when you're ready to reply.</p>
+        <div class="uc-steps-label">How to use it</div>
+        <ul class="uc-step-list">
+          <li>Navigate to the content you need to respond to</li>
+          <li>Share the page content with Claude</li>
+          <li>Ask Claude to draft a message with the context already included</li>
+          <li>Review, lightly edit, and send</li>
+        </ul>
+      </div>
+      <div class="uc-right">
+        <div class="uc-example">
+          <div class="uc-example-label">Example scenario</div>
+          <div class="uc-example-title">Responding to a product feedback thread</div>
+          <ul class="uc-example-steps">
+            <li>You're reading a user feedback thread about a missing feature</li>
+            <li>You share the thread with Claude in the sidebar</li>
+            <li>Claude drafts a professional, on-tone reply with the specifics incorporated</li>
+            <li>Your response is accurate and specific — not generic</li>
+          </ul>
+          <div class="prompt-pill">Draft a response that acknowledges their feedback and explains our roadmap direction</div>
+          <div class="pro-tip"><strong>💡 Pro Tip:</strong> Add tone guidance before Claude drafts: "Keep it warm but concise" or "Use bullet points" shapes the output before it even hits your clipboard.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 3 -->
+  <div class="tab-panel" id="panel-2">
+    <div class="uc-layout">
+      <div class="uc-left">
+        <div class="uc-tag">Use Case 03</div>
+        <h3 class="uc-title">Research & Competitive Intelligence</h3>
+        <p class="uc-subtitle">Move from information to insight without breaking your flow.</p>
+        <p class="uc-desc">When you're researching a vendor, a competitor's pricing page, or an industry trend — the extension lets you engage with what you're reading instead of just reading it. Think of it like having a conversation with the source material itself, then walking away with a useful output.</p>
+        <div class="uc-steps-label">How to use it</div>
+        <ul class="uc-step-list">
+          <li>Open any webpage with relevant research content</li>
+          <li>Share the page with Claude</li>
+          <li>Ask questions, request comparisons, or prompt for implications</li>
+          <li>Forward Claude's synthesis as a competitive brief or summary</li>
+        </ul>
+      </div>
+      <div class="uc-right">
+        <div class="uc-example">
+          <div class="uc-example-label">Example scenario</div>
+          <div class="uc-example-title">Evaluating a competitor's feature list</div>
+          <ul class="uc-example-steps">
+            <li>You're on a competitor's product page reviewing their new features</li>
+            <li>You share the page and ask Claude to compare</li>
+            <li>Claude surfaces the comparison and flags potential gaps</li>
+            <li>You forward the summary to your product team as a competitive brief</li>
+          </ul>
+          <div class="prompt-pill">How do these features compare to what we offer? Where might customers see gaps in our product?</div>
+          <div class="pro-tip"><strong>💡 Pro Tip:</strong> Ask Claude to play devil's advocate: "Why would a customer choose them over us based on this page?" pushes beyond surface-level analysis.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 4 -->
+  <div class="tab-panel" id="panel-3">
+    <div class="uc-layout">
+      <div class="uc-left">
+        <div class="uc-tag">Use Case 04</div>
+        <h3 class="uc-title">Content Review & Editing on the Fly</h3>
+        <p class="uc-subtitle">Get feedback on anything you're writing — inside any web app.</p>
+        <p class="uc-desc">Whether you're writing in a CMS, a ticket system, Confluence, or a web-based email client, Claude can review what you're working on without you ever leaving the tab. It's the equivalent of a quick peer review, available on demand, without scheduling anyone's time.</p>
+        <div class="uc-steps-label">How to use it</div>
+        <ul class="uc-step-list">
+          <li>Open a web-based editor or form where you're writing</li>
+          <li>Share the page with Claude after drafting</li>
+          <li>Ask for review, tone feedback, grammar edits, or a shorter version</li>
+          <li>Address the feedback before publishing or sending</li>
+        </ul>
+      </div>
+      <div class="uc-right">
+        <div class="uc-example">
+          <div class="uc-example-label">Example scenario</div>
+          <div class="uc-example-title">Polishing a Confluence page before publishing</div>
+          <ul class="uc-example-steps">
+            <li>You've drafted a new internal process doc in Confluence</li>
+            <li>You share the page with Claude and ask for review</li>
+            <li>Claude returns specific feedback with suggested rewrites</li>
+            <li>You address the gaps before publishing — fewer follow-up questions</li>
+          </ul>
+          <div class="prompt-pill">Review this for clarity and flag anything that might confuse someone unfamiliar with the process</div>
+          <div class="pro-tip"><strong>💡 Pro Tip:</strong> Specify your audience for better feedback: "This will be read by people who are not technical — flag any jargon that needs explaining."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 5 -->
+  <div class="tab-panel" id="panel-4">
+    <div class="uc-layout">
+      <div class="uc-left">
+        <div class="uc-tag">Use Case 05</div>
+        <h3 class="uc-title">Meeting Prep from Agenda Pages</h3>
+        <p class="uc-subtitle">Walk into every meeting already oriented, not just informed.</p>
+        <p class="uc-desc">When a meeting agenda, pre-read doc, or project brief lives in a web app, you can use Claude to prepare — pulling out action items, generating clarifying questions, or surfacing the decision points most relevant to your role — before the call starts.</p>
+        <div class="uc-steps-label">How to use it</div>
+        <ul class="uc-step-list">
+          <li>Open the agenda, pre-read, or relevant doc in your browser</li>
+          <li>Share it with Claude in the sidebar</li>
+          <li>Ask Claude to prepare you specific to your role in the meeting</li>
+          <li>Show up with the right context and the right questions</li>
+        </ul>
+      </div>
+      <div class="uc-right">
+        <div class="uc-example">
+          <div class="uc-example-label">Example scenario</div>
+          <div class="uc-example-title">Preparing for a stakeholder strategy review</div>
+          <ul class="uc-example-steps">
+            <li>The meeting pre-read is a dense 4-page strategy doc in a web portal</li>
+            <li>You share it with Claude in the sidebar 10 minutes before the call</li>
+            <li>Claude surfaces the decision points most relevant to your role</li>
+            <li>You show up oriented — not just caught up</li>
+          </ul>
+          <div class="prompt-pill">What are the top 3 things I need to have an opinion on as a product manager in this meeting?</div>
+          <div class="pro-tip"><strong>💡 Pro Tip:</strong> Follow up with "What questions should I expect to be asked in this meeting?" to stress-test your preparation.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 6 -->
+  <div class="tab-panel" id="panel-5">
+    <div class="uc-layout">
+      <div class="uc-left">
+        <div class="uc-tag">Use Case 06</div>
+        <h3 class="uc-title">Translating Technical Content</h3>
+        <p class="uc-subtitle">Bridge the gap between what was written and what your audience needs to hear.</p>
+        <p class="uc-desc">Technical docs, API changelogs, developer release notes, and data reports are often written for specialized audiences. Claude can act as a translator — taking the raw content and reshaping it for whoever you're communicating with next, without losing the meaning.</p>
+        <div class="uc-steps-label">How to use it</div>
+        <ul class="uc-step-list">
+          <li>Open the technical document or report in your browser</li>
+          <li>Share it with Claude</li>
+          <li>Specify your target audience and ask Claude to translate or reframe</li>
+          <li>Use the output in your next stakeholder communication</li>
+        </ul>
+      </div>
+      <div class="uc-right">
+        <div class="uc-example">
+          <div class="uc-example-label">Example scenario</div>
+          <div class="uc-example-title">Turning a dev changelog into a client update</div>
+          <ul class="uc-example-steps">
+            <li>Your engineering team's sprint changelog is live in your internal wiki</li>
+            <li>You share it and ask Claude to reframe it for business stakeholders</li>
+            <li>Claude strips the jargon and produces a readable, impact-focused summary</li>
+            <li>Your stakeholders stay informed without being overwhelmed</li>
+          </ul>
+          <div class="prompt-pill">Rewrite this as a 3-sentence update I can send to non-technical business stakeholders</div>
+          <div class="pro-tip"><strong>💡 Pro Tip:</strong> If you regularly bridge technical and non-technical teams, this single use case alone can save hours per sprint cycle.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK REFERENCE -->
+<section id="reference">
+  <div class="section-kicker">Quick Reference</div>
+  <h2 class="section-title">When to reach for the extension.</h2>
+
+  <table class="ref-table">
+    <thead>
+      <tr>
+        <th>Situation</th>
+        <th>Use Claude for</th>
+        <th>Time saved (est.)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Long article or report open in browser</td>
+        <td>Key takeaways, relevant sections summary</td>
+        <td><span class="time-badge">10–20 min</span></td>
+      </tr>
+      <tr>
+        <td>Need to write a reply or response to web content</td>
+        <td>Draft email or message from page context</td>
+        <td><span class="time-badge">5–15 min</span></td>
+      </tr>
+      <tr>
+        <td>Researching a vendor or competitor</td>
+        <td>Comparison analysis, gap identification</td>
+        <td><span class="time-badge">20–45 min</span></td>
+      </tr>
+      <tr>
+        <td>Reviewing content before publishing</td>
+        <td>Tone feedback, clarity edits, shorter version</td>
+        <td><span class="time-badge">10–20 min</span></td>
+      </tr>
+      <tr>
+        <td>Meeting starting in 10 minutes</td>
+        <td>Prep questions and key decision points</td>
+        <td><span class="time-badge">15–30 min</span></td>
+      </tr>
+      <tr>
+        <td>Technical doc, non-technical audience</td>
+        <td>Plain language translation</td>
+        <td><span class="time-badge">15–30 min</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- TIPS -->
+<section id="tips">
+  <div class="section-kicker">Prompting Tips</div>
+  <h2 class="section-title">Get more out of every prompt.</h2>
+
+  <div class="tips-grid">
+    <div class="tip-card fade-in stagger-1">
+      <div class="tip-number">Tip 01</div>
+      <h3>Be specific about your audience</h3>
+      <p>"Summarize this" gets a generic output. "Summarize this for a VP who has 2 minutes and no technical background" gets something immediately useful. Naming the reader changes everything.</p>
+    </div>
+    <div class="tip-card fade-in stagger-2">
+      <div class="tip-number">Tip 02</div>
+      <h3>Tell Claude your role in the situation</h3>
+      <p>"I'm a product manager preparing for a prioritization meeting" or "I'm a customer success rep writing to an upset client" gives Claude the context it needs to tailor output to your actual situation.</p>
+    </div>
+    <div class="tip-card fade-in stagger-3">
+      <div class="tip-number">Tip 03</div>
+      <h3>Iterate rather than accept the first draft</h3>
+      <p>The first response is a starting point. Follow up with "make it shorter," "add more warmth," or "what did you leave out?" The sidebar is a conversation, not a vending machine.</p>
+    </div>
+    <div class="tip-card fade-in stagger-4">
+      <div class="tip-number">Tip 04</div>
+      <h3>Use it for thinking, not just writing</h3>
+      <p>"What should I be worried about with this approach?" or "What am I missing here?" can surface blind spots before you act on incomplete information. Claude isn't just a writing tool.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">Claude in Chrome</span>
+  <span>Claude works best as a collaborator, not a replacement for judgment. Review its outputs before sending or publishing.</span>
+  <a href="https://chromewebstore.google.com/detail/claude/fcoeoabgfenejglbffodgkkbkcdhcgfn" target="_blank">Install Extension →</a>
+</footer>
+
+<script>
+  // Tab switching
+  function switchTab(index) {
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.tab-panel').forEach((panel, i) => {
+      panel.classList.toggle('active', i === index);
+    });
+  }
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Animate hero elements on load
+  window.addEventListener('load', () => {
+    document.querySelector('.hero-kicker')?.classList.add('visible');
+    document.querySelector('.hero h1')?.classList.add('visible');
+  });
+
+  // Active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = link.getAttribute('href') === '#' + entry.target.id
+            ? 'var(--ink)' : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => navObserver.observe(s));
+</script>
+</body>
+</html>
