@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSS Resource Hub: Cox Automotive</title>
+<title>Sales &amp; PM Hub, Cox Automotive</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -138,30 +138,14 @@
 
   /* ─── HERO ─── */
   .hero {
-    margin-bottom: 64px;
-  }
-
-  .hero-eyebrow {
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
     align-items: center;
-    gap: 8px;
-    font-family: 'Barlow Condensed', Arial, sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--energy-aqua);
-    margin-bottom: 16px;
+    margin-bottom: 56px;
   }
 
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--energy-aqua);
-    border-radius: 2px;
-  }
+  .hero-left {}
 
   .hero h1 {
     font-family: 'Barlow Condensed', Arial, sans-serif;
@@ -184,6 +168,118 @@
     max-width: 540px;
     line-height: 1.6;
   }
+
+  /* ─── TRACKER PANEL ─── */
+  .tracker-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px;
+    background: linear-gradient(145deg, rgba(255,130,16,0.12), rgba(255,130,16,0.05));
+    border: 1px solid rgba(255,130,16,0.4);
+    border-radius: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tracker-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--impact-orange), #ffb347);
+    border-radius: 16px 16px 0 0;
+  }
+
+  .tracker-panel:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,130,16,0.65);
+    background: linear-gradient(145deg, rgba(255,130,16,0.18), rgba(255,130,16,0.08));
+    box-shadow: 0 20px 48px rgba(255,130,16,0.15);
+  }
+
+  .tracker-panel-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tracker-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,130,16,0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--impact-orange);
+  }
+
+  .tracker-badge {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    background: rgba(255,130,16,0.2);
+    border: 1px solid rgba(255,130,16,0.4);
+    border-radius: 20px;
+    color: var(--impact-orange);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .tracker-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--impact-orange);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .tracker-panel-label {
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+  }
+
+  .tracker-panel-desc {
+    font-size: 13.5px;
+    color: var(--aluminum);
+    line-height: 1.6;
+  }
+
+  .tracker-panel-cta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--impact-orange);
+    margin-top: 4px;
+    transition: gap 0.2s;
+  }
+
+  .tracker-panel:hover .tracker-panel-cta { gap: 10px; }
+
+  /* ─── TRACKER LINK (legacy, unused) ─── */
+  .tracker-link { display: none; }
 
   /* ─── SEARCH ─── */
   .search-wrap {
@@ -462,6 +558,7 @@
   @media (max-width: 768px) {
     .page-wrap { padding: 0 20px 60px; }
     .card-grid { grid-template-columns: 1fr; }
+    .hero { grid-template-columns: 1fr; }
     header { flex-direction: column; align-items: flex-start; gap: 12px; }
   }
 </style>
@@ -479,20 +576,38 @@
       <div class="logo-mark">CA</div>
       <div class="logo-text">
         <span class="brand">Cox Automotive</span>
-        <span class="sub">MSS Resource Hub</span>
+        <span class="sub">Sales &amp; PM Hub</span>
       </div>
     </div>
     <div class="header-right">
-      <strong>Managed Sales Services</strong><br>
-      Product Consultants · Internal Use Only
+      <strong>Sales &amp; Product Management</strong><br>
+      Cox Automotive Retail Solutions · Internal Use Only
     </div>
   </header>
 
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-eyebrow">Product Consultant Tools</div>
-    <h1>Your <span>field toolkit</span>,<br>all in one place.</h1>
-    <p class="hero-sub">Guides, AI tools, product references, and training resources built for the MSS team.</p>
+    <div class="hero-left">
+      <h1>Your <span>field toolkit</span>,<br>all in one place.</h1>
+      <p class="hero-sub">Guides, AI tools, product references, and resources for Sales and Product Management teams across Retail Solutions.</p>
+    </div>
+    <a href="https://claude-project-tracker.vercel.app/" target="_blank" class="tracker-panel">
+      <div class="tracker-panel-top">
+        <div class="tracker-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <path d="M8 8h8M8 12h8M8 16h5"/>
+          </svg>
+        </div>
+        <div class="tracker-badge">Live</div>
+      </div>
+      <div class="tracker-panel-label">Claude Project Tracker</div>
+      <div class="tracker-panel-desc">Explore what your team is working on. Click any project to view details and add notes.</div>
+      <div class="tracker-panel-cta">
+        Open tracker
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </div>
+    </a>
   </div>
 
   <!-- SEARCH -->
@@ -657,8 +772,8 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>©2025 Cox Automotive. All Rights Reserved. &nbsp;·&nbsp; <strong>Internal use only</strong>: MSS Product Consultants</p>
-    <p>Retail Solutions · <strong>Managed Sales Services</strong></p>
+    <p>©2025 Cox Automotive. All Rights Reserved. &nbsp;·&nbsp; <strong>Internal use only</strong> · Sales &amp; Product Management</p>
+    <p>Retail Solutions · <strong>Cox Automotive</strong></p>
   </footer>
 
 </div><!-- /page-wrap -->
