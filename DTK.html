@@ -1486,6 +1486,164 @@
   }
 
   @media (max-width: 900px) { .ext-anatomy-body { grid-template-columns: 1fr; } .ext-file { border-right: none; } }
+
+  /* ══════════════════════════════════════
+     CLAUDE + COPILOT AI BLOCKS
+  ══════════════════════════════════════ */
+  .ai-block {
+    background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 32px 0 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #7c3aed, #1a6fff, #0d9488);
+  }
+
+  .ai-block-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .ai-block-icon {
+    font-size: 20px;
+  }
+
+  .ai-block-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .ai-block-title strong {
+    color: #a78bfa;
+    font-weight: 700;
+  }
+
+  .ai-tools {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .ai-tool {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+
+  .ai-tool-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .ai-tool-logo {
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .ai-tool-logo.claude { background: rgba(209,137,78,0.2); }
+  .ai-tool-logo.copilot { background: rgba(26,111,255,0.2); }
+
+  .ai-tool-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.04em;
+  }
+
+  .ai-tool-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: auto;
+  }
+
+  .ai-tool-badge.great { background: rgba(52,211,153,0.15); color: #34d399; }
+  .ai-tool-badge.good { background: rgba(96,165,250,0.15); color: #60a5fa; }
+  .ai-tool-badge.na { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+
+  .ai-tool ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .ai-tool ul li {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .ai-tool ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.2);
+    font-size: 10px;
+    top: 2px;
+  }
+
+  .ai-tool ul li strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+
+  .ai-prompt-example {
+    margin-top: 14px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 12px 14px;
+    grid-column: 1 / -1;
+  }
+
+  .ai-prompt-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 8px;
+  }
+
+  .ai-prompt-item {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.55);
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .ai-prompt-item:last-child { border-bottom: none; }
+  .ai-prompt-item::before { content: '"'; color: #7c3aed; }
+  .ai-prompt-item::after { content: '"'; color: #7c3aed; }
+
+  @media (max-width: 900px) { .ai-tools { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -1606,6 +1764,7 @@
   <div class="aside-divider"></div>
   <span class="aside-label">VS Code</span>
   <a href="#vscode-basics"><span class="aside-num">01</span> What is VS Code?</a>
+  <a href="#vscode-install"><span class="aside-num">01b</span> Download & install</a>
   <a href="#vscode-interface"><span class="aside-num">02</span> The interface</a>
   <a href="#vscode-files"><span class="aside-num">03</span> Files & folders</a>
   <a href="#vscode-editing"><span class="aside-num">04</span> Editing basics</a>
@@ -1620,6 +1779,9 @@
   <a href="#daily-workflow"><span class="aside-num">09</span> Daily workflow</a>
   <a href="#advanced"><span class="aside-num">10</span> Going deeper</a>
   <a href="#shortcuts"><span class="aside-num">11</span> Shortcuts</a>
+  <div class="aside-divider"></div>
+  <span class="aside-label">AI Assistants</span>
+  <a href="#copilot-install"><span class="aside-num">★</span> GitHub Copilot setup</a>
   <div class="aside-divider"></div>
   <span class="aside-label">React</span>
   <a href="#react-basics"><span class="aside-num">12</span> What is React?</a>
@@ -1637,6 +1799,7 @@
   <a href="#sandbox-basics"><span class="aside-num">20</span> CodeSandbox</a>
   <a href="#sandbox-setup"><span class="aside-num">21</span> Setup & use cases</a>
   <a href="#stackblitz-basics"><span class="aside-num">22</span> StackBlitz</a>
+  <a href="#stackblitz-setup"><span class="aside-num">22b</span> StackBlitz setup</a>
   <a href="#sandbox-vs-stack"><span class="aside-num">23</span> Which to use when</a>
   <div class="aside-divider"></div>
   <span class="aside-label">APIs & Data</span>
@@ -1669,14 +1832,30 @@
       </div>
     </div>
 
-    <p>VS Code (Visual Studio Code) is a free text editor made by Microsoft. But calling it a "text editor" is like calling a Swiss Army knife a "small knife" — technically true, but it misses the point. It's a full-featured workspace for managing any kind of structured text files: code, system prompts, documentation, HTML guides, markdown notes, JSON configs — all in one place.</p>
+    <div class="beginner-only">
+      <div class="level-badge beg">🌱 Beginner</div>
+      <p>VS Code (Visual Studio Code) is a free text editor made by Microsoft. But calling it a "text editor" is like calling a Swiss Army knife a "small knife" — technically true, but it misses the point. It's a full-featured workspace for managing any kind of structured text files: code, system prompts, documentation, HTML guides, markdown notes, JSON configs — all in one place.</p>
 
-    <div class="concept">
-      <div class="concept-label">📖 Analogy</div>
-      <p>Think of VS Code the way you'd think of Microsoft Word, except instead of being built for polished documents with fonts and formatting, it's built for <strong>working files</strong> — files you edit, organize, reference, and iterate on. It's your workbench, not your publishing tool.</p>
+      <div class="concept">
+        <div class="concept-label">📖 Analogy</div>
+        <p>Think of VS Code the way you'd think of Microsoft Word, except instead of being built for polished documents with fonts and formatting, it's built for <strong>working files</strong> — files you edit, organize, reference, and iterate on. It's your workbench, not your publishing tool.</p>
+      </div>
+
+      <p>The reason it matters for your work specifically: right now when you write a system prompt, it lives inside a chat window. VS Code gives that same prompt a real home — with a filename, a folder structure, syntax highlighting, and a history of every change you've ever made. It turns your prompts from disposable chat messages into managed, organized assets.</p>
+
+      <div class="callout tip">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body">
+          <strong>For non-coders specifically:</strong>
+          <p>You don't need to write a single line of code to get enormous value from VS Code. The file explorer, search, and split-view features alone make it worth using just for prompt management.</p>
+        </div>
+      </div>
     </div>
 
-    <p>The reason it matters for your work specifically: right now when you write a system prompt, it lives inside a chat window. VS Code gives that same prompt a real home — with a filename, a folder structure, syntax highlighting, and a history of every change you've ever made. It turns your prompts from disposable chat messages into managed, organized assets.</p>
+    <div class="advanced-only">
+      <div class="level-badge adv">⚡ Advanced</div>
+      <p>VS Code is built on Electron and uses the Monaco editor engine — the same engine that powers GitHub's web-based editor. It supports Language Server Protocol (LSP), meaning any language with an LSP implementation gets full IDE features: intellisense, go-to-definition, inline errors. For your AI tooling work, the most relevant advanced capabilities are the integrated terminal (full shell access without leaving the editor), multi-root workspaces (multiple repo folders in one window), and the remote development extensions for working on containers or remote servers.</p>
+    </div>
 
     <h3>What VS Code does that a chat window can't</h3>
 
@@ -1707,11 +1886,137 @@
       </div>
     </div>
 
-    <div class="callout tip">
-      <span class="callout-icon">💡</span>
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude & Copilot</strong> with VS Code</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li>Install the <strong>Claude for VS Code extension</strong> from the Extensions panel — gives you a Claude chat panel inside the editor</li>
+            <li>Ask Claude to explain any file you have open: <em>"What does this system prompt do?"</em></li>
+            <li>Paste error messages directly into the Claude panel for plain-English explanations</li>
+            <li>Ask Claude to generate new files and paste them directly into your workspace</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li>Install <strong>GitHub Copilot</strong> from the Extensions panel — autocompletes as you type</li>
+            <li>As you type a comment describing what you want, Copilot suggests the code — press Tab to accept</li>
+            <li>Use Copilot Chat (sidebar) to ask questions about your open files</li>
+            <li>Works best for repetitive patterns — HTML structures, JSON configs, Markdown formatting</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Try asking Claude in the chat panel</div>
+          <div class="ai-prompt-item">Look at this system prompt file and tell me if there are any gaps in the guardrails</div>
+          <div class="ai-prompt-item">Help me write a README for this project folder explaining what each file does</div>
+          <div class="ai-prompt-item">I got this error message — what does it mean and how do I fix it?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 01b — VS CODE INSTALL
+  ════════════════════════════════════════ -->
+  <div class="section" id="vscode-install">
+    <div class="section-header">
+      <div class="section-icon-wrap icon-blue">⬇️</div>
+      <div class="section-header-text">
+        <div class="section-eyebrow">Section 01b · VS Code</div>
+        <h2>Where to get it, how to install it</h2>
+      </div>
+    </div>
+
+    <p><strong>It's free.</strong> VS Code is made by Microsoft and costs nothing. There's no sign-up required to use it — just download and install.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Go to the official download page</h4>
+          <p>Open your browser and go to <strong>code.visualstudio.com</strong>. The site will automatically detect your operating system (Windows or Mac) and show the right download button.</p>
+          <div class="callout tip">
+            <span class="callout-icon">💡</span>
+            <div class="callout-body">
+              <strong>Only download from code.visualstudio.com</strong>
+              <p>The official Microsoft site is the only safe source. Avoid downloading from third-party sites — they may bundle unwanted software.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Download and run the installer</h4>
+          <p><strong>On Windows:</strong> click the big blue Download button. This downloads a <code>.exe</code> file. Open it, click through the installer accepting the defaults — no special options are needed. VS Code will appear in your Start menu when finished.</p>
+          <p><strong>On Mac:</strong> click the Download button. This downloads a <code>.zip</code> file. Open it, and drag the <strong>Visual Studio Code</strong> app into your <strong>Applications</strong> folder. Then open it from Applications or Spotlight (Cmd + Space, type "code").</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Open VS Code for the first time</h4>
+          <p>When VS Code opens you'll see a Welcome tab. You can close this. The most important thing on first launch: go to <strong>File → Open Folder</strong> and open a folder you want to work in. VS Code works with folders, not just individual files — a folder is your workspace.</p>
+          <div class="callout note">
+            <span class="callout-icon">ℹ️</span>
+            <div class="callout-body">
+              <strong>Windows users: add "Open with Code" to right-click menu</strong>
+              <p>During installation, check the box that says "Add 'Open with Code' action to Windows Explorer file context menu." This lets you right-click any folder on your computer and open it in VS Code instantly — a huge time-saver.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Install the essential extensions immediately</h4>
+          <p>Click the Extensions icon in the left sidebar (puzzle piece icon, or <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>). Search for and install these to start:</p>
+          <div class="data-table" style="overflow:hidden; border-radius:8px; margin-top:12px;">
+            <table style="width:100%; border-collapse:collapse;">
+              <thead><tr><th>Extension name</th><th>What it does</th><th>Priority</th></tr></thead>
+              <tbody>
+                <tr><td>Markdown Preview Enhanced</td><td>Renders .md files beautifully while you edit</td><td>Install now</td></tr>
+                <tr><td>GitLens</td><td>Shows Git history inline in your files</td><td>Install now</td></tr>
+                <tr><td>GitHub Copilot</td><td>AI autocomplete — see Section Copilot below</td><td>Install now</td></tr>
+                <tr><td>Claude for VS Code</td><td>Claude chat panel inside the editor</td><td>Install now</td></tr>
+                <tr><td>Prettier</td><td>Auto-formats your files on save</td><td>Install later</td></tr>
+                <tr><td>Material Icon Theme</td><td>Adds icons to files in the Explorer panel</td><td>Install later</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">5</div></div>
+        <div class="step-body">
+          <h4>Turn on Auto Save</h4>
+          <p>Go to <strong>File → Auto Save</strong> and make sure it's checked. This means your files save automatically as you type — you don't have to remember to press <kbd>Ctrl/Cmd</kbd> + <kbd>S</kbd> every time (though it's still a good habit before committing to GitHub).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <span class="callout-icon">✅</span>
       <div class="callout-body">
-        <strong>For non-coders specifically:</strong>
-        <p>You don't need to write a single line of code to get enormous value from VS Code. The file explorer, search, and split-view features alone make it worth using just for prompt management.</p>
+        <strong>VS Code is ready when you can:</strong>
+        <p>Open a folder, see its files in the left panel, create a new file, type in it, and see it autosave. That's all you need to get started — the interface and editing sections explain everything else.</p>
       </div>
     </div>
   </div>
@@ -2034,6 +2339,47 @@
         <p>By this point you should be able to: open a folder as a workspace, create and organize files, use split view to compare files, and search across your entire workspace. That's 80% of what you'll use day-to-day.</p>
       </div>
     </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude & Copilot</strong> while editing in VS Code</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li>Open the Claude panel alongside your file — ask it to review what you've written</li>
+            <li><strong>Find & replace across files:</strong> ask Claude what exact phrase to search for when you want to update something consistently</li>
+            <li>Ask Claude to write a complete file from scratch — paste the output directly into your workspace via the Explorer</li>
+            <li>Use split view to compare Claude's suggested version vs your current version side by side</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li>Type a comment like <code># system prompt for onboarding agent</code> and Copilot suggests the structure</li>
+            <li>Copilot autocompletes repetitive patterns — JSON keys, Markdown tables, HTML structures</li>
+            <li>Use <strong>Copilot Chat</strong> (<kbd>Ctrl/Cmd</kbd> + <kbd>I</kbd>) to ask questions about the file you're editing</li>
+            <li>Copilot explains what any selected block of code or text does — select + right-click + "Explain"</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Try asking Claude while editing</div>
+          <div class="ai-prompt-item">Review this system prompt and rewrite any sections that are vague or ambiguous</div>
+          <div class="ai-prompt-item">I want to find every place I used the word "helpful" across all my prompt files and replace it with something more specific — what should I search for?</div>
+          <div class="ai-prompt-item">Create a CHANGELOG.md template I can use for every agent folder</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -2048,36 +2394,84 @@
       </div>
     </div>
 
-    <p>There are two things here that often get confused: <strong>Git</strong> and <strong>GitHub</strong>. They're related but different.</p>
+    <div class="beginner-only">
+      <div class="level-badge beg">🌱 Beginner</div>
+      <p>There are two things here that often get confused: <strong>Git</strong> and <strong>GitHub</strong>. They're related but different.</p>
 
-    <div class="cards">
-      <div class="card">
-        <div class="card-accent-top" style="background: linear-gradient(90deg, #1a1814, #4a4540)"></div>
-        <span class="card-emoji">⚙️</span>
-        <h4>Git — the engine</h4>
-        <p>Git is software that tracks every change made to every file in a folder. It runs on your computer. Think of it as the "track changes" feature from Word, except for any file, and with a permanent, detailed history.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-accent-top" style="background: linear-gradient(90deg, #1a1814, #4a4540)"></div>
+          <span class="card-emoji">⚙️</span>
+          <h4>Git — the engine</h4>
+          <p>Git is software that tracks every change made to every file in a folder. It runs on your computer. Think of it as the "track changes" feature from Word, except for any file, and with a permanent, detailed history.</p>
+        </div>
+        <div class="card">
+          <div class="card-accent-top" style="background: linear-gradient(90deg, #1a6fff, #60a5fa)"></div>
+          <span class="card-emoji">☁️</span>
+          <h4>GitHub — the cloud layer</h4>
+          <p>GitHub is a website that stores your Git-tracked folders online. It's the backup, the history viewer, and the collaboration layer. Git does the tracking locally; GitHub keeps it safe in the cloud.</p>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-accent-top" style="background: linear-gradient(90deg, #1a6fff, #60a5fa)"></div>
-        <span class="card-emoji">☁️</span>
-        <h4>GitHub — the cloud layer</h4>
-        <p>GitHub is a website that stores your Git-tracked folders online. It's the backup, the history viewer, and the collaboration layer. Git does the tracking locally; GitHub keeps it safe in the cloud.</p>
+
+      <div class="concept">
+        <div class="concept-label">📖 Analogy</div>
+        <p>Git is like a personal diary that records every edit you make to a document with timestamps and notes. GitHub is like a safe deposit box where you store that diary — accessible from anywhere, never lost, shareable with others if you choose.</p>
+      </div>
+
+      <h3>Why version control changes how you work</h3>
+      <p>Without version control, your workflow probably looks like this: edit a system prompt, it stops working well, you try to remember what you changed, maybe you have a <code>system-prompt-backup.txt</code> somewhere that might be the right version... With Git and GitHub, every version you've ever saved is permanently stored with a note explaining what changed and why. Going back is one click.</p>
+
+      <div class="callout note">
+        <span class="callout-icon">ℹ️</span>
+        <div class="callout-body">
+          <strong>GitHub ≠ Google Drive</strong>
+          <p>Google Drive autosaves and syncs files continuously. GitHub is intentional — you choose when to save a "snapshot" (called a commit) and write a message explaining what that snapshot represents. This makes the history meaningful rather than just a timestamp list.</p>
+        </div>
       </div>
     </div>
 
-    <div class="concept">
-      <div class="concept-label">📖 Analogy</div>
-      <p>Git is like a personal diary that records every edit you make to a document with timestamps and notes. GitHub is like a safe deposit box where you store that diary — accessible from anywhere, never lost, shareable with others if you choose.</p>
+    <div class="advanced-only">
+      <div class="level-badge adv">⚡ Advanced</div>
+      <p>Git is a distributed version control system — every clone of a repo contains the full history, not just the latest snapshot. Commits are identified by SHA-1 hashes, and the DAG (directed acyclic graph) of commits is what makes branching, rebasing, and cherry-picking possible. GitHub adds a collaboration layer on top: pull requests with code review, protected branches, Actions for CI/CD, and the API surface for automating workflows. For AI tooling, the relevant GitHub features are: <strong>Actions</strong> (auto-run tests or deploy on push), <strong>Secrets</strong> (secure env var storage at the repo level), and <strong>Packages</strong> (host private npm packages for shared internal libraries).</p>
     </div>
 
-    <h3>Why version control changes how you work</h3>
-    <p>Without version control, your workflow probably looks like this: edit a system prompt, it stops working well, you try to remember what you changed, maybe you have a <code>system-prompt-backup.txt</code> somewhere that might be the right version... With Git and GitHub, every version you've ever saved is permanently stored with a note explaining what changed and why. Going back is one click.</p>
-
-    <div class="callout note">
-      <span class="callout-icon">ℹ️</span>
-      <div class="callout-body">
-        <strong>GitHub ≠ Google Drive</strong>
-        <p>Google Drive autosaves and syncs files continuously. GitHub is intentional — you choose when to save a "snapshot" (called a commit) and write a message explaining what that snapshot represents. This makes the history meaningful rather than just a timestamp list.</p>
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude & Copilot</strong> with GitHub</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li><strong>Write commit messages:</strong> paste a summary of what you changed and ask Claude to write a clean, descriptive commit message</li>
+            <li><strong>Review a diff:</strong> copy the changed lines from GitHub Desktop and ask Claude if anything looks unintentional</li>
+            <li><strong>Write your README:</strong> describe your project and Claude drafts a professional README.md for the repo</li>
+            <li>Ask Claude to suggest a good folder structure before you create the repo</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot</span>
+            <span class="ai-tool-badge good">Good fit</span>
+          </div>
+          <ul>
+            <li>Copilot is built into GitHub.com — it can suggest fixes directly in pull request diffs</li>
+            <li>In VS Code, Copilot writes code while you work in the repo — the GitHub connection means it understands your project context</li>
+            <li>Copilot can summarize pull requests and explain what changed when reviewing teammates' work</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Try asking Claude for GitHub help</div>
+          <div class="ai-prompt-item">I updated the guardrails section and added a new fallback behavior — write me a good commit message for this</div>
+          <div class="ai-prompt-item">Write a README.md for a repo that stores system prompts for 3 AI agents used by the Cox Automotive AI Council</div>
+          <div class="ai-prompt-item">What's a good GitHub folder structure for a team managing 10 different internal AI tools?</div>
+        </div>
       </div>
     </div>
   </div>
@@ -2341,6 +2735,43 @@
         </div>
       </div>
     </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude & Copilot</strong> with GitHub Desktop</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li>After making changes, copy the diff from GitHub Desktop and ask Claude: <em>"Does this look right? Anything missing?"</em></li>
+            <li>Ask Claude to name your branches: <em>"I'm testing a new tone for the onboarding agent — what should I name this branch?"</em></li>
+            <li>When merging goes wrong, describe the conflict to Claude and it will walk you through resolving it step by step</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot</span>
+            <span class="ai-tool-badge good">Good fit</span>
+          </div>
+          <ul>
+            <li>Copilot can suggest commit messages automatically in VS Code's Source Control panel — look for the sparkle icon</li>
+            <li>On GitHub.com, Copilot can summarize pull requests so reviewers understand changes at a glance</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Try asking Claude during your GitHub workflow</div>
+          <div class="ai-prompt-item">Here's my diff — I changed the escalation logic and added a new persona definition. Write a commit message that captures both</div>
+          <div class="ai-prompt-item">I'm about to merge a branch that rewrites the support agent system prompt. What should I check before merging?</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -2404,6 +2835,44 @@
         <div class="track-item"><div class="track-check done">✓</div> Review diff in GitHub Desktop</div>
         <div class="track-item"><div class="track-check done">✓</div> Write a descriptive commit message</div>
         <div class="track-item"><div class="track-check done">✓</div> Commit → Push</div>
+      </div>
+    </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude</strong> in your daily workflow</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li><strong>Start of day:</strong> ask Claude to summarize what's in your repo's recent commit history to re-orient yourself</li>
+            <li><strong>During editing:</strong> use Claude as a thinking partner — describe the change you're about to make and ask if it makes sense</li>
+            <li><strong>End of day:</strong> ask Claude to write your commit message based on what you describe you did</li>
+            <li>Ask Claude to review today's work and flag anything that seems incomplete or inconsistent</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot</span>
+            <span class="ai-tool-badge good">Good fit</span>
+          </div>
+          <ul>
+            <li>Copilot runs passively throughout your session — it learns the patterns in your open files and autocompletes accordingly</li>
+            <li>The more you work in a consistent style, the better Copilot's suggestions become over time</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Daily workflow prompts for Claude</div>
+          <div class="ai-prompt-item">I'm starting work on the support agent system prompt. Here's the current version — what are the three most important things I should focus on improving today?</div>
+          <div class="ai-prompt-item">Here's what I changed today across three files. Write a summary I can use as a commit message and a one-paragraph update for my team</div>
+        </div>
       </div>
     </div>
   </div>
@@ -2521,6 +2990,185 @@
 
   </div>
 
+  <!-- ═══════════════════════════════════════
+       COPILOT — GITHUB COPILOT SETUP
+  ════════════════════════════════════════ -->
+  <div class="section" id="copilot-install">
+    <div class="section-header">
+      <div class="section-icon-wrap icon-violet">⬡</div>
+      <div class="section-header-text">
+        <div class="section-eyebrow">AI Assistants · GitHub Copilot</div>
+        <h2>GitHub Copilot — what it is, how to get it, how to set it up</h2>
+      </div>
+    </div>
+
+    <p>GitHub Copilot is an AI coding assistant made by GitHub (owned by Microsoft) and powered by OpenAI. It lives inside VS Code and autocompletes code, text, and structured content as you type — like a smart autocomplete that understands context. Unlike Claude, which you interact with through conversation, Copilot works passively: it watches what you're writing and suggests completions inline, right in the editor.</p>
+
+    <div class="concept">
+      <div class="concept-label">📖 How Claude and Copilot divide the work</div>
+      <p><strong>Copilot</strong> is always-on and reactive — it suggests the next line or block as you type. Best for filling patterns, completing repetitive structures, and editing existing files. <strong>Claude</strong> is on-demand and generative — you describe what you want and it writes entire files, explains complex things, or helps you think through problems. Use both simultaneously: Copilot handles the small stuff while Claude handles the big picture.</p>
+    </div>
+
+    <h3>What does it cost?</h3>
+    <div class="data-table" style="overflow:hidden; border-radius:10px;">
+      <table style="width:100%; border-collapse:collapse;">
+        <thead><tr><th>Plan</th><th>Cost</th><th>What you get</th></tr></thead>
+        <tbody>
+          <tr><td>Free tier</td><td>Free</td><td>2,000 code completions/month + 50 chat messages/month — enough to evaluate it</td></tr>
+          <tr><td>Copilot Individual</td><td>$10/month</td><td>Unlimited completions, Copilot Chat, multi-file edits</td></tr>
+          <tr><td>Copilot Business</td><td>$19/user/month</td><td>Everything above + organization policy controls, audit logs</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout note">
+      <span class="callout-icon">ℹ️</span>
+      <div class="callout-body">
+        <strong>Check with your organization first</strong>
+        <p>Cox Automotive may already have a Copilot Business license available to you — check with IT or your manager before paying personally. Enterprise licenses are managed through your GitHub organization account.</p>
+      </div>
+    </div>
+
+    <h3>How to get it and install it</h3>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Sign up for GitHub Copilot</h4>
+          <p>Go to <strong>github.com/features/copilot</strong>. Click <strong>Start a free trial</strong> (or sign in if you already have a GitHub account). You'll be asked for payment info even for the free tier — GitHub requires it to activate the account. You won't be charged during the trial period.</p>
+          <p>If your organization provides Copilot Business: your GitHub org admin will add you to the license. You'll get an email invitation — accept it and you're enabled, no payment required.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Install the GitHub Copilot extension in VS Code</h4>
+          <p>Open VS Code → click the Extensions icon (puzzle piece, left sidebar) → search for <strong>"GitHub Copilot"</strong> → click Install on the result published by GitHub. Also install <strong>"GitHub Copilot Chat"</strong> while you're there — this adds the chat panel.</p>
+          <div class="callout warn">
+            <span class="callout-icon">⚠️</span>
+            <div class="callout-body">
+              <strong>Make sure it's the official GitHub extension</strong>
+              <p>The verified publisher should say "GitHub" with a blue checkmark. There are imitation extensions — only install the one from the verified GitHub publisher.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Sign in to GitHub from VS Code</h4>
+          <p>After installing, VS Code will show a notification asking you to sign in to GitHub. Click <strong>Sign in to GitHub</strong>. Your browser opens and asks you to authorize VS Code. Click <strong>Authorize</strong>. You're redirected back to VS Code. Copilot is now active.</p>
+          <p>You'll see a small Copilot icon in the VS Code status bar at the bottom. If it shows a warning icon, click it to troubleshoot — usually it means you need to re-authorize.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Test that it's working</h4>
+          <p>Open any file in VS Code — a <code>.md</code> file, a <code>.js</code> file, anything. Start typing. Within a second or two, Copilot will show a suggestion in grey text. Press <kbd>Tab</kbd> to accept it, or keep typing to ignore it.</p>
+          <div class="data-table" style="overflow:hidden; border-radius:8px; margin-top:12px;">
+            <table style="width:100%; border-collapse:collapse;">
+              <thead><tr><th>Key</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><kbd>Tab</kbd></td><td>Accept the full suggestion</td></tr>
+                <tr><td><kbd>Ctrl/Cmd</kbd> + <kbd>→</kbd></td><td>Accept one word of the suggestion at a time</td></tr>
+                <tr><td><kbd>Esc</kbd></td><td>Dismiss the suggestion</td></tr>
+                <tr><td><kbd>Alt/Option</kbd> + <kbd>]</kbd></td><td>See next suggestion (Copilot may have multiple)</td></tr>
+                <tr><td><kbd>Ctrl/Cmd</kbd> + <kbd>I</kbd></td><td>Open Copilot Chat inline</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">5</div></div>
+        <div class="step-body">
+          <h4>Open the Copilot Chat panel</h4>
+          <p>Click the chat bubble icon in the left sidebar (or press <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd>). This opens a full chat interface where you can ask questions about your code, request edits, or have Copilot explain anything. It has access to your currently open files as context — much like Claude, but embedded directly in the editor with live file awareness.</p>
+          <div class="callout tip">
+            <span class="callout-icon">💡</span>
+            <div class="callout-body">
+              <strong>Use @workspace for full-project context</strong>
+              <p>In Copilot Chat, type <code>@workspace</code> before your question and Copilot will search across your entire project rather than just the open file. Useful for questions like <code>@workspace where do we handle the Claude API error states?</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>How to use Copilot effectively for AI Council work</h3>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-accent-top" style="background: linear-gradient(90deg, #7c3aed, #a78bfa)"></div>
+        <span class="card-emoji">💬</span>
+        <h4>Write a comment, get the code</h4>
+        <p>Type a comment describing what you want — <code>// fetch Claude API and display response in a div</code> — and Copilot writes the implementation below it. Press Tab to accept.</p>
+      </div>
+      <div class="card">
+        <div class="card-accent-top" style="background: linear-gradient(90deg, #1a6fff, #60a5fa)"></div>
+        <span class="card-emoji">🔍</span>
+        <h4>Explain any code you don't understand</h4>
+        <p>Select any block of code → right-click → <strong>Copilot → Explain This</strong>. Copilot writes a plain-English explanation in the chat panel.</p>
+      </div>
+      <div class="card">
+        <div class="card-accent-top" style="background: linear-gradient(90deg, #0d9488, #34d399)"></div>
+        <span class="card-emoji">🐛</span>
+        <h4>Fix errors inline</h4>
+        <p>When VS Code shows a red underline error, hover over it and click <strong>Fix with Copilot</strong>. It suggests a fix right in the editor — no copy-pasting to a chat window.</p>
+      </div>
+      <div class="card">
+        <div class="card-accent-top" style="background: linear-gradient(90deg, #c47b00, #fbbf24)"></div>
+        <span class="card-emoji">📝</span>
+        <h4>Complete Markdown and JSON structures</h4>
+        <p>Copilot is excellent at structured text — Markdown tables, JSON configs, YAML. Start a table header and it fills in the rows. Start a JSON key and it suggests the value pattern.</p>
+      </div>
+    </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title"><strong>Claude + Copilot</strong> — the side-by-side workflow</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Use Claude for</span>
+            <span class="ai-tool-badge great">Big picture</span>
+          </div>
+          <ul>
+            <li>Generating complete files and components from scratch</li>
+            <li>Explaining concepts, debugging complex logic</li>
+            <li>Designing architecture, writing system prompts</li>
+            <li>Anything that requires reasoning across the whole problem</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">Use Copilot for</span>
+            <span class="ai-tool-badge great">In the moment</span>
+          </div>
+          <ul>
+            <li>Completing the next line or block as you type</li>
+            <li>Filling repetitive patterns you've already established</li>
+            <li>Quick inline fixes for errors and warnings</li>
+            <li>Explaining a selected block without leaving the editor</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Typical session: Claude then Copilot</div>
+          <div class="ai-prompt-item">Ask Claude: "Build a React component that calls the Claude API with a system prompt and user message, shows a loading state, and displays the response" → paste the file into VS Code → Copilot takes over for small edits, completions, and inline fixes as you customize it</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════
        SECTION 12 — WHAT IS REACT
@@ -2534,14 +3182,30 @@
       </div>
     </div>
 
-    <p>React is a JavaScript library created by Meta (Facebook) for building user interfaces. Where a regular HTML page is static — you write it once and it looks the same to everyone — a React app is <strong>dynamic and interactive</strong>. It can update, respond to clicks, load new data, and change what's on screen without ever reloading the page.</p>
+    <div class="beginner-only">
+      <div class="level-badge beg">🌱 Beginner</div>
+      <p>React is a JavaScript library created by Meta (Facebook) for building user interfaces. Where a regular HTML page is static — you write it once and it looks the same to everyone — a React app is <strong>dynamic and interactive</strong>. It can update, respond to clicks, load new data, and change what's on screen without ever reloading the page.</p>
 
-    <div class="concept">
-      <div class="concept-label">📖 Analogy</div>
-      <p>Think of a traditional HTML page like a printed flyer — once it's printed, it's fixed. React is more like a digital display board: the structure is defined once, but the content can change in real time based on what's happening. A button click changes what's shown. New data arrives and the screen updates automatically.</p>
+      <div class="concept">
+        <div class="concept-label">📖 Analogy</div>
+        <p>Think of a traditional HTML page like a printed flyer — once it's printed, it's fixed. React is more like a digital display board: the structure is defined once, but the content can change in real time based on what's happening. A button click changes what's shown. New data arrives and the screen updates automatically.</p>
+      </div>
+
+      <p>React is the most widely used frontend framework in the world. When you use Claude's artifact environment and build something with interactive buttons, live state, or dynamic data — that's React. When Anthropic, Netflix, Airbnb, and thousands of other companies build their web interfaces, most of them use React.</p>
+
+      <div class="callout note">
+        <span class="callout-icon">ℹ️</span>
+        <div class="callout-body">
+          <strong>The Claude connection</strong>
+          <p>When Claude builds you a <code>.jsx</code> artifact — the interactive cards, live counters, filterable lists — that's React. You've been using React-rendered outputs already. Learning React means you can understand, modify, and extend those outputs rather than treating them as a black box.</p>
+        </div>
+      </div>
     </div>
 
-    <p>React is the most widely used frontend framework in the world. When you use Claude's artifact environment and build something with interactive buttons, live state, or dynamic data — that's React. When Anthropic, Netflix, Airbnb, and thousands of other companies build their web interfaces, most of them use React.</p>
+    <div class="advanced-only">
+      <div class="level-badge adv">⚡ Advanced</div>
+      <p>React uses a virtual DOM to batch and minimize actual DOM mutations — when state changes, React diffs the previous and next virtual DOM trees and applies only the minimal set of real DOM updates. The Fiber architecture (introduced in React 16) enables interruptible rendering, concurrent features, and Suspense for async data loading. For your AI tooling work, the most relevant patterns are: <strong>controlled components</strong> for form state, <strong>useCallback/useMemo</strong> for preventing unnecessary re-renders in data-heavy dashboards, and <strong>Context API or Zustand</strong> for sharing agent state across components without prop drilling. Consider <strong>React Query (TanStack)</strong> for managing Claude API call state — it handles loading, error, caching, and refetching out of the box.</p>
+    </div>
 
     <h3>What makes React different from plain HTML</h3>
 
@@ -2584,14 +3248,6 @@
           <tr><td>Speed of creation matters more than complexity</td><td>Long-term maintainability matters</td></tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="callout note">
-      <span class="callout-icon">ℹ️</span>
-      <div class="callout-body">
-        <strong>The Claude connection</strong>
-        <p>When Claude builds you a <code>.jsx</code> artifact — the interactive cards, live counters, filterable lists — that's React. You've been using React-rendered outputs already. Learning React means you can understand, modify, and extend those outputs rather than treating them as a black box.</p>
-      </div>
     </div>
   </div>
 
@@ -2836,6 +3492,46 @@
         <p>VS Code to edit → browser to preview → GitHub to save versions. The loop between these three is how professional web development actually works. The only missing piece is getting it online — which is what Vercel handles.</p>
       </div>
     </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude & Copilot</strong> to build React apps</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li><strong>Generate entire components:</strong> describe what you want and Claude writes the full <code>.jsx</code> file — paste it directly into <code>src/components/</code></li>
+            <li>Ask Claude to explain any React code you don't understand before editing it</li>
+            <li>If your app throws an error, paste the error message and Claude diagnoses and fixes it</li>
+            <li>Ask Claude to add features to existing components: <em>"Add a loading spinner to this component while data fetches"</em></li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li>Copilot excels at React — it knows component patterns deeply and autocompletes JSX as you type</li>
+            <li>Type a comment like <code>// Card component showing agent name, version, and status</code> and Copilot writes the component</li>
+            <li>Copilot suggests imports automatically when you reference a library you haven't imported yet</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Try asking Claude to build React components</div>
+          <div class="ai-prompt-item">Build a React component that displays a list of AI agents. Each card shows the agent name, current version, last updated date, and a status badge (Active/Testing/Deprecated). Use Tailwind for styling.</div>
+          <div class="ai-prompt-item">I have this React component that calls the Claude API. It's throwing a CORS error — here's the code. What's wrong and how do I fix it?</div>
+          <div class="ai-prompt-item">Add a search bar to this agent list component that filters cards by name in real time</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -2898,6 +3594,46 @@
         <p>You don't need to write React from scratch. Describe what you want to Claude, get a <code>.jsx</code> component, drop it into your project's <code>src/components/</code> folder, import it into <code>App.jsx</code>, and it's live. Claude does the writing; you do the organizing and deploying.</p>
       </div>
     </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title"><strong>Claude</strong> as your React co-developer — the full picture</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">The workflow</span>
+            <span class="ai-tool-badge great">Core pattern</span>
+          </div>
+          <ul>
+            <li><strong>Step 1 — Describe:</strong> tell Claude what the component should do, look like, and what data it uses</li>
+            <li><strong>Step 2 — Generate:</strong> Claude writes the full <code>.jsx</code> file with imports, logic, and styling</li>
+            <li><strong>Step 3 — Test:</strong> paste into CodeSandbox or your local project and preview it immediately</li>
+            <li><strong>Step 4 — Refine:</strong> describe what's wrong or needs changing and Claude updates it</li>
+            <li><strong>Step 5 — Deploy:</strong> commit to GitHub → Vercel deploys automatically</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude + Claude API</span>
+            <span class="ai-tool-badge great">AI-powered apps</span>
+          </div>
+          <ul>
+            <li>Ask Claude to build a React component that <em>itself calls Claude</em> — a chat interface, a summarizer, a prompt tester</li>
+            <li>Claude writes the <code>fetch</code> call to the Anthropic API, the state management, and the UI all in one go</li>
+            <li>Store your API key in Vercel environment variables — Claude shows you exactly how to access it in the component</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Real AI Council use case prompts</div>
+          <div class="ai-prompt-item">Build a React app that lets a user paste a system prompt and a test message, calls the Claude API with those inputs, and displays the response. Include a token count display and a copy button on the response.</div>
+          <div class="ai-prompt-item">Build a React dashboard that shows a list of our AI agents (hardcoded data is fine). Each row shows agent name, owner, version, status, and a "View System Prompt" button that opens a modal with the prompt text.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -2912,11 +3648,27 @@
       </div>
     </div>
 
-    <p>Vercel is a cloud platform that hosts web apps and websites. You connect it to your GitHub repo, and every time you push code, Vercel automatically builds and deploys your app to a live URL. No server setup, no configuration files, no technical hosting knowledge required.</p>
+    <div class="beginner-only">
+      <div class="level-badge beg">🌱 Beginner</div>
+      <p>Vercel is a cloud platform that hosts web apps and websites. You connect it to your GitHub repo, and every time you push code, Vercel automatically builds and deploys your app to a live URL. No server setup, no configuration files, no technical hosting knowledge required.</p>
 
-    <div class="concept">
-      <div class="concept-label">📖 Analogy</div>
-      <p>Think of Vercel like a printing press that's always watching your manuscript on Google Docs. Every time you save a new version, it instantly prints and distributes the new edition — worldwide, in seconds. You just write; it handles the publishing.</p>
+      <div class="concept">
+        <div class="concept-label">📖 Analogy</div>
+        <p>Think of Vercel like a printing press that's always watching your manuscript on Google Docs. Every time you save a new version, it instantly prints and distributes the new edition — worldwide, in seconds. You just write; it handles the publishing.</p>
+      </div>
+
+      <div class="callout note">
+        <span class="callout-icon">ℹ️</span>
+        <div class="callout-body">
+          <strong>Simple rule of thumb</strong>
+          <p>If it's a static HTML file with no JavaScript framework — use GitHub Pages. If it's a React app, or if you want preview deployments and faster deploys — use Vercel. For your AI tools and interactive guides built in React, Vercel is the right choice.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="advanced-only">
+      <div class="level-badge adv">⚡ Advanced</div>
+      <p>Vercel's build pipeline runs on a global edge network — deployments are served from the CDN node closest to each user, not from a single origin server. For AI-powered apps, the critical feature is <strong>Vercel Functions</strong> (formerly serverless functions): Node.js functions in <code>/api</code> that run server-side, keeping API keys out of the client bundle. These functions support streaming responses — essential for displaying Claude's output token-by-token rather than waiting for the full response. Use <code>ReadableStream</code> in the function and the <code>useChat</code> hook from Vercel's AI SDK to get streaming working with minimal boilerplate.</p>
     </div>
 
     <h3>What Vercel gives you out of the box</h3>
@@ -2962,14 +3714,6 @@
           <tr><td>Private repos</td><td>Requires paid plan</td><td>Free tier supports private repos</td></tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="callout note">
-      <span class="callout-icon">ℹ️</span>
-      <div class="callout-body">
-        <strong>Simple rule of thumb</strong>
-        <p>If it's a static HTML file with no JavaScript framework — use GitHub Pages. If it's a React app, or if you want preview deployments and faster deploys — use Vercel. For your AI tools and interactive guides built in React, Vercel is the right choice.</p>
-      </div>
     </div>
   </div>
 
@@ -3064,6 +3808,44 @@
 <span class="c"># Access in your React code as:</span>
 <span class="k">const</span> apiKey = import.meta.env.<span class="h">VITE_CLAUDE_API_KEY</span>;</pre>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude</strong> with Vercel deployments</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li><strong>Securely deploy Claude-powered apps:</strong> store your <code>VITE_CLAUDE_API_KEY</code> in Vercel's environment variables — ask Claude to show you exactly how to read it in your React component</li>
+            <li>Ask Claude to write a <strong>Vercel serverless function</strong> that proxies Claude API calls — keeps your key completely server-side</li>
+            <li>When Vercel build logs show errors, paste them into Claude for diagnosis: <em>"My Vercel build failed — here's the log"</em></li>
+            <li>Ask Claude to help you set up a <code>vercel.json</code> config file for custom routing or redirects</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot</span>
+            <span class="ai-tool-badge good">Good fit</span>
+          </div>
+          <ul>
+            <li>Copilot helps write the serverless function files (in <code>/api/</code>) that Vercel picks up automatically</li>
+            <li>Autocompletes Vercel config syntax and environment variable access patterns</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Try asking Claude for Vercel + Claude integration help</div>
+          <div class="ai-prompt-item">Write a Vercel serverless function at /api/claude that accepts a system prompt and user message, calls the Claude API using a server-side environment variable, and returns the response. My frontend React app will call this instead of Claude directly.</div>
+          <div class="ai-prompt-item">My Vercel deployment failed with this build error — what does it mean and how do I fix it? [paste error]</div>
         </div>
       </div>
     </div>
@@ -3244,8 +4026,45 @@
       </div>
     </div>
 
-  <!-- ═══════════════════════════════════════
-       SECTION 20 — WHAT IS CODESANDBOX
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title"><strong>Claude</strong> across the full VS Code → GitHub → Vercel workflow</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude's role in each step</span>
+            <span class="ai-tool-badge great">End to end</span>
+          </div>
+          <ul>
+            <li><strong>VS Code:</strong> Claude writes the components and files you edit and organize</li>
+            <li><strong>GitHub:</strong> Claude writes your commit messages and READMEs</li>
+            <li><strong>React:</strong> Claude generates every component — you assemble them</li>
+            <li><strong>Vercel:</strong> Claude writes the serverless functions and env var config</li>
+            <li><strong>The app itself:</strong> Claude powers it — your React app calls Claude's API to do useful things</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot's role</span>
+            <span class="ai-tool-badge good">Inline assist</span>
+          </div>
+          <ul>
+            <li>Copilot fills gaps while you're actively editing — it autocompletes as you type anywhere in the workflow</li>
+            <li>Best at: filling in repetitive patterns, completing half-written lines, and explaining code inline</li>
+            <li>Think of Copilot as always-on and Claude as on-demand — both running simultaneously</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">First project prompt for the AI Council</div>
+          <div class="ai-prompt-item">Build me a complete React app: a simple internal tool for the Cox Automotive AI Council that displays a list of our AI agents. Each agent card shows name, description, owner, status (Active/Beta/Deprecated), and a button that opens a modal with the full system prompt. Include a search bar and status filter. Use Tailwind. I'll deploy it to Vercel and store the data in a JSON file for now.</div>
+        </div>
+      </div>
+    </div>
+  </div>
   ════════════════════════════════════════ -->
   <div class="section" id="sandbox-basics">
     <div class="section-header">
@@ -3256,11 +4075,19 @@
       </div>
     </div>
 
-    <p>CodeSandbox is a fully functional development environment that runs entirely in your browser. No installs, no Node.js, no terminal — you open a URL and you're immediately inside a working React project with a live preview. Think of it as VS Code and a React dev server, combined, hosted in the cloud, and ready in five seconds.</p>
+    <div class="beginner-only">
+      <div class="level-badge beg">🌱 Beginner</div>
+      <p>CodeSandbox is a fully functional development environment that runs entirely in your browser. No installs, no Node.js, no terminal — you open a URL and you're immediately inside a working React project with a live preview. Think of it as VS Code and a React dev server, combined, hosted in the cloud, and ready in five seconds.</p>
 
-    <div class="concept">
-      <div class="concept-label">📖 Analogy</div>
-      <p>VS Code + React locally is like having a full kitchen — powerful but requires setup, equipment, and some prep time. CodeSandbox is like a food truck: smaller, immediately ready, and perfect when you just want to quickly test a recipe without cleaning the whole kitchen afterward.</p>
+      <div class="concept">
+        <div class="concept-label">📖 Analogy</div>
+        <p>VS Code + React locally is like having a full kitchen — powerful but requires setup, equipment, and some prep time. CodeSandbox is like a food truck: smaller, immediately ready, and perfect when you just want to quickly test a recipe without cleaning the whole kitchen afterward.</p>
+      </div>
+    </div>
+
+    <div class="advanced-only">
+      <div class="level-badge adv">⚡ Advanced</div>
+      <p>CodeSandbox runs on a container-based architecture — each sandbox spins up a real Linux container on their cloud infrastructure. Unlike StackBlitz's browser-native WebContainers, CodeSandbox containers can run arbitrary Node.js processes including servers, making it suitable for full-stack development. Their <strong>Devboxes</strong> feature gives persistent development environments with always-on containers. For internal AI tooling, the most useful CodeSandbox feature is the <strong>GitHub integration</strong> — connect a repo and every branch gets its own live sandbox URL, making it a de facto preview environment on top of your existing GitHub workflow without Vercel.</p>
     </div>
 
     <h3>What makes CodeSandbox useful</h3>
@@ -3378,6 +4205,44 @@
         </tbody>
       </table>
     </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude</strong> with CodeSandbox</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude → CodeSandbox</span>
+            <span class="ai-tool-badge great">Perfect pair</span>
+          </div>
+          <ul>
+            <li><strong>The core loop:</strong> ask Claude to build a component → copy the code → paste into CodeSandbox → see it live immediately</li>
+            <li>If the component has an error in CodeSandbox, copy the error and paste it back to Claude: <em>"This threw an error — fix it"</em></li>
+            <li>Use CodeSandbox to demo Claude-built tools to stakeholders before spending time on a full deployment</li>
+            <li>Share the CodeSandbox URL with Claude in a follow-up: describe what you see and ask Claude what to change</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">Copilot in CodeSandbox</span>
+            <span class="ai-tool-badge good">Available</span>
+          </div>
+          <ul>
+            <li>CodeSandbox has its own AI assistant (Pitcher) built in — similar to Copilot for in-editor suggestions</li>
+            <li>GitHub Copilot works if you connect your GitHub account to CodeSandbox's VS Code-based editor</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">The Claude → CodeSandbox workflow in practice</div>
+          <div class="ai-prompt-item">Build a React component showing a stylized AI agent card with name, description, model used, and an estimated monthly cost badge. I'll paste this into CodeSandbox to preview it.</div>
+          <div class="ai-prompt-item">Here's the error CodeSandbox is showing after I pasted your component: "Cannot read properties of undefined (reading 'map')". Fix the component.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -3458,6 +4323,130 @@
   </div>
 
   <!-- ═══════════════════════════════════════
+       SECTION 22b — STACKBLITZ SETUP
+  ════════════════════════════════════════ -->
+  <div class="section" id="stackblitz-setup">
+    <div class="section-header">
+      <div class="section-icon-wrap icon-violet">⚙️</div>
+      <div class="section-header-text">
+        <div class="section-eyebrow">Section 22b · StackBlitz</div>
+        <h2>Where to get it, how to set it up, how to use Bolt</h2>
+      </div>
+    </div>
+
+    <p><strong>StackBlitz is free and requires no installation</strong> — it runs entirely in your browser. There's nothing to download. You just go to the website and start building. Bolt (StackBlitz's AI builder) is at a separate URL and works the same way.</p>
+
+    <h3>StackBlitz — getting started</h3>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Go to stackblitz.com</h4>
+          <p>Open your browser and go to <strong>stackblitz.com</strong>. You can start a project immediately without signing up — but signing in with GitHub saves your work and keeps your projects accessible from any device.</p>
+          <p>Click <strong>Sign in</strong> in the top right → choose <strong>Continue with GitHub</strong> → authorize StackBlitz when prompted. You're in.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Create a new React project</h4>
+          <p>On the StackBlitz home screen, click <strong>React</strong> under "Start a new project." A full development environment opens in your browser within a few seconds — file explorer on the left, editor in the middle, live preview on the right. It's running a real Node.js dev server inside your browser tab.</p>
+          <div class="callout note">
+            <span class="callout-icon">ℹ️</span>
+            <div class="callout-body">
+              <strong>StackBlitz works offline</strong>
+              <p>Once your project loads, StackBlitz can continue working even if your internet connection drops — because the Node.js environment runs inside your browser, not on a remote server. CodeSandbox requires an active connection.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Paste a Claude component and preview it</h4>
+          <p>In the file explorer, find <code>src/App.jsx</code> and open it. Replace its contents with a Claude-generated component, or create a new file in <code>src/components/</code> and import it into <code>App.jsx</code>. The preview updates instantly as you type — no save-and-refresh needed.</p>
+          <p>To share: copy the URL in your browser address bar. Anyone with the link can view and fork your project. No sign-in required for viewers.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Export or connect to GitHub</h4>
+          <p>To bring your StackBlitz project into your regular VS Code + GitHub workflow: click <strong>Connect repository</strong> in the top bar (or go to Project → Connect Repository). StackBlitz will push your project to a new GitHub repo. From there you can clone it locally or connect it to Vercel to deploy.</p>
+          <p>Alternatively: click <strong>Download project</strong> to get a ZIP file you can open in VS Code.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Bolt — AI-generated apps in seconds</h3>
+    <p>Bolt is a separate product from StackBlitz at <strong>bolt.new</strong>. It's purpose-built for AI-generated app creation — you describe what you want, and Bolt generates a full working app with multiple files, components, and styling. It's one of the best AI app builders available.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Go to bolt.new</h4>
+          <p>Open <strong>bolt.new</strong> in your browser. No sign-in required to start — but signing in with GitHub saves your projects. You'll see a simple text input in the center of the screen: "What do you want to build?"</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Describe your app and generate it</h4>
+          <p>Type a description of what you want — be specific about the features, layout, and data. Click the arrow to generate. Bolt creates a full React app with multiple files, installs the dependencies, and shows a live preview — usually within 30–60 seconds.</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+              <span class="code-filename">Example Bolt prompts for the AI Council</span>
+            </div>
+            <pre><span class="c"># Agent registry dashboard</span>
+<span class="s">Build a React dashboard for an AI Council team. It should
+display a list of AI agents, each with a name, description,
+owner, status badge (Active/Beta/Deprecated), and a button
+that opens a modal showing the full system prompt. Include
+a search bar and status filter. Use Tailwind CSS.</span>
+
+<span class="c"># Chrome extension scaffold</span>
+<span class="s">Create the file structure for a Chrome Extension that reads
+text from the current browser tab and sends it to an API.
+Include manifest.json, popup.html, popup.js, content.js,
+and a README explaining how to load it in Chrome.</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Iterate with follow-up prompts</h4>
+          <p>After Bolt generates the app, you can keep chatting with it to refine: "Add a dark mode toggle," "Make the cards clickable," "Add a loading spinner when the API is called." Each message updates the app in real time.</p>
+          <p>When you're happy with the result, hand it off to Claude for any precise logic or API integration that Bolt didn't get right — Bolt is great at structure and speed, Claude is great at precision.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left"><div class="step-num">4</div></div>
+        <div class="step-body">
+          <h4>Deploy to Vercel directly from Bolt</h4>
+          <p>In Bolt, click <strong>Deploy</strong> in the top bar. Bolt connects to Vercel and deploys your app to a live URL automatically — no GitHub Desktop, no terminal. You get a Vercel URL you can share immediately. If you want to continue developing the project locally, click <strong>Download</strong> or <strong>Open in GitHub</strong> first.</p>
+          <div class="callout tip">
+            <span class="callout-icon">💡</span>
+            <div class="callout-body">
+              <strong>Bolt → GitHub → Vercel is the full production path</strong>
+              <p>Bolt generates → you push to GitHub → Vercel auto-deploys on every push. This gives you the full CI/CD pipeline without any manual configuration. Future changes can be made in VS Code with Copilot and Claude, not Bolt — Bolt is for the initial scaffold.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
        SECTION 23 — CODESANDBOX VS STACKBLITZ
   ════════════════════════════════════════ -->
   <div class="section" id="sandbox-vs-stack">
@@ -3493,6 +4482,43 @@
         <p>Bookmark both. Use <strong>CodeSandbox</strong> when you want to paste and test a Claude component quickly. Use <strong>StackBlitz / Bolt</strong> when you want to generate an entire app from a description and iterate from there. They take about 30 seconds each to get into — there's no meaningful cost to having both available.</p>
       </div>
     </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude</strong> with StackBlitz & Bolt</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude + StackBlitz</span>
+            <span class="ai-tool-badge great">Great pair</span>
+          </div>
+          <ul>
+            <li>Claude describes what to build → StackBlitz Bolt generates the scaffold → Claude refines specific components</li>
+            <li>Use Bolt (<strong>bolt.new</strong>) to generate a full app structure, then switch to Claude for precise component logic and API integration</li>
+            <li>Paste the Bolt-generated code into a Claude conversation: <em>"Here's what Bolt made — now add a Claude API call to the search button"</em></li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">The best of both</span>
+            <span class="ai-tool-badge great">Combined</span>
+          </div>
+          <ul>
+            <li><strong>Bolt</strong> for speed: go from idea to scaffolded app in 60 seconds</li>
+            <li><strong>Claude</strong> for precision: add specific logic, fix errors, wire in the Claude API</li>
+            <li><strong>CodeSandbox</strong> for sharing: paste the result for stakeholder demos without deploying</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">The Bolt → Claude handoff pattern</div>
+          <div class="ai-prompt-item">I used Bolt to scaffold a React dashboard for our AI agents. Here's the code it generated. Now I need you to: 1) add a Claude API call when the user clicks "Analyze Agent", 2) display the response in a drawer on the right side, 3) add a loading state while waiting.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -3507,15 +4533,23 @@
       </div>
     </div>
 
-    <p>Postman is a tool for testing APIs. An API (Application Programming Interface) is how software talks to other software — when your React app calls Claude, it's making an API request. Postman lets you send those requests manually, outside of any code, and inspect exactly what comes back.</p>
+    <div class="beginner-only">
+      <div class="level-badge beg">🌱 Beginner</div>
+      <p>Postman is a tool for testing APIs. An API (Application Programming Interface) is how software talks to other software — when your React app calls Claude, it's making an API request. Postman lets you send those requests manually, outside of any code, and inspect exactly what comes back.</p>
 
-    <div class="concept">
-      <div class="concept-label">📖 Analogy</div>
-      <p>If an API is a restaurant kitchen and your code is a waiter that places orders, Postman is like walking directly into the kitchen yourself and placing the order at the pass — you see exactly what comes out, with no middleman. When something is wrong with your order, you know whether the problem is in the kitchen (the API) or with the waiter (your code).</p>
+      <div class="concept">
+        <div class="concept-label">📖 Analogy</div>
+        <p>If an API is a restaurant kitchen and your code is a waiter that places orders, Postman is like walking directly into the kitchen yourself and placing the order at the pass — you see exactly what comes out, with no middleman. When something is wrong with your order, you know whether the problem is in the kitchen (the API) or with the waiter (your code).</p>
+      </div>
+
+      <h3>Why Postman matters for your AI work</h3>
+      <p>When you build something that calls the Claude API and it doesn't work, there are two possible failure points: your code has a bug, or the API call itself is wrong. Postman isolates the API call completely — if it works in Postman but not in your code, you know the bug is in the code. If it fails in Postman too, the problem is the API call — wrong parameters, wrong API key, wrong format.</p>
     </div>
 
-    <h3>Why Postman matters for your AI work</h3>
-    <p>When you build something that calls the Claude API and it doesn't work, there are two possible failure points: your code has a bug, or the API call itself is wrong. Postman isolates the API call completely — if it works in Postman but not in your code, you know the bug is in the code. If it fails in Postman too, the problem is the API call — wrong parameters, wrong API key, wrong format.</p>
+    <div class="advanced-only">
+      <div class="level-badge adv">⚡ Advanced</div>
+      <p>Postman supports <strong>pre-request scripts</strong> and <strong>test scripts</strong> in JavaScript — you can programmatically set headers, chain requests (use the response from one as input to the next), and write assertions that run automatically after each call. For Claude API testing, the critical advanced pattern is <strong>Collection Runner</strong>: define a data file of different system prompts, run them all in sequence automatically, and export the results. This is how you regression test your agents — run 50 test cases against a new system prompt version and flag any that changed significantly. Also worth knowing: Postman's <strong>Mock Server</strong> feature lets you stub the Claude API with fixed responses during frontend development, so you don't burn real API credits while testing UI states.</p>
+    </div>
 
     <div class="cards">
       <div class="card">
@@ -3668,6 +4702,45 @@
         <p>Duplicate your request and save variations — one with a strict system prompt, one more conversational, one with RAG context included. Name them clearly. Now you have a one-click way to test any prompt variation directly against the API without touching any code.</p>
       </div>
     </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude</strong> with Postman to test the Claude API</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude helps you test Claude</span>
+            <span class="ai-tool-badge great">Core use case</span>
+          </div>
+          <ul>
+            <li>Postman <em>is</em> how you test Claude directly — every request you send in Postman is a raw call to claude.ai's underlying API</li>
+            <li>Use Claude to write the request body: <em>"Write the JSON body I need to test this system prompt in Postman"</em></li>
+            <li>When you get an unexpected response, paste it into Claude: <em>"This came back from the API — why did Claude respond this way?"</em></li>
+            <li>Ask Claude to help you build a <strong>Postman Collection</strong> with multiple test cases for a single agent</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Copilot in Postman</span>
+            <span class="ai-tool-badge na">N/A</span>
+          </div>
+          <ul>
+            <li>GitHub Copilot doesn't integrate with Postman directly</li>
+            <li>Use Claude instead for all Postman + API questions — it's purpose-built for this and knows its own API format precisely</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Ask Claude to help you build Postman requests</div>
+          <div class="ai-prompt-item">Write the Postman request body JSON to test this system prompt: [paste your system prompt]. The user message should be "What can you help me with?"</div>
+          <div class="ai-prompt-item">I got this response from the Claude API in Postman and it's not what I expected — the agent ignored my guardrail. Here's the full request and response. What's wrong with my system prompt?</div>
+          <div class="ai-prompt-item">Help me design 5 test cases in Postman for an onboarding agent — one normal case and four edge cases that test the guardrails</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -3684,9 +4757,17 @@
 
     <p>Supabase is a free, hosted database with an API built in. It gives your React apps the ability to <strong>store, retrieve, and update data</strong> — without you needing to build or manage a server. Think of it as a spreadsheet your app can read and write to programmatically, in real time.</p>
 
-    <div class="concept">
-      <div class="concept-label">📖 Analogy</div>
-      <p>A React app without a database is like a whiteboard — you can write on it, but when you erase it (close the browser tab), everything disappears. Supabase is the filing cabinet behind the whiteboard — data persists, can be retrieved later, and multiple people can access it simultaneously.</p>
+    <div class="beginner-only">
+      <div class="level-badge beg">🌱 Beginner</div>
+      <div class="concept">
+        <div class="concept-label">📖 Analogy</div>
+        <p>A React app without a database is like a whiteboard — you can write on it, but when you erase it (close the browser tab), everything disappears. Supabase is the filing cabinet behind the whiteboard — data persists, can be retrieved later, and multiple people can access it simultaneously.</p>
+      </div>
+    </div>
+
+    <div class="advanced-only">
+      <div class="level-badge adv">⚡ Advanced</div>
+      <p>Supabase is a Firebase alternative built on open-source PostgreSQL rather than a proprietary NoSQL store. The auto-generated REST and GraphQL APIs are built on PostgREST — they respect PostgreSQL's Row Level Security (RLS) policies, which means your security rules live in the database layer, not in your application code. For AI tooling, this matters: you can write an RLS policy that ensures each user only sees their own prompt logs without touching a line of JavaScript. The <strong>Supabase Edge Functions</strong> (Deno-based) let you run server-side logic close to the database — useful for post-processing Claude responses before storing them, or for triggering actions when new data arrives.</p>
     </div>
 
     <h3>What Supabase gives you</h3>
@@ -3869,8 +4950,45 @@
       </div>
     </div>
 
-  <!-- ═══════════════════════════════════════
-       SECTION 28 — CHROME EXTENSIONS
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude</strong> with Supabase</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude writes your database code</span>
+            <span class="ai-tool-badge great">Great fit</span>
+          </div>
+          <ul>
+            <li>Tell Claude your table structure and ask it to write the React + Supabase code to read and write data</li>
+            <li>Ask Claude to design your database schema: <em>"What tables do I need to log Claude API calls with prompt, response, token count, and agent name?"</em></li>
+            <li>Ask Claude to write Supabase queries in plain English: <em>"Show me the last 50 prompt logs for the onboarding agent, sorted newest first"</em></li>
+            <li>Claude can write the full integration: React form → Supabase insert → confirmation message</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude + Supabase together</span>
+            <span class="ai-tool-badge great">AI memory layer</span>
+          </div>
+          <ul>
+            <li>Build apps where <strong>Claude generates responses AND Supabase stores them</strong> — giving your tool a permanent memory</li>
+            <li>Log every Claude API call to Supabase: track which prompts work, which don't, and how responses change over time</li>
+            <li>Ask Claude to write a dashboard that reads from your Supabase prompt_logs table and visualizes usage patterns</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Ask Claude to wire up Supabase</div>
+          <div class="ai-prompt-item">I have a Supabase table called prompt_logs with columns: id, created_at, agent_name, system_prompt, user_message, response, token_count, rating. Write a React component that: 1) calls the Claude API, 2) saves the result to this table, 3) shows all past logs in a scrollable list below the form.</div>
+          <div class="ai-prompt-item">Design the Supabase schema I need to track all internal AI tool usage across our team — including which tool, which agent, the user (by email), date, and a thumbs up/down rating.</div>
+        </div>
+      </div>
+    </div>
+  </div>
   ════════════════════════════════════════ -->
   <div class="section" id="chrome-ext">
     <div class="section-header">
@@ -4153,6 +5271,44 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         </div>
       </div>
     </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title">Using <strong>Claude</strong> to build Chrome Extensions</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">Claude writes the extension</span>
+            <span class="ai-tool-badge great">Core pattern</span>
+          </div>
+          <ul>
+            <li>Claude can generate the complete extension — <code>manifest.json</code>, <code>popup.html</code>, <code>popup.js</code>, <code>content.js</code> — from a plain-English description</li>
+            <li>Describe what page it reads and what Claude should do with that content — Claude handles all the Chrome API wiring</li>
+            <li>When the extension breaks after a Chrome update, paste the error to Claude: <em>"My extension stopped working — here's the error from chrome://extensions"</em></li>
+            <li>Ask Claude to add features incrementally: <em>"Now add a button that lets the user copy the summary to clipboard"</em></li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo copilot">⬡</div>
+            <span class="ai-tool-name">GitHub Copilot</span>
+            <span class="ai-tool-badge good">Good fit</span>
+          </div>
+          <ul>
+            <li>Copilot autocompletes Chrome API calls (<code>chrome.tabs</code>, <code>chrome.storage</code>, <code>chrome.runtime</code>) as you type</li>
+            <li>Helpful for editing existing extension files — it knows the Manifest V3 patterns well</li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Ask Claude to build your Chrome Extension</div>
+          <div class="ai-prompt-item">Build me a Chrome Extension for Cox Automotive internal use. When I click the extension icon on any VinSolutions customer page, it reads the visible customer and vehicle data on the page, sends it to the Claude API, and shows a 3-bullet summary of the deal status and recommended next action in the popup. Include all files: manifest.json, popup.html, popup.js, and content.js.</div>
+          <div class="ai-prompt-item">My extension's content.js is extracting the page text but the popup isn't displaying it. Here are both files — what's wrong with the message passing?</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -4213,6 +5369,44 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       <div class="callout-body">
         <strong>Internal distribution vs Chrome Web Store</strong>
         <p>You don't need to publish to the Chrome Web Store for internal tools. Share the GitHub repo with your team — they load it as an unpacked extension in Developer Mode. For wider internal distribution, your IT team can push it via Chrome Enterprise policy, which installs it automatically on managed devices with no action required from end users.</p>
+      </div>
+    </div>
+
+    <div class="ai-block">
+      <div class="ai-block-header">
+        <span class="ai-block-icon">🤖</span>
+        <span class="ai-block-title"><strong>Claude</strong> is the engine inside every AI Council Chrome Extension</span>
+      </div>
+      <div class="ai-tools">
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">How Claude connects</span>
+            <span class="ai-tool-badge great">Core pattern</span>
+          </div>
+          <ul>
+            <li>The extension reads the page → passes the content to Claude via API → displays Claude's response in the popup or sidebar</li>
+            <li>Claude acts as the intelligence layer — the extension is just the delivery mechanism that brings Claude to wherever your team already works</li>
+            <li>Every use case in this section is powered by a Claude API call with a specific system prompt tailored to that context</li>
+          </ul>
+        </div>
+        <div class="ai-tool">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo claude">✦</div>
+            <span class="ai-tool-name">System prompt per use case</span>
+            <span class="ai-tool-badge great">Design pattern</span>
+          </div>
+          <ul>
+            <li><strong>CRM summarizer:</strong> <em>"You are a Cox Automotive sales assistant. Summarize the following customer record in 3 bullet points covering deal status, customer needs, and recommended next action."</em></li>
+            <li><strong>Email drafter:</strong> <em>"You are a professional email assistant. Draft a concise, friendly response to the following customer email that addresses their concern directly."</em></li>
+            <li><strong>Report interpreter:</strong> <em>"You are a data analyst. Explain the following performance metrics in plain English for a non-technical manager."</em></li>
+          </ul>
+        </div>
+        <div class="ai-prompt-example">
+          <div class="ai-prompt-label">Ask Claude to design the system prompt for your extension</div>
+          <div class="ai-prompt-item">I'm building a Chrome Extension for VinSolutions that reads a customer record page and calls Claude. Write the system prompt that makes Claude behave as a helpful sales coach — summarizing the deal, flagging risks, and suggesting a next action. Keep it concise.</div>
+          <div class="ai-prompt-item">Generate the complete files for a Chrome Extension that adds a floating "Summarize" button to any internal Cox Automotive SharePoint page. When clicked, it extracts the page text and asks Claude to write a 5-bullet executive summary.</div>
+        </div>
       </div>
     </div>
   </div>
